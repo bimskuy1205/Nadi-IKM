@@ -170,23 +170,7 @@ def project_3d(cx_screen, cy_screen, x, y, z, rot_y, pitch=0.19, fov=640):
 
 def draw_holo_3d_stack(draw, cx_screen, cy_screen, rot_y, explode, t_sec, scale_mult=1.0):
     fov = 620 * scale_mult
-    # Hologram Gyroscopic Orbital Rings around 3D Model
-    gyro_rings = [
-        (1.75, 0.35, 0.22, COLOR_CYAN, t_sec * 1.5),
-        (2.00, -0.40, 0.30, COLOR_AMBER, -t_sec * 1.2),
-        (2.22, 0.20, -0.45, COLOR_MAGENTA, t_sec * 0.9),
-    ]
-    for g_rad, tx, tz, g_col, g_ph in gyro_rings:
-        pts = []
-        for deg in range(0, 365, 15):
-            a = math.radians(deg) + g_ph
-            gx = math.cos(a) * g_rad
-            gz = math.sin(a) * g_rad
-            gy = math.sin(a) * g_rad * tx + math.cos(a) * g_rad * tz + 0.1
-            px, py, _ = project_3d(cx_screen, cy_screen, gx, gy, gz, rot_y * 0.3, 0.19, fov)
-            pts.append((px, py))
-        draw.line(pts, fill=g_col, width=2)
-
+    # Clean, unobstructed 3D model without circular rings blocking the view
     layers = [
         (-0.58 - explode * 1.05, 0.85, 0.20, (32, 58, 80), COLOR_AMBER, 8),
         (-0.28 - explode * 0.52, 1.02, 0.34, (34, 62, 86), COLOR_COPPER, 12),

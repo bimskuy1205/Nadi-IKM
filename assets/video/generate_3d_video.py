@@ -198,50 +198,14 @@ for f in range(TOTAL_FRAMES):
     draw = ImageDraw.Draw(img)
 
     # =========================================================================
-    # 1. 3D Hologram Projection Pedestal, Upward Light Cone & Gyroscopic Rings
+    # 1. Clean Ground Calibration Pedestal (No Circular Rings Blocking the Model)
     # =========================================================================
-    ped_x, ped_y, ped_sc, _ = project_3d(0, -1.72, 0, rot_y)
-    # Upward Hologram Light Cone Rays
-    for ray_i in range(-4, 5):
-        rx_bot = ped_x + ray_i * 34
-        rx_top = ped_x + ray_i * 78
-        col_ray = (0, 140, 165) if ray_i % 2 == 0 else (140, 95, 35)
-        draw.line([(rx_bot, ped_y), (rx_top, 140)], fill=col_ray, width=1)
-
-    # Calibration Pedestal Disc
-    for r_mult, r_col in [(2.25, COLOR_CYAN), (1.85, COLOR_AMBER), (1.35, COLOR_MAGENTA)]:
-        pts = []
-        for deg in range(0, 360, 10):
-            rad = math.radians(deg)
-            px, py, _, _ = project_3d(math.cos(rad) * r_mult, -1.72, math.sin(rad) * r_mult, rot_y * 0.4)
-            pts.append((px, py))
-        draw.polygon(pts, outline=r_col, width=2)
-
-    # 3 Gyroscopic 3D Tilted Hologram Orbital Rings around the model
-    gyro_configs = [
-        (1.85, 0.38, 0.22, COLOR_CYAN, t_sec * 1.4),
-        (2.10, -0.42, 0.35, COLOR_AMBER, -t_sec * 1.1),
-        (2.35, 0.18, -0.48, COLOR_MAGENTA, t_sec * 0.85),
-    ]
-    for g_rad, tilt_x, tilt_z, g_col, g_phase in gyro_configs:
-        g_pts = []
-        for deg in range(0, 365, 12):
-            a = math.radians(deg) + g_phase
-            gx = math.cos(a) * g_rad
-            gz = math.sin(a) * g_rad
-            gy = math.sin(a) * g_rad * tilt_x + math.cos(a) * g_rad * tilt_z + 0.15
-            px, py, _, _ = project_3d(gx, gy, gz, rot_y * 0.3)
-            g_pts.append((px, py))
-        draw.line(g_pts, fill=g_col, width=2)
-
-    # Floating Hologram Telemetry Particles
-    for p_i in range(28):
-        p_ang = p_i * 1.7 + t_sec * 0.9
-        p_rad = 1.2 + (p_i % 5) * 0.28
-        p_y = -1.5 + ((p_i * 0.23 + t_sec * 0.55) % 3.4)
-        px, py, _, _ = project_3d(math.cos(p_ang) * p_rad, p_y, math.sin(p_ang) * p_rad, 0)
-        p_col = COLOR_GREEN if p_i % 3 == 0 else (COLOR_CYAN if p_i % 2 == 0 else COLOR_AMBER)
-        draw.ellipse([px - 3, py - 3, px + 3, py + 3], fill=p_col)
+    pts = []
+    for deg in range(0, 360, 10):
+        rad = math.radians(deg)
+        px, py, _, _ = project_3d(math.cos(rad) * 2.0, -1.72, math.sin(rad) * 2.0, 0)
+        pts.append((px, py))
+    draw.polygon(pts, fill=(9, 20, 32), outline=COLOR_CYAN, width=2)
 
     # =========================================================================
     # 2. Render 6 Volumetric 3D Sub-Assemblies (Side View + Gradual Explode)
@@ -302,15 +266,6 @@ for f in range(TOTAL_FRAMES):
     ring_col = (255, min(255, pulse_val), 45)
     sx_ring, sy_ring, sc_ring, _ = project_3d(0, y_top + 0.21, 0, rot_y)
     draw.ellipse([sx_ring - sc_ring * 0.76, sy_ring - sc_ring * 0.16, sx_ring + sc_ring * 0.76, sy_ring + sc_ring * 0.16], outline=ring_col, width=5)
-
-    # Oscillating Holographic Laser Scanner Ring
-    laser_y = -0.9 + math.sin(t_sec * 2.4) * (1.2 + explode * 0.9)
-    laser_pts = []
-    for deg in range(0, 360, 12):
-        rad = math.radians(deg)
-        lx, ly, _, _ = project_3d(math.cos(rad) * 1.5, laser_y, math.sin(rad) * 1.5, rot_y)
-        laser_pts.append((lx, ly))
-    draw.polygon(laser_pts, outline=COLOR_GREEN, width=3)
 
     # =========================================================================
     # 3. Left-Side Live Digital Caliper Rulers

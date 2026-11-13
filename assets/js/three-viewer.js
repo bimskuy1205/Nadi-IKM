@@ -155,93 +155,11 @@ class NadiDeviceViewer {
   }
 
   setupLaserScanner() {
-    // Dynamic Laser Scanner Plane
-    const laserGeo = new THREE.RingGeometry(0.1, 3.4, 64);
-    this.laserMat = new THREE.MeshBasicMaterial({
-      color: 0x00F2FE,
-      transparent: true,
-      opacity: 0.16,
-      side: THREE.DoubleSide
-    });
-    this.laserDisc = new THREE.Mesh(laserGeo, this.laserMat);
-    this.laserDisc.rotation.x = -Math.PI / 2;
-    this.laserDisc.position.y = -0.5;
-    this.scene.add(this.laserDisc);
-
-    // ==========================================
-    // 3D HOLOGRAPHIC PROJECTION SYSTEM (AURA & ORBITS)
-    // ==========================================
-    this.holoGroup = new THREE.Group();
-    this.scene.add(this.holoGroup);
-
-    // 1. Volumetric Upward Hologram Projector Beam Cone
-    const coneGeo = new THREE.ConeGeometry(2.8, 3.8, 48, 1, true);
-    const coneMat = new THREE.MeshBasicMaterial({
-      color: 0x00F2FE,
-      transparent: true,
-      opacity: 0.055,
-      side: THREE.DoubleSide,
-      depthWrite: false
-    });
-    this.holoCone = new THREE.Mesh(coneGeo, coneMat);
-    this.holoCone.position.y = 0.75;
-    this.holoCone.rotation.x = Math.PI; // Inverted cone expanding upward from pedestal
-    this.holoGroup.add(this.holoCone);
-
-    // 2. Gyroscopic 3D Hologram Orbital Rings (Cyan, Amber, Magenta)
-    this.holoRings = [];
-    const ringConfigs = [
-      { radius: 2.05, tube: 0.014, color: 0x00F2FE, rx: 0.45, rz: 0.25, speed: 0.65 },
-      { radius: 2.35, tube: 0.012, color: 0xFFA834, rx: -0.55, rz: 0.40, speed: -0.50 },
-      { radius: 2.65, tube: 0.010, color: 0xFF2E93, rx: 0.20, rz: -0.65, speed: 0.38 }
-    ];
-    ringConfigs.forEach((cfg) => {
-      const rGeo = new THREE.TorusGeometry(cfg.radius, cfg.tube, 12, 96);
-      const rMat = new THREE.MeshBasicMaterial({
-        color: cfg.color,
-        transparent: true,
-        opacity: 0.48
-      });
-      const rMesh = new THREE.Mesh(rGeo, rMat);
-      rMesh.rotation.set(cfg.rx, 0, cfg.rz);
-      rMesh.position.y = 0.25;
-      rMesh.userData = { speed: cfg.speed };
-      this.holoGroup.add(rMesh);
-      this.holoRings.push(rMesh);
-    });
-
-    // 3. Outer Holographic Wireframe Geodesic Cylinder Lattice
-    const cageGeo = new THREE.CylinderGeometry(1.55, 1.55, 2.5, 24, 6, true);
-    this.holoCageMat = new THREE.MeshBasicMaterial({
-      color: 0x00F2FE,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.09
-    });
-    this.holoCage = new THREE.Mesh(cageGeo, this.holoCageMat);
-    this.holoCage.position.y = 0.22;
-    this.holoGroup.add(this.holoCage);
-
-    // 4. Floating 3D Hologram Telemetry Particles
-    const pCount = 90;
-    const pPositions = new Float32Array(pCount * 3);
-    for (let i = 0; i < pCount; i++) {
-      const ang = Math.random() * Math.PI * 2;
-      const rad = 1.15 + Math.random() * 1.8;
-      pPositions[i * 3] = Math.cos(ang) * rad;
-      pPositions[i * 3 + 1] = -1.0 + Math.random() * 3.0;
-      pPositions[i * 3 + 2] = Math.sin(ang) * rad;
-    }
-    const pGeo = new THREE.BufferGeometry();
-    pGeo.setAttribute('position', new THREE.BufferAttribute(pPositions, 3));
-    const pMat = new THREE.PointsMaterial({
-      color: 0x00FF87,
-      size: 0.055,
-      transparent: true,
-      opacity: 0.75
-    });
-    this.holoParticles = new THREE.Points(pGeo, pMat);
-    this.holoGroup.add(this.holoParticles);
+    // Clean, unobstructed 3D view: no circular rings or wireframe cages blocking the model
+    this.laserDisc = null;
+    this.holoRings = null;
+    this.holoCage = null;
+    this.holoParticles = null;
   }
 
   buildMasterpieceModel() {
