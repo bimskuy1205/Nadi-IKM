@@ -648,6 +648,32 @@ class NadiDeviceViewer {
     }
   }
 
+  play30sSideExplodeDemo(onUpdateCallback) {
+    this.isolatePart(null);
+    this.setView('side');
+    this.controls.autoRotate = true;
+    this.controls.autoRotateSpeed = 3.2;
+
+    if (this._demoInterval) clearInterval(this._demoInterval);
+    const startTime = performance.now();
+    const durationMs = 30000;
+    this.setExploded(0);
+
+    this._demoInterval = setInterval(() => {
+      const elapsed = performance.now() - startTime;
+      const rawP = Math.min(1, elapsed / durationMs);
+      const smoothP = rawP * rawP * (3 - 2 * rawP);
+      this.setExploded(smoothP);
+      if (typeof onUpdateCallback === 'function') {
+        onUpdateCallback(smoothP, Math.min(30, elapsed / 1000));
+      }
+      if (rawP >= 1) {
+        clearInterval(this._demoInterval);
+        this._demoInterval = null;
+      }
+    }, 33);
+  }
+
   selectPart(partId) {
     this.selectedPart = partId;
     const part = this.parts[partId];

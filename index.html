@@ -174,18 +174,22 @@
           </p>
 
           <!-- Action Buttons -->
-          <div class="flex flex-wrap items-center gap-4 pt-2">
-            <a href="dashboard.html" class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl gradient-plasma-flame hover:brightness-110 text-midnight-navy font-display font-bold text-sm tracking-wide shadow-xl shadow-plasma-amber/20 transition-all">
+          <div class="flex flex-wrap items-center gap-3 pt-2">
+            <a href="dashboard.html" class="inline-flex items-center gap-2.5 px-5 py-3.5 rounded-xl gradient-plasma-flame hover:brightness-110 text-midnight-navy font-display font-bold text-xs uppercase tracking-wider shadow-xl shadow-plasma-amber/20 transition-all">
               <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
               <span data-i18n="ctaDashboard">Buka Dashboard Demo</span>
             </a>
-            <a href="#lab3d" class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-deep-steel hover:bg-surface-plate border border-neon-cyan/30 text-neon-cyan font-mono text-xs font-semibold tracking-wider uppercase transition-all shadow-lg">
+            <button onclick="openVideoCinema('3d')" class="inline-flex items-center gap-2 px-4 py-3.5 rounded-xl bg-plasma-amber/20 hover:bg-plasma-amber/30 border border-plasma-amber/50 text-plasma-amber font-mono text-xs font-bold uppercase tracking-wider shadow-lg transition-all">
+              <i data-lucide="play-circle" class="w-4 h-4"></i>
+              <span>Video 3D 360° (30s)</span>
+            </button>
+            <button onclick="openVideoCinema('full')" class="inline-flex items-center gap-2 px-4 py-3.5 rounded-xl bg-neon-cyan/20 hover:bg-neon-cyan/30 border border-neon-cyan/50 text-neon-cyan font-mono text-xs font-bold uppercase tracking-wider shadow-lg transition-all">
+              <i data-lucide="film" class="w-4 h-4"></i>
+              <span>Video Showcase Web</span>
+            </button>
+            <a href="#lab3d" class="inline-flex items-center gap-2 px-4 py-3.5 rounded-xl bg-deep-steel hover:bg-surface-plate border border-slate-700 text-slate-300 font-mono text-xs font-semibold tracking-wider uppercase transition-all">
               <i data-lucide="box" class="w-4 h-4 text-plasma-amber"></i>
-              <span data-i18n="ctaExplore3D">Jelajahi 3D Lab</span>
-            </a>
-            <a href="#research" class="inline-flex items-center gap-2 px-4 py-3.5 text-xs text-slate-400 hover:text-white font-mono">
-              <i data-lucide="file-text" class="w-4 h-4 text-oscilloscope-green"></i>
-              <span data-i18n="ctaReadPaper">Ringkasan Riset</span>
+              <span>3D CAD Lab</span>
             </a>
           </div>
 
@@ -371,10 +375,13 @@
 
             <!-- Toggles & Camera Presets -->
             <div class="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-slate-800 text-xs font-mono">
-              <div class="flex items-center gap-2">
+              <div class="flex flex-wrap items-center gap-2">
                 <button id="toggleXrayBtn" class="px-3 py-1.5 rounded-lg bg-deep-steel hover:bg-surface-plate border border-neon-cyan/30 text-neon-cyan flex items-center gap-1.5 transition-colors">
                   <i data-lucide="eye" class="w-3.5 h-3.5"></i>
                   <span data-i18n="xrayToggle">X-Ray</span>
+                </button>
+                <button id="btnSideView" class="px-3 py-1.5 rounded-lg bg-deep-steel hover:bg-surface-plate border border-neon-cyan/40 text-neon-cyan transition-colors">
+                  Samping (Side)
                 </button>
                 <button id="btnIsoView" class="px-3 py-1.5 rounded-lg bg-deep-steel hover:bg-surface-plate border border-slate-700 text-slate-300 transition-colors" data-i18n="btnIsoView">
                   Isometrik
@@ -384,12 +391,16 @@
                 </button>
               </div>
 
-              <div class="flex items-center gap-2">
+              <div class="flex flex-wrap items-center gap-2">
+                <button id="btnAutoDemo30s" class="px-3 py-1.5 rounded-lg gradient-plasma-flame text-midnight-navy font-bold flex items-center gap-1.5 shadow transition-all hover:brightness-110">
+                  <i data-lucide="play" class="w-3.5 h-3.5"></i>
+                  <span>Auto-Explode 30s (Samping)</span>
+                </button>
                 <button id="btnResetLab" class="px-3 py-1.5 rounded-lg bg-plasma-amber/20 text-plasma-amber hover:bg-plasma-amber/30 border border-plasma-amber/40 font-bold transition-colors" data-i18n="btnResetView">
-                  Reset Posisi
+                  Reset
                 </button>
                 <a href="explore.html" class="px-3 py-1.5 rounded-lg bg-neon-cyan/20 text-neon-cyan hover:bg-neon-cyan/30 border border-neon-cyan/40 font-bold transition-colors">
-                  Studio 3D Penuh ↗
+                  Studio 3D ↗
                 </a>
               </div>
             </div>
@@ -478,6 +489,103 @@
 
           </div>
 
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= S04B CINEMATIC VIDEO SHOWCASE THEATER ================= -->
+  <section id="videoShowcase" class="py-24 bg-midnight-navy/95 relative border-t border-neon-cyan/20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <div class="text-center max-w-3xl mx-auto mb-14 space-y-3">
+        <span class="inline-block px-3.5 py-1 rounded-full bg-plasma-amber/15 text-plasma-amber border border-plasma-amber/40 text-xs font-mono font-bold uppercase tracking-wider">
+          CINEMATIC MASTERPIECE REELS • 1080P FULL HD
+        </span>
+        <h2 class="text-3xl sm:text-5xl font-display font-extrabold text-white">
+          Galeri Video Demo <span class="text-gradient-exotic">3D 360° & Full Website Showcase</span>
+        </h2>
+        <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+          Tonton langsung atau unduh dua video demonstrasi resolusi tinggi (1080p @ 30 FPS): putaran otomatis 360° tampilan samping dengan <em>gradual exploded view</em> selama 30 detik penuh, serta video <em>walkthrough</em> menyeluruh dari Hero, Dashboard, 3D Lab, hingga Mindmap Tim.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+        <!-- Video Card 1: 30s 3D 360 Side-View Exploded Anatomy -->
+        <div class="retro-card p-5 border-2 border-neon-cyan/50 shadow-2xl space-y-4">
+          <div class="corner-tick-tl"></div>
+          <div class="corner-tick-tr"></div>
+          <div class="corner-tick-bl"></div>
+          <div class="corner-tick-br"></div>
+
+          <div class="flex items-center justify-between border-b border-neon-cyan/20 pb-3">
+            <div>
+              <span class="text-[11px] font-mono font-bold text-neon-cyan uppercase tracking-wider">REEL 01 • DURASI PAS 30.0 DETIK</span>
+              <h3 class="text-lg font-display font-bold text-white">3D 360° Side-View Gradual Exploded Anatomy</h3>
+            </div>
+            <span class="px-2.5 py-1 rounded bg-neon-cyan/15 text-neon-cyan border border-neon-cyan/40 text-[11px] font-mono font-bold">1080p • 30 FPS</span>
+          </div>
+
+          <div class="relative w-full aspect-video rounded-xl overflow-hidden bg-black border border-neon-cyan/30">
+            <video controls loop muted playsinline preload="metadata" class="w-full h-full object-contain">
+              <source src="assets/video/nadi-ikm-3d-anatomy-30s.mp4" type="video/mp4">
+            </video>
+          </div>
+
+          <p class="text-xs text-slate-300 leading-relaxed font-sans">
+            Memperlihatkan putaran otomatis 360° dari sudut pandang samping (<em>side elevation</em>) yang secara perlahan-lahan terurai (<em>gradual explode</em> 0% hingga 100%) sampai detik ke-30, lengkap dengan kaliper milimeter digital dan 6 kartu spesifikasi komponen.
+          </p>
+
+          <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-800 text-xs font-mono">
+            <button onclick="openVideoCinema('3d')" class="px-4 py-2 rounded-xl bg-neon-cyan text-midnight-navy font-bold flex items-center gap-2 hover:brightness-110 transition-all">
+              <i data-lucide="maximize-2" class="w-4 h-4"></i>
+              <span>Buka Mode Bioskop</span>
+            </button>
+            <a href="assets/video/nadi-ikm-3d-anatomy-30s.mp4" download class="px-4 py-2 rounded-xl bg-deep-steel hover:bg-surface-plate text-neon-cyan border border-neon-cyan/40 font-bold flex items-center gap-2 transition-all">
+              <i data-lucide="download" class="w-4 h-4"></i>
+              <span>Unduh MP4 (30s)</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Video Card 2: Full Website, Dashboard & Team Showcase -->
+        <div class="retro-card p-5 border-2 border-plasma-amber/50 shadow-2xl space-y-4">
+          <div class="corner-tick-tl"></div>
+          <div class="corner-tick-tr"></div>
+          <div class="corner-tick-bl"></div>
+          <div class="corner-tick-br"></div>
+
+          <div class="flex items-center justify-between border-b border-plasma-amber/20 pb-3">
+            <div>
+              <span class="text-[11px] font-mono font-bold text-plasma-amber uppercase tracking-wider">REEL 02 • 6 CHAPTER SINEMATIK (42.0 DETIK)</span>
+              <h3 class="text-lg font-display font-bold text-white">Full Website, Telemetry Dashboard & Team Mindmap</h3>
+            </div>
+            <span class="px-2.5 py-1 rounded bg-plasma-amber/15 text-plasma-amber border border-plasma-amber/40 text-[11px] font-mono font-bold">LUXURY TRANSITIONS</span>
+          </div>
+
+          <div class="relative w-full aspect-video rounded-xl overflow-hidden bg-black border border-plasma-amber/30">
+            <video controls loop muted playsinline preload="metadata" class="w-full h-full object-contain">
+              <source src="assets/video/nadi-ikm-full-showcase.mp4" type="video/mp4">
+            </video>
+          </div>
+
+          <p class="text-xs text-slate-300 leading-relaxed font-sans">
+            Menampilkan keseluruhan isi website dari awal hingga akhir dengan transisi <em>Cyber-Shutter Laser Wipe</em>: Hero Oscilloscope, Arsitektur 4 Lapis, Highlight 3D 360°, Dashboard Telemetri (P-01, M-02, F-03), hingga Mindmap Tim (Ketua Bimo Satrio, Ihwan Ridwan, Muhammad Raiz).
+          </p>
+
+          <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-800 text-xs font-mono">
+            <button onclick="openVideoCinema('full')" class="px-4 py-2 rounded-xl gradient-plasma-flame text-midnight-navy font-bold flex items-center gap-2 hover:brightness-110 transition-all">
+              <i data-lucide="maximize-2" class="w-4 h-4"></i>
+              <span>Buka Mode Bioskop</span>
+            </button>
+            <a href="assets/video/nadi-ikm-full-showcase.mp4" download class="px-4 py-2 rounded-xl bg-deep-steel hover:bg-surface-plate text-plasma-amber border border-plasma-amber/40 font-bold flex items-center gap-2 transition-all">
+              <i data-lucide="download" class="w-4 h-4"></i>
+              <span>Unduh MP4 (Full Web)</span>
+            </a>
+          </div>
         </div>
 
       </div>
@@ -904,6 +1012,72 @@
     </div>
   </footer>
 
+  <!-- ================= CINEMATIC VIDEO DEMO MODAL ================= -->
+  <div id="videoCinemaModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="retro-card border-2 border-neon-cyan max-w-5xl w-full p-6 space-y-4 shadow-2xl relative bg-midnight-navy/95">
+      <div class="corner-tick-tl"></div>
+      <div class="corner-tick-tr"></div>
+      <div class="corner-tick-bl"></div>
+      <div class="corner-tick-br"></div>
+
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-3 border-b border-neon-cyan/20">
+        <div class="flex items-center gap-3">
+          <span class="w-3 h-3 rounded-full bg-plasma-amber animate-pulse"></span>
+          <h3 class="text-lg font-display font-bold text-white tracking-wide">
+            CINEMATIC DEMO THEATER // <span class="text-neon-cyan">NADI-IKM</span>
+          </h3>
+        </div>
+
+        <button onclick="closeVideoCinema()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors">
+          <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+      </div>
+
+      <!-- Video Selector Tabs -->
+      <div class="flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+        <div class="flex items-center gap-2">
+          <button id="tabVideo3D" onclick="switchVideo('3d')" class="px-4 py-2 rounded-xl bg-neon-cyan text-midnight-navy font-bold transition-all flex items-center gap-2 shadow">
+            <i data-lucide="rotate-3d" class="w-4 h-4"></i>
+            <span>1. Video 3D 360° Exploded Anatomy (30 Detik)</span>
+          </button>
+          <button id="tabVideoFull" onclick="switchVideo('full')" class="px-4 py-2 rounded-xl bg-deep-steel text-slate-300 hover:text-white transition-all flex items-center gap-2 border border-slate-700">
+            <i data-lucide="film" class="w-4 h-4"></i>
+            <span>2. Video Full Website & Dashboard Showcase</span>
+          </button>
+        </div>
+
+        <span id="cinemaVideoBadge" class="text-plasma-amber font-mono font-bold">1080p FULL HD • 30 FPS</span>
+      </div>
+
+      <!-- Video Player Frame -->
+      <div class="relative w-full aspect-video rounded-xl overflow-hidden bg-black border border-neon-cyan/30 shadow-2xl">
+        <video id="cinemaVideoPlayer" controls autoplay loop playsinline class="w-full h-full object-contain">
+          <source id="cinemaVideoSource" src="assets/video/nadi-ikm-3d-anatomy-30s.mp4" type="video/mp4">
+          Browser Anda tidak mendukung tag video HTML5.
+        </video>
+      </div>
+
+      <!-- Footer Info & Direct Download Button -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2 border-t border-slate-800 text-xs font-mono">
+        <div class="text-slate-400">
+          Codec: <span class="text-white">H.264 High Profile</span> | Durasi: <span id="cinemaDuration" class="text-neon-cyan">30.0 Detik</span> | Audio/Video: <span class="text-oscilloscope-green">Pristine Master</span>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <a id="downloadVideoBtn" href="assets/video/nadi-ikm-3d-anatomy-30s.mp4" download class="px-4 py-2 rounded-xl bg-plasma-amber/20 hover:bg-plasma-amber/30 text-plasma-amber border border-plasma-amber/50 font-bold flex items-center gap-2 transition-all">
+            <i data-lucide="download" class="w-4 h-4"></i>
+            <span>Unduh File MP4 Asli</span>
+          </a>
+          <button onclick="closeVideoCinema()" class="px-4 py-2 rounded-xl bg-deep-steel hover:bg-surface-plate text-slate-300">
+            Tutup Theater
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- Scripts -->
   <script src="assets/js/translations.js"></script>
   <script src="assets/js/cursor.js"></script>
@@ -912,6 +1086,61 @@
 
   <script>
     lucide.createIcons();
+
+    // Cinema Video Modal Logic
+    function openVideoCinema(type) {
+      const modal = document.getElementById('videoCinemaModal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        switchVideo(type || '3d');
+      }
+    }
+
+    function closeVideoCinema() {
+      const modal = document.getElementById('videoCinemaModal');
+      const player = document.getElementById('cinemaVideoPlayer');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+      if (player) {
+        player.pause();
+      }
+    }
+
+    function switchVideo(type) {
+      const player = document.getElementById('cinemaVideoPlayer');
+      const source = document.getElementById('cinemaVideoSource');
+      const tab3D = document.getElementById('tabVideo3D');
+      const tabFull = document.getElementById('tabVideoFull');
+      const durLabel = document.getElementById('cinemaDuration');
+      const dlBtn = document.getElementById('downloadVideoBtn');
+
+      if (type === '3d') {
+        const url = 'assets/video/nadi-ikm-3d-anatomy-30s.mp4';
+        source.src = url;
+        player.load();
+        player.play().catch(() => {});
+        tab3D.className = 'px-4 py-2 rounded-xl bg-neon-cyan text-midnight-navy font-bold transition-all flex items-center gap-2 shadow';
+        tabFull.className = 'px-4 py-2 rounded-xl bg-deep-steel text-slate-300 hover:text-white transition-all flex items-center gap-2 border border-slate-700';
+        if (durLabel) durLabel.innerText = '30.0 Detik';
+        if (dlBtn) dlBtn.href = url;
+      } else {
+        const url = 'assets/video/nadi-ikm-full-showcase.mp4';
+        source.src = url;
+        player.load();
+        player.play().catch(() => {});
+        tabFull.className = 'px-4 py-2 rounded-xl gradient-plasma-flame text-midnight-navy font-bold transition-all flex items-center gap-2 shadow';
+        tab3D.className = 'px-4 py-2 rounded-xl bg-deep-steel text-slate-300 hover:text-white transition-all flex items-center gap-2 border border-slate-700';
+        if (durLabel) durLabel.innerText = '42.0 Detik';
+        if (dlBtn) dlBtn.href = url;
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeVideoCinema();
+    });
 
     // Mobile Menu Toggle
     const mobileBtn = document.getElementById('mobileMenuBtn');
@@ -953,7 +1182,24 @@
 
         document.getElementById('btnIsoView').addEventListener('click', () => window.mainLabViewer.setView('iso'));
         document.getElementById('btnTopView').addEventListener('click', () => window.mainLabViewer.setView('top'));
+        const btnSide = document.getElementById('btnSideView');
+        if (btnSide) {
+          btnSide.addEventListener('click', () => window.mainLabViewer.setView('side'));
+        }
+        const btnAutoDemo = document.getElementById('btnAutoDemo30s');
+        if (btnAutoDemo) {
+          btnAutoDemo.addEventListener('click', () => {
+            window.mainLabViewer.play30sSideExplodeDemo((progress) => {
+              if (explodeRange) explodeRange.value = progress.toFixed(2);
+              if (explodePct) explodePct.innerText = `${Math.round(progress * 100)}%`;
+            });
+          });
+        }
         document.getElementById('btnResetLab').addEventListener('click', () => {
+          if (window.mainLabViewer._demoInterval) {
+            clearInterval(window.mainLabViewer._demoInterval);
+            window.mainLabViewer._demoInterval = null;
+          }
           window.mainLabViewer.resetView();
           if (explodeRange) explodeRange.value = 0;
           if (explodePct) explodePct.innerText = '0%';
