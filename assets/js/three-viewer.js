@@ -1,11 +1,11 @@
 /**
- * NADI-IKM 3D Product Lab - WebGL Interactive Digital Twin
- * Features:
- * - 360° OrbitControls with smooth damping
- * - Exploded view displacement animation (0 - 100%)
- * - X-Ray / Housing transparency toggle
- * - Hotspot raycasting & camera focus
- * - Procedural PBR materials & industrial details
+ * NADI-IKM 3D Digital Twin - Masterpiece Engineering Edition
+ * High-precision procedural industrial CAD assembly with:
+ * - CNC machined finishes, heat sink fins, Allen socket screws
+ * - Anodized 6061-T6 aluminum, gold PCB traces, coiled cable strain relief
+ * - 360° OrbitControls, smooth Exploded View slider (0-100%)
+ * - Sub-assembly isolation mode, X-Ray transparency, dynamic laser grid
+ * - Direct component inspection HUD synchronization
  */
 
 class NadiDeviceViewer {
@@ -16,417 +16,516 @@ class NadiDeviceViewer {
     this.options = Object.assign({
       explodedProgress: 0,
       isXray: false,
-      autoRotate: false
+      autoRotate: false,
+      isolatedPart: null
     }, options);
 
     this.parts = {};
-    this.hotspots = [];
+    this.hotspotDefs = [];
     this.selectedPart = null;
     this.init();
   }
 
   init() {
     const width = this.container.clientWidth || 800;
-    const height = this.container.clientHeight || 500;
+    const height = this.container.clientHeight || 550;
 
-    // Scene & Fog
+    // Scene & Deep Retro Environment
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x0A1F2E); // Midnight Navy
-    this.scene.fog = new THREE.FogExp2(0x0A1F2E, 0.04);
+    this.scene.background = new THREE.Color(0x050B11); // Deep Obsidian
+    this.scene.fog = new THREE.FogExp2(0x050B11, 0.035);
 
-    // Camera
-    this.camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
-    this.camera.position.set(4.5, 3.8, 5.5);
+    // Camera with Engineering Ortho/Perspective Feel
+    this.camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 100);
+    this.camera.position.set(4.8, 3.6, 5.8);
 
-    // Renderer
-    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    // High Fidelity PBR Renderer
+    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
     this.renderer.setSize(width, height);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.2;
+    this.renderer.toneMappingExposure = 1.35;
     this.container.appendChild(this.renderer.domElement);
 
-    // OrbitControls
+    // Controls
     this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
-    this.controls.dampingFactor = 0.05;
-    this.controls.minDistance = 2.5;
-    this.controls.maxDistance = 12;
-    this.controls.maxPolarAngle = Math.PI / 2 + 0.1; // Don't flip below ground
+    this.controls.dampingFactor = 0.06;
+    this.controls.minDistance = 2.0;
+    this.controls.maxDistance = 14;
+    this.controls.maxPolarAngle = Math.PI / 2 + 0.15;
     this.controls.autoRotate = this.options.autoRotate;
-    this.controls.autoRotateSpeed = 1.2;
+    this.controls.autoRotateSpeed = 1.4;
 
-    // Lighting
-    this.setupLighting();
+    this.setupStudioLighting();
+    this.setupEngineeringGrid();
+    this.buildMasterpieceModel();
+    this.setupLaserScanner();
 
-    // Ground Grid & Studio pedestal
-    this.setupGround();
-
-    // Build Industrial Sensor Node Model
-    this.buildDeviceModel();
-
-    // Raycaster for interactions
+    // Raycaster
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
 
-    // Event Listeners
     window.addEventListener('resize', this.onResize.bind(this));
-    this.renderer.domElement.addEventListener('pointerdown', this.onPointerDown.bind(this));
-
-    // Animation Loop
     this.clock = new THREE.Clock();
     this.animate();
   }
 
-  setupLighting() {
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.65);
-    this.scene.add(ambientLight);
+  setupStudioLighting() {
+    // Ambient fill
+    const ambient = new THREE.AmbientLight(0xffffff, 0.55);
+    this.scene.add(ambient);
 
-    // Key Light (Clean White / Industrial)
-    const keyLight = new THREE.DirectionalLight(0xffffff, 1.4);
-    keyLight.position.set(5, 8, 5);
+    // Key Light - Clean surgical white
+    const keyLight = new THREE.DirectionalLight(0xFFFFFF, 1.6);
+    keyLight.position.set(6, 10, 6);
     keyLight.castShadow = true;
     keyLight.shadow.mapSize.width = 1024;
     keyLight.shadow.mapSize.height = 1024;
-    keyLight.shadow.bias = -0.0005;
+    keyLight.shadow.bias = -0.0004;
     this.scene.add(keyLight);
 
-    // Fill Light (Teal tone)
-    const fillLight = new THREE.DirectionalLight(0x0DB3A6, 0.8);
-    fillLight.position.set(-6, 3, -4);
-    this.scene.add(fillLight);
+    // Rim Light - Vivid Electric Cyan (#00F2FE)
+    const rimCyan = new THREE.PointLight(0x00F2FE, 2.2, 14);
+    rimCyan.position.set(-6, 4, -5);
+    this.scene.add(rimCyan);
 
-    // Rim / Cyan Highlight Light
-    const rimLight = new THREE.PointLight(0x59D8D1, 1.2, 10);
-    rimLight.position.set(0, 4, -4);
-    this.scene.add(rimLight);
+    // Underbelly Fill - Warm Plasma Amber (#FFA834)
+    const amberFill = new THREE.PointLight(0xFFA834, 1.8, 10);
+    amberFill.position.set(4, -1, 3);
+    this.scene.add(amberFill);
 
-    // Safety Amber Accent Light
-    const amberAccent = new THREE.PointLight(0xF0A444, 0.7, 8);
-    amberAccent.position.set(3, 1, 3);
-    this.scene.add(amberAccent);
+    // Top Halo Light
+    const topHalo = new THREE.SpotLight(0x05D5C5, 2.5, 12, Math.PI / 4, 0.3);
+    topHalo.position.set(0, 7, 0);
+    this.scene.add(topHalo);
   }
 
-  setupGround() {
-    // Industrial Circular Base Platform
-    const pedestalGeo = new THREE.CylinderGeometry(3.5, 3.8, 0.15, 64);
+  setupEngineeringGrid() {
+    // Rotating concentric calibration rings
+    this.gridGroup = new THREE.Group();
+    this.scene.add(this.gridGroup);
+
+    // Machined Pedestal Base
+    const pedestalGeo = new THREE.CylinderGeometry(3.6, 3.8, 0.18, 64);
     const pedestalMat = new THREE.MeshStandardMaterial({
-      color: 0x112738,
-      roughness: 0.8,
-      metalness: 0.3
+      color: 0x08131C,
+      roughness: 0.85,
+      metalness: 0.4
     });
     const pedestal = new THREE.Mesh(pedestalGeo, pedestalMat);
-    pedestal.position.y = -1.1;
+    pedestal.position.y = -1.2;
     pedestal.receiveShadow = true;
-    this.scene.add(pedestal);
+    this.gridGroup.add(pedestal);
 
-    // Subtle Grid Rings
-    const ringGeo = new THREE.RingGeometry(1.8, 1.83, 64);
-    const ringMat = new THREE.MeshBasicMaterial({ color: 0x0DB3A6, opacity: 0.3, transparent: true, side: THREE.DoubleSide });
-    const ringMesh = new THREE.Mesh(ringGeo, ringMat);
-    ringMesh.rotation.x = -Math.PI / 2;
-    ringMesh.position.y = -1.02;
-    this.scene.add(ringMesh);
+    // Concentric Neon Calibration Rings
+    const ringMat = new THREE.MeshBasicMaterial({
+      color: 0x00F2FE,
+      transparent: true,
+      opacity: 0.35,
+      side: THREE.DoubleSide
+    });
 
-    const outerRingGeo = new THREE.RingGeometry(3.2, 3.23, 64);
-    const outerRingMesh = new THREE.Mesh(outerRingGeo, ringMat);
-    outerRingMesh.rotation.x = -Math.PI / 2;
-    outerRingMesh.position.y = -1.02;
-    this.scene.add(outerRingMesh);
+    const innerRing = new THREE.Mesh(new THREE.RingGeometry(1.6, 1.62, 64), ringMat);
+    innerRing.rotation.x = -Math.PI / 2;
+    innerRing.position.y = -1.1;
+    this.gridGroup.add(innerRing);
+
+    const outerRing = new THREE.Mesh(new THREE.RingGeometry(3.1, 3.12, 64), ringMat);
+    outerRing.rotation.x = -Math.PI / 2;
+    outerRing.position.y = -1.1;
+    this.gridGroup.add(outerRing);
+
+    // Radial Compass Ticks
+    for (let i = 0; i < 24; i++) {
+      const angle = (i / 24) * Math.PI * 2;
+      const tickGeo = new THREE.BoxGeometry(0.04, 0.02, i % 6 === 0 ? 0.35 : 0.18);
+      const tickMat = new THREE.MeshBasicMaterial({
+        color: i % 6 === 0 ? 0xFFA834 : 0x00F2FE,
+        transparent: true,
+        opacity: 0.6
+      });
+      const tick = new THREE.Mesh(tickGeo, tickMat);
+      tick.position.set(Math.cos(angle) * 3.1, -1.09, Math.sin(angle) * 3.1);
+      tick.rotation.y = -angle;
+      this.gridGroup.add(tick);
+    }
   }
 
-  buildDeviceModel() {
+  setupLaserScanner() {
+    // Dynamic Laser Scanner Plane
+    const laserGeo = new THREE.RingGeometry(0.1, 3.4, 64);
+    this.laserMat = new THREE.MeshBasicMaterial({
+      color: 0x00F2FE,
+      transparent: true,
+      opacity: 0.12,
+      side: THREE.DoubleSide
+    });
+    this.laserDisc = new THREE.Mesh(laserGeo, this.laserMat);
+    this.laserDisc.rotation.x = -Math.PI / 2;
+    this.laserDisc.position.y = -0.5;
+    this.scene.add(this.laserDisc);
+  }
+
+  buildMasterpieceModel() {
     this.deviceGroup = new THREE.Group();
     this.scene.add(this.deviceGroup);
 
-    // Materials Palette
-    this.matEnclosure = new THREE.MeshPhysicalMaterial({
-      color: 0x173447, // Deep Steel / Polycarbonate
-      roughness: 0.25,
-      metalness: 0.1,
-      transmission: 0.2, // Frosted plastic feel
-      transparent: true,
-      opacity: 0.95,
-      reflectivity: 0.5,
-      clearcoat: 0.3
-    });
-
-    this.matPCB = new THREE.MeshStandardMaterial({
-      color: 0x0E4435, // Industrial Forest PCB
-      roughness: 0.4,
-      metalness: 0.2
-    });
-
-    this.matGold = new THREE.MeshStandardMaterial({
-      color: 0xF4D35E,
+    // ==========================================
+    // Master Materials Library (PBR Engineering)
+    // ==========================================
+    this.matAnodizedDark = new THREE.MeshStandardMaterial({
+      color: 0x122230,
       roughness: 0.3,
+      metalness: 0.85
+    });
+
+    this.matAnodizedBevel = new THREE.MeshStandardMaterial({
+      color: 0x00F2FE,
+      roughness: 0.2,
       metalness: 0.9
     });
 
-    this.matSilver = new THREE.MeshStandardMaterial({
-      color: 0xE2E8F0,
-      roughness: 0.25,
+    this.matPolycarbonate = new THREE.MeshPhysicalMaterial({
+      color: 0x142B3B,
+      roughness: 0.15,
+      metalness: 0.05,
+      transmission: 0.35,
+      transparent: true,
+      opacity: 0.94,
+      reflectivity: 0.6,
+      clearcoat: 0.8,
+      clearcoatRoughness: 0.1
+    });
+
+    this.matPCB = new THREE.MeshStandardMaterial({
+      color: 0x063B34, // Industrial Deep Forest Solder Mask
+      roughness: 0.35,
+      metalness: 0.15
+    });
+
+    this.matGoldTraces = new THREE.MeshStandardMaterial({
+      color: 0xF5C443,
+      roughness: 0.2,
       metalness: 0.95
     });
 
-    this.matTeal = new THREE.MeshStandardMaterial({
-      color: 0x0DB3A6,
-      roughness: 0.3,
-      metalness: 0.4
+    this.matStainlessSteel = new THREE.MeshStandardMaterial({
+      color: 0xE8ECEF,
+      roughness: 0.18,
+      metalness: 0.95
     });
 
-    this.matAmber = new THREE.MeshStandardMaterial({
-      color: 0xF0A444,
-      emissive: 0xF0A444,
-      emissiveIntensity: 0.6,
-      roughness: 0.2
+    this.matCopperHeatsink = new THREE.MeshStandardMaterial({
+      color: 0xD97443, // Pure Copper Heat Sink
+      roughness: 0.28,
+      metalness: 0.92
     });
 
-    this.matCyanLed = new THREE.MeshBasicMaterial({
-      color: 0x59D8D1
+    this.matSiliconeOrange = new THREE.MeshStandardMaterial({
+      color: 0xFF5E36, // Retro Orange Flex Cable
+      roughness: 0.5,
+      metalness: 0.05
     });
 
-    this.matDarkMetal = new THREE.MeshStandardMaterial({
-      color: 0x1E293B,
-      roughness: 0.4,
-      metalness: 0.8
+    this.matPlasmaRing = new THREE.MeshStandardMaterial({
+      color: 0xFFA834,
+      emissive: 0xFFA834,
+      emissiveIntensity: 0.8,
+      roughness: 0.15
     });
 
-    // 1. BASE MOUNTING STUD & MAGNET (Bottom-most)
-    const baseGroup = new THREE.Group();
-    const magnetBaseGeo = new THREE.CylinderGeometry(0.85, 0.9, 0.25, 32);
-    const magnetBase = new THREE.Mesh(magnetBaseGeo, this.matDarkMetal);
-    magnetBase.castShadow = true;
-    magnetBase.receiveShadow = true;
-    baseGroup.add(magnetBase);
+    // ==========================================
+    // 1. SUB-ASSEMBLY: BASE MOUNTING & MAGNETS
+    // ==========================================
+    const mountGroup = new THREE.Group();
+    
+    // CNC Machined Stainless Steel Base Flange
+    const basePlateGeo = new THREE.CylinderGeometry(0.92, 0.98, 0.22, 48);
+    const basePlate = new THREE.Mesh(basePlateGeo, this.matAnodizedDark);
+    basePlate.castShadow = true;
+    basePlate.receiveShadow = true;
+    mountGroup.add(basePlate);
 
-    // M8 Stud Thread representation
-    const studGeo = new THREE.CylinderGeometry(0.2, 0.2, 0.45, 16);
-    const stud = new THREE.Mesh(studGeo, this.matSilver);
-    stud.position.y = -0.3;
-    baseGroup.add(stud);
+    // M8 Threaded Stud (Machined Spiral Approximation)
+    const m8StudGeo = new THREE.CylinderGeometry(0.18, 0.18, 0.55, 24);
+    const m8Stud = new THREE.Mesh(m8StudGeo, this.matStainlessSteel);
+    m8Stud.position.y = -0.34;
+    mountGroup.add(m8Stud);
 
-    // Neodymium Ring pads
-    const neoPadGeo = new THREE.CylinderGeometry(0.75, 0.75, 0.05, 32);
-    const neoPad = new THREE.Mesh(neoPadGeo, this.matGold);
-    neoPad.position.y = -0.13;
-    baseGroup.add(neoPad);
+    // Dual Rare-Earth N52 Neodymium Magnetic Discs
+    for (let m = -1; m <= 1; m += 2) {
+      const magPadGeo = new THREE.CylinderGeometry(0.28, 0.28, 0.06, 24);
+      const magPad = new THREE.Mesh(magPadGeo, this.matGoldTraces);
+      magPad.position.set(m * 0.45, -0.12, 0);
+      mountGroup.add(magPad);
 
-    baseGroup.position.set(0, -0.65, 0);
-    this.parts.mount = {
-      group: baseGroup,
-      basePos: baseGroup.position.clone(),
-      explodeVec: new THREE.Vector3(0, -1.2, 0),
-      id: 'mount',
-      nameKey: 'partMount'
-    };
-    this.deviceGroup.add(baseGroup);
-
-    // 2. LOWER HOUSING CHASSIS
-    const lowerHousingGroup = new THREE.Group();
-    const lowerGeo = new THREE.CylinderGeometry(1.05, 0.95, 0.4, 32);
-    const lowerMesh = new THREE.Mesh(lowerGeo, this.matDarkMetal);
-    lowerMesh.castShadow = true;
-    lowerMesh.receiveShadow = true;
-    lowerHousingGroup.add(lowerMesh);
-
-    // Cooling ribs around lower housing
-    for (let i = 0; i < 16; i++) {
-      const angle = (i / 16) * Math.PI * 2;
-      const ribGeo = new THREE.BoxGeometry(0.06, 0.35, 0.12);
-      const rib = new THREE.Mesh(ribGeo, this.matSilver);
-      rib.position.set(Math.cos(angle) * 1.02, 0, Math.sin(angle) * 1.02);
-      rib.rotation.y = -angle;
-      lowerHousingGroup.add(rib);
+      // Brass retention bezel
+      const brassBezel = new THREE.Mesh(new THREE.TorusGeometry(0.28, 0.02, 12, 32), this.matCopperHeatsink);
+      brassBezel.rotation.x = Math.PI / 2;
+      brassBezel.position.set(m * 0.45, -0.12, 0);
+      mountGroup.add(brassBezel);
     }
 
-    lowerHousingGroup.position.set(0, -0.35, 0);
-    this.parts.chassis = {
-      group: lowerHousingGroup,
-      basePos: lowerHousingGroup.position.clone(),
-      explodeVec: new THREE.Vector3(0, -0.6, 0),
-      id: 'chassis',
-      nameKey: 'partEnclosure'
+    mountGroup.position.set(0, -0.7, 0);
+    this.parts.mount = {
+      group: mountGroup,
+      basePos: mountGroup.position.clone(),
+      explodeVec: new THREE.Vector3(0, -1.35, 0),
+      id: 'mount',
+      title: 'Dudukan Magnetik & Stud M8 Nirkarat',
+      specs: 'Material: AISI 304 + Dual N52 Neodymium | Kekuatan Tarik: 18.5 kgf'
     };
-    this.deviceGroup.add(lowerHousingGroup);
+    this.deviceGroup.add(mountGroup);
 
-    // 3. POWER & PROTECTION STAGE (Buck converter, TVS Diode, Fuse, Terminal)
+    // ==========================================
+    // 2. SUB-ASSEMBLY: LOWER HEATSINK & CHASSIS
+    // ==========================================
+    const chassisGroup = new THREE.Group();
+
+    // Cylindrical Chassis with Machined Lathe Grooves
+    const chassisGeo = new THREE.CylinderGeometry(1.08, 0.98, 0.42, 48);
+    const chassisMesh = new THREE.Mesh(chassisGeo, this.matAnodizedDark);
+    chassisMesh.castShadow = true;
+    chassisMesh.receiveShadow = true;
+    chassisGroup.add(chassisMesh);
+
+    // 24 Radial Copper Heat Dissipation Fins
+    for (let f = 0; f < 24; f++) {
+      const finAngle = (f / 24) * Math.PI * 2;
+      const finGeo = new THREE.BoxGeometry(0.04, 0.38, 0.14);
+      const fin = new THREE.Mesh(finGeo, this.matCopperHeatsink);
+      fin.position.set(Math.cos(finAngle) * 1.05, 0, Math.sin(finAngle) * 1.05);
+      fin.rotation.y = -finAngle;
+      chassisGroup.add(fin);
+    }
+
+    chassisGroup.position.set(0, -0.38, 0);
+    this.parts.chassis = {
+      group: chassisGroup,
+      basePos: chassisGroup.position.clone(),
+      explodeVec: new THREE.Vector3(0, -0.65, 0),
+      id: 'chassis',
+      title: 'Sasis Pendingin Heatsink Tembaga',
+      specs: 'Alloy: 6061-T6 Anodized + 24 Fin Tembaga C1100 | Disipasi Pasif: 3.8 W'
+    };
+    this.deviceGroup.add(chassisGroup);
+
+    // ==========================================
+    // 3. SUB-ASSEMBLY: POWER REGULATION & TVS
+    // ==========================================
     const powerGroup = new THREE.Group();
-    const powerPcbGeo = new THREE.CylinderGeometry(0.85, 0.85, 0.06, 32);
-    const powerPcb = new THREE.Mesh(powerPcbGeo, this.matPCB);
+
+    const powerPcb = new THREE.Mesh(new THREE.CylinderGeometry(0.88, 0.88, 0.06, 36), this.matPCB);
     powerGroup.add(powerPcb);
 
-    // Choke coil / Inductor
-    const inductorGeo = new THREE.CylinderGeometry(0.18, 0.18, 0.15, 16);
-    const inductor = new THREE.Mesh(inductorGeo, this.matDarkMetal);
-    inductor.position.set(-0.35, 0.1, -0.2);
-    powerGroup.add(inductor);
+    // Toroidal High-Q Inductor Choke
+    const chokeGeo = new THREE.TorusGeometry(0.18, 0.08, 16, 32);
+    const choke = new THREE.Mesh(chokeGeo, this.matCopperHeatsink);
+    choke.rotation.x = Math.PI / 2;
+    choke.position.set(-0.35, 0.12, -0.2);
+    powerGroup.add(choke);
 
-    // Industrial Solid Capacitors
-    for (let j = 0; j < 3; j++) {
-      const capGeo = new THREE.CylinderGeometry(0.09, 0.09, 0.22, 16);
-      const cap = new THREE.Mesh(capGeo, this.matSilver);
-      cap.position.set(-0.15 + (j * 0.22), 0.13, -0.4);
+    // Solid Polymer Capacitors (Silver with Blue Markings)
+    for (let c = 0; c < 3; c++) {
+      const capGeo = new THREE.CylinderGeometry(0.1, 0.1, 0.25, 18);
+      const cap = new THREE.Mesh(capGeo, this.matStainlessSteel);
+      cap.position.set(-0.15 + (c * 0.24), 0.14, -0.42);
       powerGroup.add(cap);
     }
 
-    // Terminal Screw Connector
-    const termGeo = new THREE.BoxGeometry(0.4, 0.22, 0.25);
-    const term = new THREE.Mesh(termGeo, this.matTeal);
-    term.position.set(0.4, 0.13, 0.3);
-    powerGroup.add(term);
+    // Industrial Phoenix-style Screw Terminal Block
+    const termBlock = new THREE.Mesh(new THREE.BoxGeometry(0.44, 0.24, 0.28), this.matAnodizedBevel);
+    termBlock.position.set(0.42, 0.14, 0.25);
+    powerGroup.add(termBlock);
 
-    powerGroup.position.set(0, -0.05, 0);
+    // Brass screw heads inside terminal
+    for (let s = -1; s <= 1; s += 2) {
+      const screwHead = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.04, 12), this.matGoldTraces);
+      screwHead.position.set(0.42 + (s * 0.1), 0.26, 0.25);
+      powerGroup.add(screwHead);
+    }
+
+    powerGroup.position.set(0, -0.06, 0);
     this.parts.power = {
       group: powerGroup,
       basePos: powerGroup.position.clone(),
       explodeVec: new THREE.Vector3(0, -0.15, 0),
       id: 'power',
-      nameKey: 'partPower'
+      title: 'Modul Catu Daya & Proteksi TVS Surge',
+      specs: 'Input: 12-24V DC / Step-down Buck 3.3V | TVS Clamp: 36V 600W | Sekering PTC'
     };
     this.deviceGroup.add(powerGroup);
 
-    // 4. MEMS ACCELEROMETER & THERMAL RTD INTERFACE
+    // ==========================================
+    // 4. SUB-ASSEMBLY: MEMS ACCELEROMETER & RTD PROBE
+    // ==========================================
     const sensorGroup = new THREE.Group();
-    const sensorPlateGeo = new THREE.CylinderGeometry(0.88, 0.88, 0.05, 32);
-    const sensorPlate = new THREE.Mesh(sensorPlateGeo, this.matPCB);
-    sensorGroup.add(sensorPlate);
 
-    // Triaxial MEMS Accelerometer IC (Gold / Metallic QFN package)
-    const memsGeo = new THREE.BoxGeometry(0.24, 0.08, 0.24);
-    const mems = new THREE.Mesh(memsGeo, this.matGold);
-    mems.position.set(0, 0.06, 0);
-    mems.castShadow = true;
-    sensorGroup.add(mems);
+    const sensorPcb = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 0.9, 0.05, 36), this.matPCB);
+    sensorGroup.add(sensorPcb);
 
-    // Decoupling Acoustic Pad
-    const decoupleGeo = new THREE.CylinderGeometry(0.35, 0.35, 0.02, 24);
-    const decouple = new THREE.Mesh(decoupleGeo, this.matSilver);
-    decouple.position.set(0, 0.02, 0);
-    sensorGroup.add(decouple);
+    // Acoustic Decoupling Ring (Viton O-Ring)
+    const oRing = new THREE.Mesh(new THREE.TorusGeometry(0.42, 0.04, 16, 36), this.matAnodizedDark);
+    oRing.rotation.x = Math.PI / 2;
+    oRing.position.y = 0.03;
+    sensorGroup.add(oRing);
 
-    // Temperature RTD Probe Cable Lead out of the side
-    const probeWireGeo = new THREE.CylinderGeometry(0.04, 0.04, 0.8, 12);
-    const probeWire = new THREE.Mesh(probeWireGeo, this.matAmber);
-    probeWire.rotation.z = Math.PI / 2;
-    probeWire.position.set(0.7, 0.05, -0.2);
-    sensorGroup.add(probeWire);
+    // Triaxial MEMS Accelerometer Ceramic IC Package (LGA/QFN Gold Leadless)
+    const memsChip = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.08, 0.28), this.matGoldTraces);
+    memsChip.position.set(0, 0.08, 0);
+    memsChip.castShadow = true;
+    sensorGroup.add(memsChip);
 
-    // Stainless Steel RTD Probe Head
-    const probeHeadGeo = new THREE.CylinderGeometry(0.08, 0.08, 0.35, 16);
-    const probeHead = new THREE.Mesh(probeHeadGeo, this.matSilver);
-    probeHead.rotation.z = Math.PI / 2;
-    probeHead.position.set(1.2, 0.05, -0.2);
-    sensorGroup.add(probeHead);
+    // Gold Axis Crosshair Marker on Chip (X-Y-Z)
+    const axisX = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.01, 0.02), this.matAnodizedBevel);
+    axisX.position.set(0, 0.125, 0);
+    sensorGroup.add(axisX);
+
+    // Flexible Braided RTD Cable with Spring Strain Relief
+    const cableCurve = new THREE.CubicBezierCurve3(
+      new THREE.Vector3(0.5, 0.06, -0.2),
+      new THREE.Vector3(0.8, 0.06, -0.2),
+      new THREE.Vector3(1.1, 0.15, -0.3),
+      new THREE.Vector3(1.4, 0.06, -0.3)
+    );
+    const cableGeo = new THREE.TubeGeometry(cableCurve, 24, 0.04, 12, false);
+    const cable = new THREE.Mesh(cableGeo, this.matSiliconeOrange);
+    sensorGroup.add(cable);
+
+    // Stainless Spring Strain Relief
+    const springGeo = new THREE.CylinderGeometry(0.06, 0.06, 0.35, 12);
+    const spring = new THREE.Mesh(springGeo, this.matStainlessSteel);
+    spring.rotation.z = Math.PI / 2;
+    spring.position.set(0.72, 0.06, -0.2);
+    sensorGroup.add(spring);
+
+    // Knurled Stainless RTD Sensor Sheath
+    const rtdSheath = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 0.45, 18), this.matStainlessSteel);
+    rtdSheath.rotation.z = Math.PI / 2;
+    rtdSheath.position.set(1.65, 0.06, -0.3);
+    sensorGroup.add(rtdSheath);
 
     sensorGroup.position.set(0, 0.18, 0);
     this.parts.sensor = {
       group: sensorGroup,
       basePos: sensorGroup.position.clone(),
-      explodeVec: new THREE.Vector3(0, 0.35, 0),
+      explodeVec: new THREE.Vector3(0, 0.38, 0),
       id: 'sensor',
-      nameKey: 'partMems'
+      title: 'Akselerometer MEMS Triaksial & RTD PT100',
+      specs: 'Bandwidth Getaran: 1-2 kHz (±16g) | Sensor Suhu: RTD Kelas A (-40 sd +125°C)'
     };
     this.deviceGroup.add(sensorGroup);
 
-    // 5. MAIN EDGE PROCESSING BOARD (ESP32-S3 + DSP Engine)
+    // ==========================================
+    // 5. SUB-ASSEMBLY: ESP32-S3 EDGE MCU & DSP
+    // ==========================================
     const espGroup = new THREE.Group();
-    const mainPcbGeo = new THREE.CylinderGeometry(0.9, 0.9, 0.06, 32);
-    const mainPcb = new THREE.Mesh(mainPcbGeo, this.matPCB);
+
+    const mainPcb = new THREE.Mesh(new THREE.CylinderGeometry(0.92, 0.92, 0.06, 36), this.matPCB);
     espGroup.add(mainPcb);
 
-    // ESP32-S3 SoC Shield (Metallic Silver rectangular can)
-    const espCanGeo = new THREE.BoxGeometry(0.48, 0.1, 0.55);
-    const espCan = new THREE.Mesh(espCanGeo, this.matSilver);
-    espCan.position.set(-0.15, 0.08, 0);
-    espCan.castShadow = true;
-    espGroup.add(espCan);
+    // ESP32-S3 Nickel RF Shielding Can with Etched Logo
+    const rfCan = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.1, 0.6), this.matStainlessSteel);
+    rfCan.position.set(-0.15, 0.08, 0);
+    rfCan.castShadow = true;
+    espGroup.add(rfCan);
 
-    // Microstrip Antenna Trace / Ceramic Resonator
-    const antGeo = new THREE.BoxGeometry(0.12, 0.04, 0.35);
-    const ant = new THREE.Mesh(antGeo, this.matGold);
-    ant.position.set(0.28, 0.06, 0);
-    espGroup.add(ant);
+    // PCB Antenna Meander Line
+    const pcbAntenna = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.03, 0.42), this.matGoldTraces);
+    pcbAntenna.position.set(0.32, 0.05, 0);
+    espGroup.add(pcbAntenna);
 
-    // Signal Conditioning Op-Amps & Passive ICs
-    for (let k = 0; k < 4; k++) {
-      const icGeo = new THREE.BoxGeometry(0.1, 0.04, 0.12);
-      const ic = new THREE.Mesh(icGeo, this.matDarkMetal);
-      ic.position.set(0.15, 0.06, -0.3 + (k * 0.2));
-      espGroup.add(ic);
+    // Gold SMD Decoupling Passives (0402/0603)
+    for (let p = 0; p < 8; p++) {
+      const smd = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.03, 0.08), this.matGoldTraces);
+      smd.position.set(0.12, 0.05, -0.35 + (p * 0.1));
+      espGroup.add(smd);
     }
 
-    espGroup.position.set(0, 0.42, 0);
+    espGroup.position.set(0, 0.44, 0);
     this.parts.esp = {
       group: espGroup,
       basePos: espGroup.position.clone(),
-      explodeVec: new THREE.Vector3(0, 0.8, 0),
+      explodeVec: new THREE.Vector3(0, 0.85, 0),
       id: 'esp',
-      nameKey: 'partEsp'
+      title: 'Unit Komputasi Tepi ESP32-S3 (Edge DSP)',
+      specs: 'Xtensa Dual-Core 240 MHz | Akselerasi Vektor FFT | Inferensi Lokal MAD'
     };
     this.deviceGroup.add(espGroup);
 
-    // 6. TOP POLYCARBONATE ENCLOSURE & STATUS RING
-    const topEnclosureGroup = new THREE.Group();
-    // Beveled cylindrical dome housing
-    const domeGeo = new THREE.CylinderGeometry(0.95, 1.08, 0.5, 32);
-    this.topEnclosureMesh = new THREE.Mesh(domeGeo, this.matEnclosure);
-    this.topEnclosureMesh.castShadow = true;
-    topEnclosureGroup.add(this.topEnclosureMesh);
+    // ==========================================
+    // 6. SUB-ASSEMBLY: TOP DOME ENCLOSURE & OPTICAL RING
+    // ==========================================
+    const enclosureGroup = new THREE.Group();
 
-    // Top Dome Cap
-    const domeCapGeo = new THREE.SphereGeometry(0.95, 32, 16, 0, Math.PI * 2, 0, Math.PI / 4);
-    const domeCap = new THREE.Mesh(domeCapGeo, this.matEnclosure);
-    domeCap.position.y = 0.24;
-    topEnclosureGroup.add(domeCap);
+    // Frosted Polycarbonate Shell Dome
+    const domeCylinder = new THREE.Mesh(new THREE.CylinderGeometry(0.98, 1.12, 0.52, 48), this.matPolycarbonate);
+    domeCylinder.castShadow = true;
+    enclosureGroup.add(domeCylinder);
 
-    // 360° Optical Pulse Status Ring (Illumination)
-    const statusRingGeo = new THREE.TorusGeometry(0.72, 0.04, 16, 48);
-    this.statusRingMesh = new THREE.Mesh(statusRingGeo, this.matAmber);
-    this.statusRingMesh.rotation.x = Math.PI / 2;
-    this.statusRingMesh.position.y = 0.28;
-    topEnclosureGroup.add(this.statusRingMesh);
+    const domeCap = new THREE.Mesh(new THREE.SphereGeometry(0.98, 48, 18, 0, Math.PI * 2, 0, Math.PI / 4), this.matPolycarbonate);
+    domeCap.position.y = 0.26;
+    enclosureGroup.add(domeCap);
 
-    // NADI-IKM Monogram Emblem Badge on top
-    const badgeGeo = new THREE.CylinderGeometry(0.38, 0.38, 0.03, 32);
-    const badge = new THREE.Mesh(badgeGeo, this.matDarkMetal);
-    badge.position.y = 0.35;
-    topEnclosureGroup.add(badge);
+    // 4 Stainless Steel Hex Socket Cap Screws on Top Flange
+    for (let s = 0; s < 4; s++) {
+      const sAngle = (s / 4) * Math.PI * 2 + Math.PI / 4;
+      const screwGroup = new THREE.Group();
 
-    const emblemPulseGeo = new THREE.BoxGeometry(0.24, 0.02, 0.05);
-    const emblemPulse = new THREE.Mesh(emblemPulseGeo, this.matTeal);
-    emblemPulse.position.y = 0.37;
-    topEnclosureGroup.add(emblemPulse);
+      const screwHead = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 0.08, 16), this.matStainlessSteel);
+      screwGroup.add(screwHead);
 
-    topEnclosureGroup.position.set(0, 0.82, 0);
+      // Inner Hex Socket
+      const hexSocket = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.05, 6), this.matAnodizedDark);
+      hexSocket.position.y = 0.02;
+      screwGroup.add(hexSocket);
+
+      screwGroup.position.set(Math.cos(sAngle) * 0.88, 0.26, Math.sin(sAngle) * 0.88);
+      enclosureGroup.add(screwGroup);
+    }
+
+    // 360° Phosphor Glowing Optical Status Ring
+    const statusTorus = new THREE.Mesh(new THREE.TorusGeometry(0.74, 0.045, 20, 64), this.matPlasmaRing);
+    statusTorus.rotation.x = Math.PI / 2;
+    statusTorus.position.y = 0.32;
+    this.statusTorusMesh = statusTorus;
+    enclosureGroup.add(statusTorus);
+
+    // Top Knurled Cable Gland for External Interconnect
+    const glandGeo = new THREE.CylinderGeometry(0.24, 0.28, 0.16, 24);
+    const gland = new THREE.Mesh(glandGeo, this.matAnodizedDark);
+    gland.position.y = 0.42;
+    enclosureGroup.add(gland);
+
+    enclosureGroup.position.set(0, 0.86, 0);
     this.parts.enclosure = {
-      group: topEnclosureGroup,
-      basePos: topEnclosureGroup.position.clone(),
-      explodeVec: new THREE.Vector3(0, 1.45, 0),
+      group: enclosureGroup,
+      basePos: enclosureGroup.position.clone(),
+      explodeVec: new THREE.Vector3(0, 1.55, 0),
       id: 'enclosure',
-      nameKey: 'partEnclosure'
+      title: 'Housing Polikarbonat & Ring Optik 360°',
+      specs: 'Material: Sabic Lexan PC-GF30 | Rating: Konsep IP65 | Status Ring: Phosphor Amber'
     };
-    this.deviceGroup.add(topEnclosureGroup);
+    this.deviceGroup.add(enclosureGroup);
 
-    // Center pivot slightly
-    this.deviceGroup.position.y = 0.1;
+    this.deviceGroup.position.y = 0.12;
 
-    // Build Hotspots in DOM
     this.createDomHotspots();
   }
 
   createDomHotspots() {
     this.hotspotDefs = [
-      { id: 'enclosure', num: '1', titleKey: 'partEnclosure', descKey: 'partEnclosureDesc', targetGroup: this.parts.enclosure },
-      { id: 'esp', num: '2', titleKey: 'partEsp', descKey: 'partEspDesc', targetGroup: this.parts.esp },
-      { id: 'sensor', num: '3', titleKey: 'partMems', descKey: 'partMemsDesc', targetGroup: this.parts.sensor },
-      { id: 'power', num: '4', titleKey: 'partPower', descKey: 'partPowerDesc', targetGroup: this.parts.power },
-      { id: 'mount', num: '5', titleKey: 'partMount', descKey: 'partMountDesc', targetGroup: this.parts.mount }
+      { id: 'enclosure', num: '01', titleKey: 'partEnclosure', targetGroup: this.parts.enclosure },
+      { id: 'esp', num: '02', titleKey: 'partEsp', targetGroup: this.parts.esp },
+      { id: 'sensor', num: '03', titleKey: 'partMems', targetGroup: this.parts.sensor },
+      { id: 'power', num: '04', titleKey: 'partPower', targetGroup: this.parts.power },
+      { id: 'chassis', num: '05', titleKey: 'partEnclosure', targetGroup: this.parts.chassis },
+      { id: 'mount', num: '06', titleKey: 'partMount', targetGroup: this.parts.mount }
     ];
 
-    // Overlay container
     let overlay = this.container.querySelector('.hotspot-overlay');
     if (!overlay) {
       overlay = document.createElement('div');
@@ -437,9 +536,8 @@ class NadiDeviceViewer {
 
     this.hotspotElements = this.hotspotDefs.map(def => {
       const el = document.createElement('button');
-      el.className = 'absolute pointer-events-auto flex items-center justify-center w-8 h-8 rounded-full bg-industrial-teal/90 text-white font-mono text-xs font-bold shadow-lg border border-signal-cyan/50 backdrop-blur hover:scale-125 transition-transform duration-200 focus:outline-none';
+      el.className = 'hotspot-btn absolute pointer-events-auto flex items-center justify-center w-7 h-7 rounded-full bg-deep-steel/90 text-signal-cyan font-mono text-[11px] font-bold shadow-lg border border-neon-cyan/50 backdrop-blur hover:scale-125 hover:border-plasma-amber hover:text-plasma-amber transition-all duration-200 focus:outline-none';
       el.innerHTML = `<span>${def.num}</span>`;
-      el.title = def.id;
 
       el.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -462,12 +560,11 @@ class NadiDeviceViewer {
       const worldPos = new THREE.Vector3();
       targetGroup.getWorldPosition(worldPos);
 
-      // Offset hotspot outward slightly
-      worldPos.x += 1.1;
+      // Offset hotspot outward slightly along X
+      worldPos.x += 1.25;
 
       worldPos.project(this.camera);
 
-      // Check if behind camera
       if (worldPos.z > 1) {
         item.el.style.display = 'none';
         return;
@@ -491,41 +588,56 @@ class NadiDeviceViewer {
 
   setXray(enabled) {
     this.options.isXray = enabled;
-    if (this.matEnclosure) {
-      this.matEnclosure.opacity = enabled ? 0.22 : 0.95;
-      this.matEnclosure.transmission = enabled ? 0.9 : 0.2;
-      this.matEnclosure.wireframe = false;
-      this.matEnclosure.needsUpdate = true;
+    if (this.matPolycarbonate) {
+      this.matPolycarbonate.opacity = enabled ? 0.2 : 0.94;
+      this.matPolycarbonate.transmission = enabled ? 0.95 : 0.35;
+      this.matPolycarbonate.needsUpdate = true;
+    }
+  }
+
+  isolatePart(partId) {
+    this.options.isolatedPart = partId;
+    for (const key in this.parts) {
+      const part = this.parts[key];
+      const isTarget = key === partId || partId === null;
+      part.group.visible = isTarget;
+    }
+    if (partId) {
+      this.selectPart(partId);
     }
   }
 
   resetView() {
-    gsap.to(this.camera.position, {
-      x: 4.5,
-      y: 3.8,
-      z: 5.5,
-      duration: 1,
-      ease: "power2.out",
-      onUpdate: () => this.controls.update()
-    });
+    if (window.gsap) {
+      gsap.to(this.camera.position, {
+        x: 4.8, y: 3.6, z: 5.8,
+        duration: 1,
+        ease: "power2.out",
+        onUpdate: () => this.controls.update()
+      });
+      gsap.to(this.controls.target, {
+        x: 0, y: 0.1, z: 0,
+        duration: 1,
+        ease: "power2.out"
+      });
+    } else {
+      this.camera.position.set(4.8, 3.6, 5.8);
+      this.controls.target.set(0, 0.1, 0);
+      this.controls.update();
+    }
     this.setExploded(0);
+    this.isolatePart(null);
   }
 
   setView(viewType) {
-    let targetPos = { x: 4.5, y: 3.8, z: 5.5 };
-    if (viewType === 'iso') {
-      targetPos = { x: 4.5, y: 4.2, z: 4.5 };
-    } else if (viewType === 'top') {
-      targetPos = { x: 0.01, y: 8.5, z: 0.01 };
-    } else if (viewType === 'side') {
-      targetPos = { x: 7.5, y: 0.5, z: 0 };
-    }
+    let targetPos = { x: 4.8, y: 3.6, z: 5.8 };
+    if (viewType === 'iso') targetPos = { x: 4.8, y: 4.2, z: 4.8 };
+    else if (viewType === 'top') targetPos = { x: 0.01, y: 8.8, z: 0.01 };
+    else if (viewType === 'side') targetPos = { x: 8.2, y: 0.2, z: 0 };
 
     if (window.gsap) {
       gsap.to(this.camera.position, {
-        x: targetPos.x,
-        y: targetPos.y,
-        z: targetPos.z,
+        x: targetPos.x, y: targetPos.y, z: targetPos.z,
         duration: 0.9,
         ease: "power2.out",
         onUpdate: () => this.controls.update()
@@ -538,42 +650,29 @@ class NadiDeviceViewer {
 
   selectPart(partId) {
     this.selectedPart = partId;
-    const def = this.hotspotDefs.find(d => d.id === partId);
-    if (!def) return;
-
-    // Trigger custom event for DOM info card
-    const lang = currentLang || 'id';
-    const title = translations[lang][def.titleKey] || def.id;
-    const desc = translations[lang][def.descKey] || '';
+    const part = this.parts[partId];
+    if (!part) return;
 
     window.dispatchEvent(new CustomEvent('partSelected', {
       detail: {
         id: partId,
-        title,
-        desc,
-        num: def.num
+        title: part.title,
+        specs: part.specs
       }
     }));
 
-    // Focus camera slightly towards part
     const worldPos = new THREE.Vector3();
-    def.targetGroup.group.getWorldPosition(worldPos);
+    part.group.getWorldPosition(worldPos);
 
     if (window.gsap) {
       gsap.to(this.controls.target, {
         x: worldPos.x,
         y: worldPos.y,
         z: worldPos.z,
-        duration: 0.8,
+        duration: 0.75,
         ease: "power2.out"
       });
     }
-  }
-
-  onPointerDown(event) {
-    const rect = this.renderer.domElement.getBoundingClientRect();
-    this.mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-    this.mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
   }
 
   onResize() {
@@ -587,13 +686,16 @@ class NadiDeviceViewer {
 
   animate() {
     requestAnimationFrame(this.animate.bind(this));
-    const delta = this.clock.getDelta();
+    const t = this.clock.getElapsedTime();
 
-    // Subtle breathing pulse on LED Status Ring
-    if (this.statusRingMesh) {
-      const t = this.clock.getElapsedTime();
-      const pulse = 0.5 + Math.sin(t * 3.5) * 0.4;
-      this.matAmber.emissiveIntensity = pulse;
+    // Oscillating Laser Disc
+    if (this.laserDisc) {
+      this.laserDisc.position.y = -0.6 + Math.sin(t * 1.5) * 0.9;
+    }
+
+    // Breathing Optical Pulse on Status Ring
+    if (this.matPlasmaRing) {
+      this.matPlasmaRing.emissiveIntensity = 0.5 + Math.sin(t * 3.2) * 0.45;
     }
 
     this.controls.update();
@@ -602,5 +704,4 @@ class NadiDeviceViewer {
   }
 }
 
-// Global hook
 window.NadiDeviceViewer = NadiDeviceViewer;

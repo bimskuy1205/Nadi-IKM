@@ -1,101 +1,286 @@
-/* NADI-IKM Custom Style Tokens & Aesthetics */
+/* ==========================================================================
+   NADI-IKM: RETRO-INDUSTRIAL ENGINEERING MASTERPIECE STYLESHEET
+   Aesthetics: Vintage Oscilloscope / Aerospace CAD Workstation / Braun-Linear Hybrid
+   ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 :root {
-  --midnight-navy: #0A1F2E;
-  --deep-steel: #173447;
-  --industrial-teal: #0DB3A6;
-  --signal-cyan: #59D8D1;
-  --safety-amber: #F0A444;
-  --alert-coral: #E96F67;
-  --success-jade: #3CB789;
-  --paper: #F6F8F8;
-  --ink: #173042;
-  --muted-slate: #6B7F8A;
+  /* Core Industrial Palette */
+  --obsidian-dark: #050B11;
+  --midnight-navy: #09131D;
+  --deep-steel: #122230;
+  --surface-plate: #182C3D;
+  --border-caliper: rgba(0, 242, 254, 0.2);
+  
+  /* Exotic Engineering Neon & Retro Tones */
+  --neon-cyan: #00F2FE;
+  --electric-teal: #05D5C5;
+  --plasma-amber: #FFA834;
+  --retro-orange: #FF5E36;
+  --oscilloscope-green: #00FF87;
+  --cadmium-red: #FF3366;
+  --ultra-violet: #8A2BE2;
+  
+  /* Textures & Fonts */
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+
+/* Base Viewport & Blueprint Grid */
+html {
+  scroll-behavior: smooth;
+  cursor: default;
 }
 
 body {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  background-color: var(--midnight-navy);
-  color: #F8FAFC;
+  font-family: var(--font-body);
+  background-color: var(--obsidian-dark);
+  color: #EDF3F8;
   overflow-x: hidden;
+  position: relative;
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(0, 242, 254, 0.08) 0%, transparent 60%),
+    linear-gradient(rgba(0, 242, 254, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 242, 254, 0.03) 1px, transparent 1px);
+  background-size: 100% 100%, 32px 32px, 32px 32px;
+  background-position: 0 0, -1px -1px, -1px -1px;
 }
 
-.font-mono {
-  font-family: 'IBM Plex Mono', monospace;
+.font-display { font-family: var(--font-display); }
+.font-mono { font-family: var(--font-mono); }
+
+/* Retro CRT Subtle Scanline Overlay */
+body::before {
+  content: " ";
+  display: block;
+  position: fixed;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
+  background-size: 100% 4px;
+  z-index: 9990;
+  pointer-events: none;
+  opacity: 0.45;
 }
 
-/* Custom Gradients */
-.bg-hero-gradient {
-  background: linear-gradient(120deg, #061720 0%, #0A2937 58%, #0E4449 100%);
-}
-
-.bg-radial-glow {
-  background: radial-gradient(circle at 50% 30%, rgba(13, 179, 166, 0.15) 0%, rgba(10, 31, 46, 0) 70%);
-}
-
-/* Glassmorphism */
-.glass-card {
-  background: rgba(23, 52, 71, 0.65);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(89, 216, 209, 0.15);
-}
-
-.glass-card-hover {
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.glass-card-hover:hover {
-  transform: translateY(-4px);
-  border-color: rgba(13, 179, 166, 0.45);
-  box-shadow: 0 16px 32px -8px rgba(0, 0, 0, 0.5), 0 0 20px rgba(13, 179, 166, 0.15);
-}
-
-/* Custom Sliders */
-input[type=range] {
-  -webkit-appearance: none;
-  background: #173447;
-  height: 8px;
-  border-radius: 4px;
-  outline: none;
-}
-input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: #0DB3A6;
-  border: 3px solid #59D8D1;
-  cursor: pointer;
-  box-shadow: 0 0 10px rgba(89, 216, 209, 0.6);
-  transition: transform 0.15s ease;
-}
-input[type=range]::-webkit-slider-thumb:hover {
-  transform: scale(1.2);
-}
-
-/* Pulse effects */
-@keyframes pulse-subtle {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
-.animate-pulse-subtle {
-  animation: pulse-subtle 2s infinite ease-in-out;
-}
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
+/* ==========================================================================
+   INTERACTIVE ENGINEERING CUSTOM CURSOR & HUD RETICLE
+   ========================================================================== */
+#cursor-dot {
   width: 8px;
   height: 8px;
+  background-color: var(--neon-cyan);
+  border-radius: 50%;
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 12px var(--neon-cyan), 0 0 24px var(--neon-cyan);
+  transition: transform 0.05s ease-out, background-color 0.2s ease;
+}
+
+#cursor-reticle {
+  width: 36px;
+  height: 36px;
+  border: 1.5px dashed rgba(0, 242, 254, 0.65);
+  border-radius: 50%;
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 99998;
+  transform: translate(-50%, -50%);
+  transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+              height 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.2s ease;
+  animation: reticle-spin 14s linear infinite;
+}
+
+#cursor-reticle::before, #cursor-reticle::after {
+  content: '';
+  position: absolute;
+  background: var(--plasma-amber);
+}
+#cursor-reticle::before {
+  top: -4px; left: 50%; width: 2px; height: 6px; transform: translateX(-50%);
+}
+#cursor-reticle::after {
+  bottom: -4px; left: 50%; width: 2px; height: 6px; transform: translateX(-50%);
+}
+
+@keyframes reticle-spin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Cursor hover on active buttons & links */
+.cursor-hover #cursor-reticle {
+  width: 58px;
+  height: 58px;
+  border-color: var(--plasma-amber);
+  border-style: solid;
+  background: rgba(255, 168, 52, 0.08);
+}
+.cursor-hover #cursor-dot {
+  background-color: var(--retro-orange);
+  box-shadow: 0 0 15px var(--retro-orange);
+}
+
+/* Top Right Fixed Engineering Telemetry HUD */
+#eng-hud-badge {
+  position: fixed;
+  top: 14px;
+  right: 18px;
+  z-index: 9995;
+  background: rgba(9, 19, 29, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 242, 254, 0.3);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--neon-cyan);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   EXOTIC RETRO-INDUSTRIAL GRADIENTS & ILLUMINATION TOKENS
+   ========================================================================== */
+.bg-retro-mesh {
+  background: linear-gradient(135deg, #050B11 0%, #091927 50%, #0F2A38 100%);
+}
+
+.gradient-plasma-flame {
+  background: linear-gradient(135deg, #FF5E36 0%, #FFA834 50%, #00F2FE 100%);
+}
+
+.text-gradient-plasma {
+  background: linear-gradient(120deg, #FFFFFF 0%, #00F2FE 40%, #FFA834 85%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-oscilloscope {
+  background: linear-gradient(120deg, #00FF87 0%, #00F2FE 60%, #FFFFFF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Tactile Industrial Bezel Card */
+.retro-card {
+  background: linear-gradient(145deg, rgba(18, 34, 48, 0.75) 0%, rgba(9, 19, 29, 0.85) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 242, 254, 0.18);
+  border-radius: 18px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.retro-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 242, 254, 0.5), transparent);
+}
+
+.retro-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(0, 242, 254, 0.45);
+  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.8), 0 0 25px -5px rgba(0, 242, 254, 0.25);
+}
+
+/* Tactical Corner Chamfer Markers */
+.corner-tick-tl {
+  position: absolute; top: 0; left: 0; width: 8px; height: 8px;
+  border-top: 2px solid var(--neon-cyan); border-left: 2px solid var(--neon-cyan);
+}
+.corner-tick-tr {
+  position: absolute; top: 0; right: 0; width: 8px; height: 8px;
+  border-top: 2px solid var(--neon-cyan); border-right: 2px solid var(--neon-cyan);
+}
+.corner-tick-bl {
+  position: absolute; bottom: 0; left: 0; width: 8px; height: 8px;
+  border-bottom: 2px solid var(--plasma-amber); border-left: 2px solid var(--plasma-amber);
+}
+.corner-tick-br {
+  position: absolute; bottom: 0; right: 0; width: 8px; height: 8px;
+  border-bottom: 2px solid var(--plasma-amber); border-right: 2px solid var(--plasma-amber);
+}
+
+/* Laser Scan Line Sweep */
+@keyframes laser-sweep {
+  0% { transform: translateY(-100%); opacity: 0; }
+  50% { opacity: 0.8; }
+  100% { transform: translateY(400%); opacity: 0; }
+}
+
+.laser-scanner-line {
+  position: absolute;
+  left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--neon-cyan), var(--plasma-amber), transparent);
+  box-shadow: 0 0 15px var(--neon-cyan);
+  pointer-events: none;
+  animation: laser-sweep 5s infinite cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Mechanical Slider Styling */
+input[type=range].retro-slider {
+  -webkit-appearance: none;
+  background: #0B1924;
+  height: 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 242, 254, 0.25);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+input[type=range].retro-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, #2D4D65 0%, #122230 100%);
+  border: 2px solid var(--neon-cyan);
+  cursor: ew-resize;
+  box-shadow: 0 0 14px rgba(0, 242, 254, 0.8), 0 2px 4px rgba(0, 0, 0, 0.8);
+  transition: transform 0.15s ease, border-color 0.2s ease;
+}
+input[type=range].retro-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  border-color: var(--plasma-amber);
+  box-shadow: 0 0 18px var(--plasma-amber);
+}
+
+/* Flowchart Circuit Routing Paths */
+.flowchart-pulse-line {
+  stroke-dasharray: 6 6;
+  animation: circuit-flow 1.5s linear infinite;
+}
+
+@keyframes circuit-flow {
+  from { stroke-dashoffset: 24; }
+  to { stroke-dashoffset: 0; }
+}
+
+/* Responsive Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
 }
 ::-webkit-scrollbar-track {
-  background: #0A1F2E;
+  background: var(--obsidian-dark);
 }
 ::-webkit-scrollbar-thumb {
-  background: #173447;
-  border-radius: 4px;
+  background: var(--surface-plate);
+  border-radius: 3px;
+  border: 1px solid rgba(0, 242, 254, 0.2);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #0DB3A6;
+  background: var(--neon-cyan);
 }
