@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NADI-IKM | Riset Ilmiah & Landasan Referensi Akademis</title>
+  
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            'midnight-navy': '#0A1F2E',
+            'deep-steel': '#173447',
+            'industrial-teal': '#0DB3A6',
+            'signal-cyan': '#59D8D1',
+            'safety-amber': '#F0A444',
+            'alert-coral': '#E96F67',
+            'success-jade': '#3CB789',
+            'paper': '#F6F8F8',
+            'ink': '#173042',
+            'muted-slate': '#6B7F8A'
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"IBM Plex Mono"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-midnight-navy text-slate-100 antialiased min-h-screen flex flex-col font-sans">
+
+  <!-- Header -->
+  <header class="bg-deep-steel/90 border-b border-slate-800 sticky top-0 z-40 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <a href="index.html" class="flex items-center gap-2 group">
+          <img src="assets/img/logo-dark.svg" alt="NADI-IKM Logo" class="h-9 w-auto">
+        </a>
+        <div class="hidden sm:block h-6 w-px bg-slate-700"></div>
+        <span class="hidden sm:inline-block px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-industrial-teal/20 text-signal-cyan border border-industrial-teal/40">
+          DOKUMENTASI RISET IYEEA 2026
+        </span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- Language Switcher -->
+        <div class="flex items-center bg-midnight-navy rounded-lg p-1 border border-slate-700 text-xs font-mono">
+          <button onclick="setLanguage('id')" data-lang="id" class="lang-btn px-2.5 py-1 rounded transition-all">ID</button>
+          <button onclick="setLanguage('en')" data-lang="en" class="lang-btn px-2.5 py-1 rounded transition-all">EN</button>
+        </div>
+
+        <a href="dashboard.html" class="px-3 py-1.5 rounded-lg bg-industrial-teal text-midnight-navy font-bold text-xs hover:bg-teal-400 transition-colors">
+          Demo Dashboard
+        </a>
+        <a href="index.html" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 transition-colors">
+          Beranda
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full space-y-10">
+    
+    <!-- Paper Banner Header -->
+    <div class="glass-card rounded-3xl p-8 lg:p-10 border border-signal-cyan/20 space-y-4">
+      <div class="flex flex-wrap items-center gap-3">
+        <span class="px-3 py-1 rounded-full bg-industrial-teal/20 text-signal-cyan text-xs font-mono font-bold">
+          SUB-TEMA 1: INOVASI TEKNOLOGI & DIGITALISASI
+        </span>
+        <span class="text-xs text-slate-400 font-mono">Universitas Brawijaya • Malang, Indonesia (2026)</span>
+      </div>
+
+      <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-tight">
+        NADI-IKM: Pemeliharaan Prediktif Hemat Data Berbasis Edge AI untuk Menjaga Keandalan Mesin Industri Kecil dan Menengah
+      </h1>
+
+      <div class="flex flex-wrap items-center gap-6 text-xs text-slate-300 pt-2 border-t border-slate-800">
+        <div><strong>Penulis:</strong> Bimo Satrio, Ihwan Ridwan S. Maulidian, Muhammad Raiz Belyaa</div>
+        <div><strong>Institusi:</strong> Universitas Brawijaya</div>
+        <div><strong>Kompetisi:</strong> Indonesian Young Economy and Engineering Award (IYEEA 2026)</div>
+      </div>
+    </div>
+
+    <!-- Paper Abstract -->
+    <div class="glass-card rounded-3xl p-8 space-y-4">
+      <h3 class="text-lg font-bold text-white flex items-center gap-2">
+        <i data-lucide="book-open" class="w-5 h-5 text-industrial-teal"></i>
+        <span>Abstrak & Ringkasan Eksekutif</span>
+      </h3>
+      <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+        Gangguan produksi pada industri kecil dan menengah (IKM) sering bermula dari getaran halus atau peningkatan suhu bantalan yang tidak terpantau. Dengan populasi 4,2 juta unit usaha yang menyerap 12,3 juta tenaga kerja di Indonesia, keandalan mesin penggerak utama menentukan kelangsungan operasional dan ketepatan pengiriman produk. Sayangnya, adopsi predictive maintenance terhambat oleh mahalnya sensor komersial, ketiadaan data kerusakan historis untuk melatih model kecerdasan buatan, dan keengganan teknisi terhadap alarm tanpa konteks.
+      </p>
+      <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+        Esai ini mengusulkan NADI-IKM, sebuah sistem pemeliharaan prediktif hemat data berbasis retrofit edge AI. Sistem ini menggabungkan sensor getaran MEMS berbiaya terjangkau, komputasi tepi mandiri pada mikrokontroler kelas ESP32, deteksi anomali berbasis baseline per mesin menggunakan statistik robust dan Isolation Forest, serta penjelasan peringatan yang dapat ditindaklanjuti secara langsung oleh teknisi pabrik. Melalui simulasi biaya-manfaat pada tiga mesin kritis, NADI-IKM menawarkan periode pengembalian investasi (payback period) sekitar 10,7 bulan pada skenario moderat tanpa memerlukan ketergantungan koneksi internet konstan.
+      </p>
+    </div>
+
+    <!-- Table 4: Validation Matrix -->
+    <div class="glass-card rounded-3xl p-8 space-y-4">
+      <h3 class="text-lg font-bold text-white flex items-center gap-2">
+        <i data-lucide="check-circle-2" class="w-5 h-5 text-signal-cyan"></i>
+        <span>Matriks Validasi & Target Awal Uji Pilot 6 Bulan (Tabel 4)</span>
+      </h3>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead>
+            <tr class="font-mono text-slate-400 border-b border-slate-800">
+              <th class="py-3 px-4">Indikator</th>
+              <th class="py-3 px-4">Cara Menghitung / Menilai</th>
+              <th class="py-3 px-4">Target Desain / Keputusan</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800/60 font-sans text-slate-300">
+            <tr class="hover:bg-slate-800/30">
+              <td class="py-3 px-4 font-semibold text-white">Ketersediaan Data</td>
+              <td class="py-3 px-4">Waktu data valid ÷ waktu pemantauan yang direncanakan</td>
+              <td class="py-3 px-4 text-signal-cyan font-mono">Target desain ≥ 95% (dicatat per mesin)</td>
+            </tr>
+            <tr class="hover:bg-slate-800/30">
+              <td class="py-3 px-4 font-semibold text-white">Alarm Palsu</td>
+              <td class="py-3 px-4">Alarm tanpa masalah terkonfirmasi ÷ mesin-bulan</td>
+              <td class="py-3 px-4 text-safety-amber font-mono">Target desain ≤ 2 per mesin-bulan</td>
+            </tr>
+            <tr class="hover:bg-slate-800/30">
+              <td class="py-3 px-4 font-semibold text-white">Tindak Lanjut Alarm</td>
+              <td class="py-3 px-4">Alarm dengan hasil pemeriksaan tercatat ÷ total alarm</td>
+              <td class="py-3 px-4 text-emerald-400 font-mono">Target desain 100% (audit logbook)</td>
+            </tr>
+            <tr class="hover:bg-slate-800/30">
+              <td class="py-3 px-4 font-semibold text-white">Sensitivitas Deteksi</td>
+              <td class="py-3 px-4">Gangguan terkonfirmasi yang didahului alarm ÷ total gangguan</td>
+              <td class="py-3 px-4 text-slate-400 font-mono">Dilaporkan hanya jika jumlah kejadian memadai</td>
+            </tr>
+            <tr class="hover:bg-slate-800/30">
+              <td class="py-3 px-4 font-semibold text-white">Nilai Ekonomi Bersih</td>
+              <td class="py-3 px-4">Jam henti terhindarkan × biaya per jam − semua biaya terkait</td>
+              <td class="py-3 px-4 text-emerald-400 font-mono">Positif dan stabil sebelum ekspansi</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Table 7: Critical Risks & Controls -->
+    <div class="glass-card rounded-3xl p-8 space-y-4">
+      <h3 class="text-lg font-bold text-white flex items-center gap-2">
+        <i data-lucide="shield-alert" class="w-5 h-5 text-safety-amber"></i>
+        <span>Risiko Kritis & Langkah Pengendalian Rekayasa (Tabel 7)</span>
+      </h3>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead>
+            <tr class="font-mono text-slate-400 border-b border-slate-800">
+              <th class="py-3 px-4">Identifikasi Risiko</th>
+              <th class="py-3 px-4">Konsekuensi</th>
+              <th class="py-3 px-4">Langkah Pengendalian NADI-IKM</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800/60 font-sans text-slate-300">
+            <tr class="hover:bg-slate-800/30">
+              <td class="py-3 px-4 font-semibold text-white">Sensor longgar / sinyal buruk</td>
+              <td class="py-3 px-4 text-amber-300">Alarm palsu atau gangguan mekanis luput</td>
+              <td class="py-3 px-4">Pengecekan pemasangan fisik, uji mutu sinyal, dan status data tidak valid</td>
+            </tr>
+            <tr class="hover:bg-slate-800/30">
+              <td class="py-3 px-4 font-semibold text-white">Data kerusakan sangat sedikit</td>
+              <td class="py-3 px-4 text-amber-300">Klaim akurasi semu model deep learning</td>
+              <td class="py-3 px-4">Metode deteksi anomali baseline tanpa data latih rusak; evaluasi prospektif</td>
+            </tr>
+            <tr class="hover:bg-slate-800/30">
+              <td class="py-3 px-4 font-semibold text-white">Perubahan beban kerja mesin</td>
+              <td class="py-3 px-4 text-amber-300">Ambang tidak dapat dipindahkan antar mesin</td>
+              <td class="py-3 px-4">Baseline spesifik per aset dan pengelompokan kondisi operasi (clustering)</td>
+            </tr>
+            <tr class="hover:bg-slate-800/30">
+              <td class="py-3 px-4 font-semibold text-white">Perintah otomatis berbahaya</td>
+              <td class="py-3 px-4 text-rose-400">Risiko keselamatan operator pabrik</td>
+              <td class="py-3 px-4">Pemantauan pasif tanpa kendali aktuator; keputusan mutlak di personel berwenang</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 16 References Box -->
+    <div class="glass-card rounded-3xl p-8 space-y-4">
+      <h3 class="text-lg font-bold text-white flex items-center gap-2">
+        <i data-lucide="bookmark" class="w-5 h-5 text-industrial-teal"></i>
+        <span>16 Referensi Ilmiah Lengkap</span>
+      </h3>
+      <ol class="space-y-3 text-xs text-slate-300 leading-relaxed list-decimal list-inside divide-y divide-slate-800/60">
+        <li class="pt-2">Badan Pusat Statistik (BPS) (2026) 'Ekonomi Indonesia Triwulan III-2026 tumbuh 5,47 persen (y-on-y)', Berita Resmi Statistik, 5 November.</li>
+        <li class="pt-2">Carvalho, T.P., Soares, F.A.A.M.N., Vita, R., Francisco, R. da P., Basto, J.P. dan Alcalá, S.G.S. (2019) 'A systematic literature review of machine learning methods applied to predictive maintenance', <em>Computers & Industrial Engineering</em>, 137, artikel 106024.</li>
+        <li class="pt-2">Cummins, L., Sommers, A., Ramezani, S.B., Mittal, S., Jabour, J., Seale, M. dan Rahimi, S. (2024) 'Explainable predictive maintenance: A survey of current methods, challenges and opportunities', <em>IEEE Access</em>, 12, hlm. 57574–57602.</li>
+        <li class="pt-2">Elía, I. dan Pagola, M. (2025) 'Anomaly detection in smart-manufacturing era: A review', <em>Engineering Applications of Artificial Intelligence</em>, 139, artikel 109578.</li>
+        <li class="pt-2">International Organization for Standardization (ISO) (2018) <em>ISO 17359:2018: Condition monitoring and diagnostics of machines—General guidelines</em>. Geneva: ISO.</li>
+        <li class="pt-2">International Organization for Standardization (ISO) (2026) <em>ISO 20816-3:2026: Mechanical vibration—Part 3: Industrial machines with operating speeds between 120 r/min and 30 000 r/min</em>. Geneva: ISO.</li>
+        <li class="pt-2">Jardine, A.K.S., Lin, D. dan Banjevic, D. (2006) 'A review on machinery diagnostics and prognostics implementing condition-based maintenance', <em>Mechanical Systems and Signal Processing</em>, 20(7), hlm. 1483–1510.</li>
+        <li class="pt-2">Kementerian Koordinator Bidang Perekonomian (2026) 'Ekonomi Indonesia Triwulan III-2026 tumbuh 5,47%, fundamental kuat jaga momentum pertumbuhan', 5 November.</li>
+        <li class="pt-2">Kementerian Perindustrian (2026) 'Dukung industri dalam negeri, Kemenperin gelar Pameran Beli Produk IKM 2026', Ditjen IKMA, 9 November.</li>
+        <li class="pt-2">Khanfor, A. (2024) 'Determinants to adopt industrial internet of things in small and medium-sized enterprises', <em>Future Internet</em>, 16(9), artikel 340.</li>
+        <li class="pt-2">Kolok, P., Hodoň, M., Ševčík, P., Hotz, L. dan Remy, N. (2025) 'Low-cost IoT-based predictive maintenance using vibration', <em>Sensors</em>, 25(21), artikel 6610.</li>
+        <li class="pt-2">Liu, F.T., Ting, K.M. dan Zhou, Z.-H. (2008) 'Isolation forest', <em>Proceedings of the 2008 Eighth IEEE International Conference on Data Mining</em>, hlm. 413–422.</li>
+        <li class="pt-2">Nasirinejad, M., Afshari, H. dan Sampalli, S. (2024) 'Challenges and solutions to adopt smart maintenance in SMEs: A literature review and research agenda', <em>IFAC-PapersOnLine</em>, 58(19), hlm. 917–922.</li>
+        <li class="pt-2">National Institute of Standards and Technology (NIST) (2023) <em>Guide to Operational Technology (OT) Security</em>. NIST Special Publication 800-82 Revision 3.</li>
+        <li class="pt-2">Neupane, D., Bouadjenek, M.R., Dazeley, R. dan Aryal, S. (2025) 'Data-driven machinery fault diagnosis: A comprehensive review', <em>Neurocomputing</em>, 627, artikel 129588.</li>
+        <li class="pt-2">Sculley, D., Holt, G., Golovin, D., Davydov, E., Phillips, T., Ebner, D., Chaudhary, V., Young, M., Crespo, J.-F. dan Dennison, D. (2015) 'Hidden technical debt in machine learning systems', <em>Advances in Neural Information Processing Systems</em>, 28, hlm. 2503–2511.</li>
+      </ol>
+    </div>
+
+  </main>
+
+  <footer class="bg-midnight-navy border-t border-slate-800 py-8 text-xs text-slate-400 text-center font-mono">
+    Hak Cipta © 2026 Tim NADI-IKM • Universitas Brawijaya, Malang.
+  </footer>
+
+  <script src="assets/js/translations.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="100%" height="100%">
+  <rect width="128" height="128" rx="28" fill="#0A1F2E"/>
+  <!-- Gauge Arc Segment -->
+  <path d="M 64,18 A 46,46 0 0,1 110,64" fill="none" stroke="#F0A444" stroke-width="8" stroke-linecap="round" stroke-dasharray="10 5"/>
+  <!-- Monogram N -->
+  <g transform="translate(64, 64) scale(0.68)">
+    <path d="M -44,-55 L -18,-55 L -18,55 L -44,55 Z" fill="#0DB3A6"/>
+    <path d="M 18,-55 L 44,-55 L 44,55 L 18,55 Z" fill="#FFFFFF"/>
+    <path d="M -18,-55 L 18,25 L 18,55 L -18,-25 Z" fill="#173447"/>
+    <!-- Orbit Ellipse -->
+    <ellipse cx="0" cy="14" rx="75" ry="26" fill="none" stroke="#59D8D1" stroke-width="5" transform="rotate(-18)"/>
+    <circle cx="-58" cy="30" r="7.5" fill="#F0A444"/>
+    <!-- Pulse Line -->
+    <path d="M -26,4 L -11,4 L -4,-22 L 6,22 L 12,-9 L 18,6 L 28,4" fill="none" stroke="#F0A444" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

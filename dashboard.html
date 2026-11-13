@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NADI-IKM | Interactive Telemetry Dashboard</title>
+  
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            'midnight-navy': '#0A1F2E',
+            'deep-steel': '#173447',
+            'industrial-teal': '#0DB3A6',
+            'signal-cyan': '#59D8D1',
+            'safety-amber': '#F0A444',
+            'alert-coral': '#E96F67',
+            'success-jade': '#3CB789',
+            'paper': '#F6F8F8',
+            'ink': '#173042',
+            'muted-slate': '#6B7F8A'
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"IBM Plex Mono"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-midnight-navy text-slate-100 antialiased min-h-screen flex flex-col font-sans">
+
+  <!-- ================= TOP HEADER ================= -->
+  <header class="bg-deep-steel/90 border-b border-slate-800 sticky top-0 z-40 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3 flex items-center justify-between">
+      
+      <!-- Brand & Back -->
+      <div class="flex items-center gap-4">
+        <a href="index.html" class="flex items-center gap-2 group">
+          <img src="assets/img/logo-dark.svg" alt="NADI-IKM Logo" class="h-9 w-auto">
+        </a>
+        <div class="hidden sm:block h-6 w-px bg-slate-700"></div>
+        <div class="hidden sm:flex items-center gap-2">
+          <span class="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">
+            DEMO • DATA SINTETIS
+          </span>
+          <button id="infoMethodBtn" class="text-xs text-slate-400 hover:text-signal-cyan flex items-center gap-1 font-mono">
+            <i data-lucide="help-circle" class="w-3.5 h-3.5"></i>
+            <span>Info Metodologi</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Controls Right: Language, Clock, Back to Landing -->
+      <div class="flex items-center gap-3">
+        <!-- Live Clock -->
+        <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-midnight-navy border border-slate-800 text-xs font-mono text-signal-cyan">
+          <i data-lucide="clock" class="w-3.5 h-3.5 text-industrial-teal"></i>
+          <span id="liveClock">--:--:--</span>
+        </div>
+
+        <!-- Language Switcher -->
+        <div class="flex items-center bg-midnight-navy rounded-lg p-1 border border-slate-700 text-xs font-mono">
+          <button onclick="setLanguage('id')" data-lang="id" class="lang-btn px-2.5 py-1 rounded transition-all">ID</button>
+          <button onclick="setLanguage('en')" data-lang="en" class="lang-btn px-2.5 py-1 rounded transition-all">EN</button>
+        </div>
+
+        <!-- Back to Website -->
+        <a href="index.html" class="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-medium text-slate-200 flex items-center gap-1.5 transition-colors">
+          <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+          <span>Kembali ke Web</span>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTENT ================= -->
+  <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-6">
+    
+    <!-- Top KPI Cards Bar -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      
+      <div class="glass-card rounded-2xl p-4">
+        <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+          <span>Mesin Terpantau</span>
+          <i data-lucide="cpu" class="w-4 h-4 text-industrial-teal"></i>
+        </div>
+        <div class="text-2xl font-bold font-mono text-white">3 Unit</div>
+        <div class="text-[11px] text-emerald-400 mt-1 flex items-center gap-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> 1 Normal • 1 Cek • 1 Sensor
+        </div>
+      </div>
+
+      <div class="glass-card rounded-2xl p-4">
+        <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+          <span>Alarm Menunggu Verifikasi</span>
+          <i data-lucide="alert-circle" class="w-4 h-4 text-safety-amber"></i>
+        </div>
+        <div class="text-2xl font-bold font-mono text-safety-amber">1 Aset (M-02)</div>
+        <div class="text-[11px] text-slate-400 mt-1">Deviasi persisten &gt; 3 siklus</div>
+      </div>
+
+      <div class="glass-card rounded-2xl p-4">
+        <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+          <span>Validitas Sinyal Edge</span>
+          <i data-lucide="activity" class="w-4 h-4 text-signal-cyan"></i>
+        </div>
+        <div class="text-2xl font-bold font-mono text-signal-cyan">98.4%</div>
+        <div class="text-[11px] text-slate-400 mt-1">Sensor F-03 sinyal dropout</div>
+      </div>
+
+      <div class="glass-card rounded-2xl p-4">
+        <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+          <span>Mode Komputasi</span>
+          <i data-lucide="hard-drive" class="w-4 h-4 text-industrial-teal"></i>
+        </div>
+        <div class="text-xl font-bold font-mono text-white">Edge Lokal (ESP32)</div>
+        <div class="text-[11px] text-emerald-400 mt-1">Bekerja tanpa internet</div>
+      </div>
+
+    </div>
+
+    <!-- Interactive Simulation & Scenario Presets Bar -->
+    <div class="glass-card rounded-2xl p-4 lg:p-5">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-3 border-b border-slate-800">
+        <div>
+          <h3 class="text-sm font-bold text-white flex items-center gap-2">
+            <i data-lucide="sliders" class="w-4 h-4 text-signal-cyan"></i>
+            <span>Simulasi Skenario Pengujian (What-If Scenarios)</span>
+          </h3>
+          <p class="text-xs text-slate-400 mt-0.5">
+            Pilih skenario operasional untuk menguji respons logika deteksi anomali bertingkat NADI-IKM.
+          </p>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button id="pauseSimulationBtn" class="px-3 py-1.5 rounded-lg bg-deep-steel hover:bg-slate-700 text-xs font-mono text-slate-200 border border-slate-700 transition-colors">
+            ⏸ Jeda Data
+          </button>
+          <button id="exportCsvBtn" class="px-3 py-1.5 rounded-lg bg-industrial-teal/20 hover:bg-industrial-teal/30 text-xs font-mono text-signal-cyan border border-industrial-teal/40 transition-colors flex items-center gap-1.5">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            <span>Ekspor CSV Sintetis</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Scenario Selector Buttons -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-3">
+        <button data-scen="normal" class="scen-btn px-3 py-2 rounded-xl text-xs font-semibold bg-deep-steel text-slate-300 hover:text-white border border-slate-700 transition-all text-left">
+          <div class="font-bold text-white mb-0.5">1. Normal & Stabil</div>
+          <span class="text-[10px] text-slate-400 block truncate">Seluruh mesin dalam baseline</span>
+        </button>
+
+        <button data-scen="load_shift" class="scen-btn px-3 py-2 rounded-xl text-xs font-semibold bg-deep-steel text-slate-300 hover:text-white border border-slate-700 transition-all text-left">
+          <div class="font-bold text-white mb-0.5">2. Lonjakan Beban</div>
+          <span class="text-[10px] text-slate-400 block truncate">Konteks operasi diverifikasi</span>
+        </button>
+
+        <button data-scen="anomaly" class="scen-btn px-3 py-2 rounded-xl text-xs font-semibold bg-industrial-teal text-white border border-signal-cyan transition-all text-left">
+          <div class="font-bold text-white mb-0.5">3. Anomali Bantalan M-02</div>
+          <span class="text-[10px] text-teal-100 block truncate">Deviasi getaran & suhu naik</span>
+        </button>
+
+        <button data-scen="sensor_fault" class="scen-btn px-3 py-2 rounded-xl text-xs font-semibold bg-deep-steel text-slate-300 hover:text-white border border-slate-700 transition-all text-left">
+          <div class="font-bold text-white mb-0.5">4. Kabel Sensor Lepas F-03</div>
+          <span class="text-[10px] text-slate-400 block truncate">Fail-safe: Periksa Sensor</span>
+        </button>
+      </div>
+
+      <!-- Scenario Explanation Notice -->
+      <div id="scenNotice" class="mt-3 text-xs font-mono text-signal-cyan bg-midnight-navy/60 p-2.5 rounded-lg border border-slate-800">
+        Skenario Aktif: Anomali getaran bantalan terdeteksi pada M-02 (RMS 4.9 mm/s, Suhu 69°C). Status: INSPEKSI dengan SOP terarah.
+      </div>
+    </div>
+
+    <!-- 3 Asset Summary Cards -->
+    <div id="assetCardsContainer" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <!-- Populated dynamically by dashboard.js -->
+    </div>
+
+    <!-- Chart & Detail Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      
+      <!-- Telemetry Chart (8 Cols) -->
+      <div class="lg:col-span-8 glass-card rounded-2xl p-5 border border-slate-800">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h4 id="selectedAssetTitle" class="text-base font-bold text-white">M-02 • Motor Induksi Konveyor</h4>
+            <span class="text-xs text-slate-400 font-mono">Tren Sinyal Waktu Nyata (Pembaruan tiap 2 detik)</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span id="selectedAssetBadge" class="px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/40">
+              INSPEKSI
+            </span>
+          </div>
+        </div>
+
+        <!-- Canvas Container -->
+        <div class="relative w-full h-[320px]">
+          <canvas id="telemetryChart"></canvas>
+        </div>
+
+        <div class="mt-3 flex items-center justify-between text-[11px] font-mono text-slate-400 pt-3 border-t border-slate-800">
+          <span>*Ambang baseline mengikuti metode Robust Median Absolute Deviation (MAD).</span>
+          <span class="text-signal-cyan">Data stream: Deterministic Synthetic</span>
+        </div>
+      </div>
+
+      <!-- Explainability & SOP Action Box (4 Cols) -->
+      <div class="lg:col-span-4 space-y-4">
+        
+        <!-- Explainable Card -->
+        <div class="glass-card rounded-2xl p-5 border-l-4 border-l-safety-amber">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-mono uppercase text-slate-400">Skor Deviasi Baseline</span>
+            <span id="selectedDevScore" class="text-2xl font-mono font-bold text-amber-400">74%</span>
+          </div>
+          <div id="selectedReasonText" class="text-xs text-slate-300 leading-relaxed space-y-2">
+            <!-- Dynamic explanation injected here -->
+          </div>
+        </div>
+
+        <!-- 4-Step Action Checklist (SOP Teknisi) -->
+        <div class="glass-card rounded-2xl p-5">
+          <h5 class="text-xs font-mono font-bold uppercase tracking-wider text-slate-300 mb-3 flex items-center gap-2">
+            <i data-lucide="check-square" class="w-4 h-4 text-industrial-teal"></i>
+            <span>SOP Pemeriksaan Teknisi Terarah</span>
+          </h5>
+
+          <ol class="space-y-2 text-xs text-slate-300">
+            <li class="flex items-start gap-2.5 p-2 rounded-lg bg-midnight-navy/60 border border-slate-800">
+              <span class="font-mono font-bold text-signal-cyan shrink-0">01</span>
+              <span>Periksa dudukan baut dan kondisi penempelan sensor.</span>
+            </li>
+            <li class="flex items-start gap-2.5 p-2 rounded-lg bg-midnight-navy/60 border border-slate-800">
+              <span class="font-mono font-bold text-signal-cyan shrink-0">02</span>
+              <span>Bandingkan beban produksi dan putaran mesin (RPM).</span>
+            </li>
+            <li class="flex items-start gap-2.5 p-2 rounded-lg bg-midnight-navy/60 border border-slate-800">
+              <span class="font-mono font-bold text-signal-cyan shrink-0">03</span>
+              <span>Periksa pelumasan bearing atau keausan kopling mekanik.</span>
+            </li>
+            <li class="flex items-start gap-2.5 p-2 rounded-lg bg-midnight-navy/60 border border-slate-800">
+              <span class="font-mono font-bold text-signal-cyan shrink-0">04</span>
+              <span>Catat hasil pemeriksaan fisik pada logbook di bawah.</span>
+            </li>
+          </ol>
+        </div>
+
+        <!-- Safety Principle Callout -->
+        <div class="p-3.5 rounded-xl bg-deep-steel border border-slate-700 text-[11px] text-slate-300 flex items-start gap-2.5">
+          <i data-lucide="shield-alert" class="w-4 h-4 text-safety-amber shrink-0 mt-0.5"></i>
+          <span><strong>Prinsip Keselamatan:</strong> Dashboard hanya memberikan rekomendasi inspeksi. Tidak mematikan mesin secara otomatis dan tidak menggantikan interlock keselamatan pabrik.</span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Technician Inspection Logbook Section -->
+    <div class="glass-card rounded-2xl p-5 border border-slate-800">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+        <div>
+          <h4 class="text-base font-bold text-white flex items-center gap-2">
+            <i data-lucide="clipboard-list" class="w-4 h-4 text-industrial-teal"></i>
+            <span>Logbook Riwayat Pemeriksaan & Tindakan Teknisi</span>
+          </h4>
+          <span class="text-xs text-slate-400">Bukti audit berkala untuk evaluasi keandalan dan payback investasi.</span>
+        </div>
+        <button id="openAddLogBtn" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-industrial-teal hover:bg-teal-400 text-midnight-navy font-bold text-xs shadow transition-colors">
+          <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+          <span>+ Catat Hasil Inspeksi</span>
+        </button>
+      </div>
+
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead>
+            <tr class="text-[11px] font-mono text-slate-400 border-b border-slate-800">
+              <th class="py-2.5 px-4">Waktu</th>
+              <th class="py-2.5 px-4">ID Aset</th>
+              <th class="py-2.5 px-4">Teknisi</th>
+              <th class="py-2.5 px-4">Tindakan SOP</th>
+              <th class="py-2.5 px-4">Hasil / Temuan</th>
+              <th class="py-2.5 px-4">Status</th>
+            </tr>
+          </thead>
+          <tbody id="inspectionLogTableBody">
+            <!-- Populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ================= ADD INSPECTION MODAL ================= -->
+  <div id="logModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-deep-steel border border-slate-700 rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-700">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <i data-lucide="edit-3" class="w-4 h-4 text-signal-cyan"></i>
+          <span>Catat Hasil Inspeksi Mesin</span>
+        </h3>
+        <button id="closeLogModalBtn" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <form id="addLogForm" class="space-y-4 text-xs">
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">Nama Teknisi</label>
+          <input type="text" id="logTechName" required value="Bimo Satrio (Lead)" class="w-full bg-midnight-navy border border-slate-700 rounded-xl px-3 py-2 text-white outline-none focus:border-industrial-teal">
+        </div>
+
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">Tindakan SOP Dilakukan</label>
+          <input type="text" id="logAction" required value="Pemeriksaan Baut Fondasi & Pelumasan" class="w-full bg-midnight-navy border border-slate-700 rounded-xl px-3 py-2 text-white outline-none focus:border-industrial-teal">
+        </div>
+
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">Temuan / Catatan Verifikasi</label>
+          <textarea id="logResult" rows="3" required class="w-full bg-midnight-navy border border-slate-700 rounded-xl px-3 py-2 text-white outline-none focus:border-industrial-teal">Baut dudukan motor dikencangkan kembali. Getaran berangsur normal.</textarea>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="document.getElementById('logModal').classList.add('hidden')" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700">Batal</button>
+          <button type="submit" class="px-4 py-2 rounded-xl bg-industrial-teal text-midnight-navy font-bold hover:bg-teal-400">Simpan Log</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="assets/js/translations.js"></script>
+  <script src="assets/js/dashboard.js"></script>
+
+  <script>
+    lucide.createIcons();
+
+    // Live Clock
+    function updateClock() {
+      const now = new Date();
+      const str = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      const el = document.getElementById('liveClock');
+      if (el) el.innerText = str;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Initialize Dashboard
+    window.addEventListener('DOMContentLoaded', () => {
+      if (window.NadiDashboard) {
+        window.NadiDashboard.init();
+      }
+    });
+  </script>
+</body>
+</html>

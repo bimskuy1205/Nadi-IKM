@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NADI-IKM | Navigasi Anomali dan Diagnosis Industri untuk IKM</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  
+  <!-- SEO & OpenGraph -->
+  <meta name="description" content="NADI-IKM: Sistem pemeliharaan prediktif hemat data berbasis Edge AI retrofit untuk menjaga keandalan mesin industri kecil dan menengah (IKM).">
+  <meta name="keywords" content="NADI-IKM, Predictive Maintenance, Edge AI, IKM, IoT Industri, Universitas Brawijaya, IYEEA 2026, Bimo Satrio">
+  <meta property="og:title" content="NADI-IKM | Intelligent Machine Care">
+  <meta property="og:description" content="Sebelum mesin berhenti, pahami sinyalnya. Pemantauan kondisi berbasis Edge AI hemat data.">
+  <meta property="og:image" content="assets/img/logo.svg">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            'midnight-navy': '#0A1F2E',
+            'deep-steel': '#173447',
+            'industrial-teal': '#0DB3A6',
+            'signal-cyan': '#59D8D1',
+            'safety-amber': '#F0A444',
+            'alert-coral': '#E96F67',
+            'success-jade': '#3CB789',
+            'paper': '#F6F8F8',
+            'ink': '#173042',
+            'muted-slate': '#6B7F8A'
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"IBM Plex Mono"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Three.js + OrbitControls + GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-midnight-navy text-slate-100 antialiased selection:bg-industrial-teal selection:text-white">
+
+  <!-- ================= TOP NOTICE BAR ================= -->
+  <div class="bg-deep-steel/90 border-b border-signal-cyan/20 px-4 py-2 text-xs font-mono text-center flex items-center justify-center gap-2">
+    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-safety-amber/20 text-safety-amber border border-safety-amber/40">
+      <span class="w-1.5 h-1.5 rounded-full bg-safety-amber mr-1.5 animate-ping"></span>
+      <span data-i18n="badgeConcept">RANCANGAN KONSEPTUAL • DEMO SINTETIS</span>
+    </span>
+    <span class="hidden md:inline text-slate-400">|</span>
+    <span class="hidden md:inline text-slate-300" data-i18n="institution">Universitas Brawijaya • IYEEA 2026</span>
+  </div>
+
+  <!-- ================= NAVBAR ================= -->
+  <nav class="sticky top-0 z-50 bg-midnight-navy/90 backdrop-blur-md border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        
+        <!-- Logo -->
+        <a href="index.html" class="flex items-center gap-3 group">
+          <img src="assets/img/logo-dark.svg" alt="NADI-IKM Logo" class="h-10 w-auto group-hover:scale-105 transition-transform duration-200">
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <div class="hidden lg:flex items-center gap-6 text-sm font-medium text-slate-300">
+          <a href="#problem" class="hover:text-signal-cyan transition-colors" data-i18n="navTech">Masalah & Solusi</a>
+          <a href="#lab3d" class="hover:text-signal-cyan transition-colors" data-i18n="navExplore">3D Product Lab</a>
+          <a href="#architecture" class="hover:text-signal-cyan transition-colors">Arsitektur</a>
+          <a href="dashboard.html" class="hover:text-signal-cyan transition-colors flex items-center gap-1.5 text-industrial-teal font-semibold">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span data-i18n="navDashboard">Demo Dashboard</span>
+          </a>
+          <a href="#economics" class="hover:text-signal-cyan transition-colors" data-i18n="navEconomics">Kalkulator Finansial</a>
+          <a href="#pilot" class="hover:text-signal-cyan transition-colors" data-i18n="navPilot">Peta Pilot</a>
+          <a href="#team" class="hover:text-signal-cyan transition-colors" data-i18n="navTeam">Struktur Tim</a>
+          <a href="#research" class="hover:text-signal-cyan transition-colors" data-i18n="navResearch">Riset</a>
+        </div>
+
+        <!-- Controls: Language Toggle & Dashboard CTA -->
+        <div class="flex items-center gap-3">
+          <!-- Language Toggle -->
+          <div class="flex items-center bg-deep-steel rounded-lg p-1 border border-slate-700 text-xs font-mono">
+            <button onclick="setLanguage('id')" data-lang="id" class="lang-btn px-2.5 py-1 rounded transition-all">ID</button>
+            <button onclick="setLanguage('en')" data-lang="en" class="lang-btn px-2.5 py-1 rounded transition-all">EN</button>
+          </div>
+
+          <!-- Direct CTA -->
+          <a href="dashboard.html" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-industrial-teal to-signal-cyan text-midnight-navy font-bold text-xs uppercase tracking-wider hover:opacity-95 shadow-md shadow-industrial-teal/20 transition-all">
+            <i data-lucide="activity" class="w-4 h-4"></i>
+            <span data-i18n="ctaDashboard">Demo Dashboard</span>
+          </a>
+
+          <!-- Mobile Menu Button -->
+          <button id="mobileMenuBtn" class="lg:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown -->
+    <div id="mobileMenu" class="hidden lg:hidden bg-deep-steel border-b border-slate-800 px-4 pt-2 pb-6 space-y-3 text-sm">
+      <a href="#problem" class="block py-2 text-slate-200">Masalah & Solusi</a>
+      <a href="#lab3d" class="block py-2 text-slate-200">3D Product Lab</a>
+      <a href="#architecture" class="block py-2 text-slate-200">Arsitektur 4 Lapis</a>
+      <a href="dashboard.html" class="block py-2 text-industrial-teal font-bold">Demo Dashboard (Live)</a>
+      <a href="#economics" class="block py-2 text-slate-200">Kalkulator Finansial</a>
+      <a href="#pilot" class="block py-2 text-slate-200">Peta Jalan Pilot</a>
+      <a href="#team" class="block py-2 text-slate-200">Struktur Tim & Jobdesk</a>
+      <a href="#research" class="block py-2 text-slate-200">Riset & Referensi</a>
+    </div>
+  </nav>
+
+  <!-- ================= S01 HERO SECTION ================= -->
+  <section class="relative min-h-[90vh] flex items-center bg-hero-gradient overflow-hidden pt-8 pb-16">
+    <!-- Background Grid Effect -->
+    <div class="absolute inset-0 bg-radial-glow pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Left Hero Content (7 Cols) -->
+        <div class="lg:col-span-7 space-y-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-industrial-teal/10 border border-industrial-teal/30 text-signal-cyan text-xs font-mono">
+            <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+            <span>RETROFIT EDGE AI • KONDISI PREDIKTIF IKM</span>
+          </div>
+
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15] text-white" data-i18n="heroHeadline">
+            Sebelum mesin berhenti, <span class="text-transparent bg-clip-text bg-gradient-to-r from-signal-cyan via-industrial-teal to-safety-amber">pahami sinyalnya.</span>
+          </h1>
+
+          <p class="text-base sm:text-lg text-slate-300 leading-relaxed max-w-2xl" data-i18n="heroSubhead">
+            NADI-IKM menghadirkan sistem pemantauan kondisi mesin berbasis edge AI retrofit bagi industri kecil & menengah (IKM). Mengubah getaran mikro dan tren termal menjadi anjuran inspeksi yang logis, hemat data, dan tanpa ketergantungan internet penuh.
+          </p>
+
+          <!-- Action Buttons -->
+          <div class="flex flex-wrap items-center gap-4 pt-2">
+            <a href="dashboard.html" class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-industrial-teal hover:bg-teal-400 text-midnight-navy font-bold text-sm tracking-wide shadow-lg shadow-industrial-teal/25 transition-all">
+              <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+              <span data-i18n="ctaDashboard">Buka Dashboard Demo</span>
+            </a>
+            <a href="#lab3d" class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-deep-steel hover:bg-slate-700 border border-slate-700 text-white font-semibold text-sm transition-all">
+              <i data-lucide="box" class="w-4 h-4 text-signal-cyan"></i>
+              <span data-i18n="ctaExplore3D">Jelajahi 3D Lab</span>
+            </a>
+            <a href="#research" class="inline-flex items-center gap-2 px-4 py-3.5 text-xs text-slate-400 hover:text-white font-mono">
+              <i data-lucide="file-text" class="w-4 h-4"></i>
+              <span data-i18n="ctaReadPaper">Ringkasan Riset</span>
+            </a>
+          </div>
+
+          <!-- Quick Metrics Banner -->
+          <div class="grid grid-cols-3 gap-4 pt-6 border-t border-slate-800">
+            <div>
+              <div class="text-2xl sm:text-3xl font-extrabold text-white font-mono" data-i18n="heroStat1Val">Rp8.000.000</div>
+              <div class="text-xs text-slate-400 mt-1" data-i18n="heroStat1Label">Asumsi CAPEX 3 Mesin</div>
+            </div>
+            <div>
+              <div class="text-2xl sm:text-3xl font-extrabold text-safety-amber font-mono" data-i18n="heroStat2Val">10,7 Bulan</div>
+              <div class="text-xs text-slate-400 mt-1" data-i18n="heroStat2Label">Payback Skenario Moderat</div>
+            </div>
+            <div>
+              <div class="text-2xl sm:text-3xl font-extrabold text-signal-cyan font-mono" data-i18n="heroStat3Val">100%</div>
+              <div class="text-xs text-slate-400 mt-1" data-i18n="heroStat3Label">Pemrosesan Tepi Mandiri</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Hero Interactive 3D Turntable Preview (5 Cols) -->
+        <div class="lg:col-span-5 relative">
+          <div class="relative bg-deep-steel/60 rounded-3xl border border-signal-cyan/20 p-2 shadow-2xl backdrop-blur-xl">
+            <!-- 3D Canvas Box -->
+            <div id="hero3dCanvas" class="w-full h-[420px] rounded-2xl relative overflow-hidden bg-midnight-navy/80 cursor-grab active:cursor-grabbing">
+              <!-- Overlay Pill -->
+              <div class="absolute top-4 left-4 z-10 flex items-center gap-2 px-3 py-1 rounded-full bg-midnight-navy/80 border border-slate-700 text-[11px] font-mono text-signal-cyan backdrop-blur">
+                <i data-lucide="rotate-3d" class="w-3.5 h-3.5 animate-spin"></i>
+                <span>360° INTERACTIVE TWIN</span>
+              </div>
+            </div>
+            
+            <div class="p-3 text-center text-xs text-slate-400 flex items-center justify-between">
+              <span>Klik & geser untuk rotasi 360°</span>
+              <a href="#lab3d" class="text-industrial-teal font-semibold hover:underline flex items-center gap-1">
+                Exploded View <i data-lucide="arrow-right" class="w-3 h-3"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= S02 PROBLEM SECTION ================= -->
+  <section id="problem" class="py-20 bg-midnight-navy relative border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Section Header -->
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="inline-block px-3 py-1 rounded-full bg-alert-coral/10 text-alert-coral border border-alert-coral/30 text-xs font-mono font-bold uppercase tracking-wider mb-3" data-i18n="problemBadge">
+          Akar Masalah IKM
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white" data-i18n="problemTitle">
+          Gangguan kecil. Dampak produksi yang besar.
+        </h2>
+        <p class="mt-4 text-slate-300 text-sm sm:text-base leading-relaxed" data-i18n="problemDesc">
+          IKM mengoperasikan 4,2 juta unit usaha dengan 12,3 juta tenaga kerja di Indonesia. Kerusakan pada satu motor penggerak atau pompa utama dapat menghentikan seluruh lini perakitan.
+        </p>
+      </div>
+
+      <!-- Problem 4 Pillars Cards (Figure 1 of Paper) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- P1 -->
+        <div class="glass-card glass-card-hover rounded-2xl p-6 border-l-4 border-l-alert-coral">
+          <div class="w-12 h-12 rounded-xl bg-alert-coral/10 text-alert-coral flex items-center justify-center mb-4">
+            <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2" data-i18n="prob1Title">Aset Kritis Tanpa Prioritas</h3>
+          <p class="text-xs text-slate-300 leading-relaxed" data-i18n="prob1Desc">
+            Sensor dipasang membabi buta atau diabaikan sama sekali. Padahal kerusakan motor tunggal jauh lebih fatal dibanding kipas bantu.
+          </p>
+        </div>
+
+        <!-- P2 -->
+        <div class="glass-card glass-card-hover rounded-2xl p-6 border-l-4 border-l-safety-amber">
+          <div class="w-12 h-12 rounded-xl bg-safety-amber/10 text-safety-amber flex items-center justify-center mb-4">
+            <i data-lucide="database" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2" data-i18n="prob2Title">Data Rusak Sangat Sedikit</h3>
+          <p class="text-xs text-slate-300 leading-relaxed" data-i18n="prob2Desc">
+            IKM jarang memiliki log kegagalan historis ribuan jam. Model AI komersial konvensional gagal dilatih tanpa data rusak.
+          </p>
+        </div>
+
+        <!-- P3 -->
+        <div class="glass-card glass-card-hover rounded-2xl p-6 border-l-4 border-l-signal-cyan">
+          <div class="w-12 h-12 rounded-xl bg-signal-cyan/10 text-signal-cyan flex items-center justify-center mb-4">
+            <i data-lucide="bell-off" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2" data-i18n="prob3Title">Alarm Tanpa Konteks Operasi</h3>
+          <p class="text-xs text-slate-300 leading-relaxed" data-i18n="prob3Desc">
+            Getaran melonjak saat beban naik atau start-up sering memicu alarm palsu hingga teknisi mematikan buzzer peringatan.
+          </p>
+        </div>
+
+        <!-- P4 -->
+        <div class="glass-card glass-card-hover rounded-2xl p-6 border-l-4 border-l-industrial-teal">
+          <div class="w-12 h-12 rounded-xl bg-industrial-teal/10 text-industrial-teal flex items-center justify-center mb-4">
+            <i data-lucide="clock" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2" data-i18n="prob4Title">Keputusan Terlambat & Reaktif</h3>
+          <p class="text-xs text-slate-300 leading-relaxed" data-i18n="prob4Desc">
+            Perawatan dilakukan setelah mesin berasap atau macet total, memicu biaya lembur perbaikan darurat dan kehilangan pesanan.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= S03 FOUR PILLARS APPROACH ================= -->
+  <section class="py-20 bg-deep-steel/30 relative border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="inline-block px-3 py-1 rounded-full bg-industrial-teal/10 text-signal-cyan border border-industrial-teal/30 text-xs font-mono font-bold uppercase tracking-wider mb-3" data-i18n="pillarBadge">
+          PENDEKATAN NADI-IKM
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white" data-i18n="pillarTitle">
+          Empat Fondasi Inovasi Bertanggung Jawab
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        <div class="glass-card rounded-2xl p-7 flex items-start gap-5">
+          <div class="w-12 h-12 rounded-xl bg-industrial-teal/15 text-industrial-teal flex items-center justify-center shrink-0">
+            <i data-lucide="target" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <h4 class="text-xl font-bold text-white mb-2" data-i18n="p1Title">1. Audit Kekritisan Aset</h4>
+            <p class="text-sm text-slate-300 leading-relaxed" data-i18n="p1Desc">
+              Fokus pada 3 mesin inti terpenting berdasarkan dampak penghentian, kemudahan suku cadang, dan risiko keselamatan.
+            </p>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-7 flex items-start gap-5">
+          <div class="w-12 h-12 rounded-xl bg-signal-cyan/15 text-signal-cyan flex items-center justify-center shrink-0">
+            <i data-lucide="sliders" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <h4 class="text-xl font-bold text-white mb-2" data-i18n="p2Title">2. Baseline Spesifik per Mesin</h4>
+            <p class="text-sm text-slate-300 leading-relaxed" data-i18n="p2Desc">
+              Model belajar dari kondisi normal masing-masing unit tanpa ambang getaran seragam yang kaku (ISO 17359 / 20816-3).
+            </p>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-7 flex items-start gap-5">
+          <div class="w-12 h-12 rounded-xl bg-safety-amber/15 text-safety-amber flex items-center justify-center shrink-0">
+            <i data-lucide="file-check-2" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <h4 class="text-xl font-bold text-white mb-2" data-i18n="p3Title">3. Alarm yang Dapat Dijelaskan</h4>
+            <p class="text-sm text-slate-300 leading-relaxed" data-i18n="p3Desc">
+              Bukan persentase probabilitas hitam, melainkan bukti: deviasi RMS, tren suhu, validasi mutu sinyal, dan rekomendasi SOP.
+            </p>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-7 flex items-start gap-5">
+          <div class="w-12 h-12 rounded-xl bg-success-jade/15 text-success-jade flex items-center justify-center shrink-0">
+            <i data-lucide="user-check" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <h4 class="text-xl font-bold text-white mb-2" data-i18n="p4Title">4. Kendali Tetap di Teknisi</h4>
+            <p class="text-sm text-slate-300 leading-relaxed" data-i18n="p4Desc">
+              Tanpa shutdown otomatis berbahaya. Sistem adalah asisten navigasi; keputusan tindakan keselamatan mutlak di tangan teknisi.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= S04 3D PRODUCT LAB: 360 & EXPLODED VIEW ================= -->
+  <section id="lab3d" class="py-24 bg-midnight-navy relative border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Section Header -->
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="inline-block px-3 py-1 rounded-full bg-industrial-teal/15 text-signal-cyan border border-industrial-teal/30 text-xs font-mono font-bold uppercase tracking-wider mb-3" data-i18n="labBadge">
+          ANATOMI PERANGKAT RETROFIT
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white" data-i18n="labTitle">
+          Kenali Setiap Komponen, Lapis demi Lapis.
+        </h2>
+        <p class="mt-4 text-slate-300 text-sm sm:text-base leading-relaxed" data-i18n="labDesc">
+          Kit sensor retrofit non-invasif NADI-IKM dirancang untuk dipasang tanpa memodifikasi sirkuit kendali utama (PLC) mesin industri.
+        </p>
+      </div>
+
+      <!-- 3D Lab Main Stage -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- 3D WebGL Canvas Box (8 Cols) -->
+        <div class="lg:col-span-8 bg-deep-steel/50 rounded-3xl border border-signal-cyan/20 p-4 shadow-2xl relative">
+          
+          <div id="mainLab3dCanvas" class="w-full h-[520px] rounded-2xl relative overflow-hidden bg-midnight-navy cursor-grab active:cursor-grabbing">
+            <!-- Canvas Mounts Here -->
+          </div>
+
+          <!-- Bottom Control Bar inside Canvas Box -->
+          <div class="mt-4 flex flex-wrap items-center justify-between gap-4 p-3 bg-midnight-navy/70 backdrop-blur rounded-xl border border-slate-800">
+            
+            <!-- Explode Slider -->
+            <div class="flex items-center gap-3 flex-1 min-w-[220px]">
+              <span class="text-xs font-mono text-slate-400 whitespace-nowrap" data-i18n="explodeSlider">Explode:</span>
+              <input type="range" id="labExplodeRange" min="0" max="1" step="0.01" value="0" class="w-full">
+            </div>
+
+            <!-- Toggles & Camera Presets -->
+            <div class="flex items-center gap-2">
+              <button id="toggleXrayBtn" class="px-3 py-1.5 rounded-lg bg-deep-steel hover:bg-slate-700 border border-slate-700 text-xs font-medium text-slate-200 flex items-center gap-1.5 transition-colors">
+                <i data-lucide="eye" class="w-3.5 h-3.5 text-signal-cyan"></i>
+                <span data-i18n="xrayToggle">X-Ray</span>
+              </button>
+              <button id="btnIsoView" class="px-3 py-1.5 rounded-lg bg-deep-steel hover:bg-slate-700 border border-slate-700 text-xs font-medium text-slate-200 transition-colors" data-i18n="btnIsoView">
+                Isometrik
+              </button>
+              <button id="btnTopView" class="px-3 py-1.5 rounded-lg bg-deep-steel hover:bg-slate-700 border border-slate-700 text-xs font-medium text-slate-200 transition-colors" data-i18n="btnTopView">
+                Tampak Atas
+              </button>
+              <button id="btnResetLab" class="px-3 py-1.5 rounded-lg bg-industrial-teal/20 text-signal-cyan hover:bg-industrial-teal/30 border border-industrial-teal/40 text-xs font-semibold transition-colors" data-i18n="btnResetView">
+                Reset
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Right Side: Component Details & BOM (4 Cols) -->
+        <div class="lg:col-span-4 space-y-4">
+          
+          <!-- Selected Hotspot Active Card -->
+          <div id="activePartCard" class="glass-card rounded-2xl p-6 border-l-4 border-l-industrial-teal">
+            <div class="flex items-center justify-between mb-3">
+              <span id="activePartBadge" class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-industrial-teal/20 text-signal-cyan border border-industrial-teal/30">KOMPONEN #1</span>
+              <span class="text-xs text-slate-400 font-mono">BOM RETROFIT</span>
+            </div>
+            <h3 id="activePartTitle" class="text-lg font-bold text-white mb-2">Housing Enclosure Polikarbonat</h3>
+            <p id="activePartDesc" class="text-xs text-slate-300 leading-relaxed">
+              Tutup atas polikarbonat tahan benturan dengan ventilasi labirin termal dan indikator status akrilik 360 derajat.
+            </p>
+          </div>
+
+          <!-- Hotspot Selection List -->
+          <div class="glass-card rounded-2xl p-4">
+            <h4 class="text-xs font-mono uppercase tracking-wider text-slate-400 mb-3 px-2">Daftar Modul Anatomi (Klik untuk Sorot)</h4>
+            <div class="space-y-1.5 text-xs font-medium">
+              <button onclick="window.mainLabViewer && window.mainLabViewer.selectPart('enclosure')" class="w-full text-left px-3 py-2 rounded-lg hover:bg-deep-steel text-slate-200 flex items-center justify-between transition-colors">
+                <span>1. Enclosure Polikarbonat</span>
+                <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-500"></i>
+              </button>
+              <button onclick="window.mainLabViewer && window.mainLabViewer.selectPart('esp')" class="w-full text-left px-3 py-2 rounded-lg hover:bg-deep-steel text-slate-200 flex items-center justify-between transition-colors">
+                <span>2. Mikrokontroler Edge ESP32-S3</span>
+                <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-500"></i>
+              </button>
+              <button onclick="window.mainLabViewer && window.mainLabViewer.selectPart('sensor')" class="w-full text-left px-3 py-2 rounded-lg hover:bg-deep-steel text-slate-200 flex items-center justify-between transition-colors">
+                <span>3. Akselerometer MEMS Triaksial & RTD</span>
+                <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-500"></i>
+              </button>
+              <button onclick="window.mainLabViewer && window.mainLabViewer.selectPart('power')" class="w-full text-left px-3 py-2 rounded-lg hover:bg-deep-steel text-slate-200 flex items-center justify-between transition-colors">
+                <span>4. Catu Daya & Proteksi TVS Surge</span>
+                <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-500"></i>
+              </button>
+              <button onclick="window.mainLabViewer && window.mainLabViewer.selectPart('mount')" class="w-full text-left px-3 py-2 rounded-lg hover:bg-deep-steel text-slate-200 flex items-center justify-between transition-colors">
+                <span>5. Dudukan Magnetik M8 Nirkarat</span>
+                <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-500"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Safety & Non-Invasive Note -->
+          <div class="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-xs text-amber-200 flex items-start gap-3">
+            <i data-lucide="alert-circle" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i>
+            <span><strong>Prinsip Retrofit:</strong> Pemasangan sepenuhnya non-intrusif pada casing bearing luar motor. Tanpa memotong kabel kontrol atau membatalkan garansi mesin pabrik.</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= S05 4-LAYER ARCHITECTURE ================= -->
+  <section id="architecture" class="py-20 bg-deep-steel/20 relative border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="inline-block px-3 py-1 rounded-full bg-industrial-teal/15 text-signal-cyan border border-industrial-teal/30 text-xs font-mono font-bold uppercase tracking-wider mb-3" data-i18n="archBadge">
+          ARSITEKTUR 4 LAPIS
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white" data-i18n="archTitle">
+          Dari Getaran Menjadi Keputusan Terarah
+        </h2>
+      </div>
+
+      <!-- Architecture Workflow (Figure 2 of Paper) -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 relative">
+        
+        <!-- Layer 1 -->
+        <div class="glass-card rounded-2xl p-6 relative">
+          <div class="text-xs font-mono font-bold text-signal-cyan mb-2">LAPISAN 01</div>
+          <h4 class="text-lg font-bold text-white mb-2" data-i18n="archL1Title">Akuisisi Sinyal</h4>
+          <p class="text-xs text-slate-300 leading-relaxed" data-i18n="archL1Desc">
+            Pembacaan frekuensi tinggi getaran (1-2 kHz) dan suhu interval 15 detik dengan validasi kabel longgar.
+          </p>
+          <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] font-mono text-slate-400">
+            MEMS • PT100 RTD • Validasi Mutu
+          </div>
+        </div>
+
+        <!-- Layer 2 -->
+        <div class="glass-card rounded-2xl p-6 relative">
+          <div class="text-xs font-mono font-bold text-industrial-teal mb-2">LAPISAN 02</div>
+          <h4 class="text-lg font-bold text-white mb-2" data-i18n="archL2Title">Komputasi Tepi (Edge)</h4>
+          <p class="text-xs text-slate-300 leading-relaxed" data-i18n="archL2Desc">
+            Ekstraksi fitur statistik ringkas (RMS, kurtosis, deviasi median robust MAD) langsung pada mikrokontroler.
+          </p>
+          <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] font-mono text-slate-400">
+            ESP32 DSP • Feature Extraction
+          </div>
+        </div>
+
+        <!-- Layer 3 -->
+        <div class="glass-card rounded-2xl p-6 relative">
+          <div class="text-xs font-mono font-bold text-safety-amber mb-2">LAPISAN 03</div>
+          <h4 class="text-lg font-bold text-white mb-2" data-i18n="archL3Title">Gateway & Visualisasi</h4>
+          <p class="text-xs text-slate-300 leading-relaxed" data-i18n="archL3Desc">
+            Penyimpanan histori lokal SQLite, evaluasi algoritma Isolation Forest, dan server dashboard web lokal.
+          </p>
+          <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] font-mono text-slate-400">
+            SQLite Lokal • Isolation Forest
+          </div>
+        </div>
+
+        <!-- Layer 4 -->
+        <div class="glass-card rounded-2xl p-6 relative">
+          <div class="text-xs font-mono font-bold text-success-jade mb-2">LAPISAN 04</div>
+          <h4 class="text-lg font-bold text-white mb-2" data-i18n="archL4Title">Keputusan Teknisi & Log</h4>
+          <p class="text-xs text-slate-300 leading-relaxed" data-i18n="archL4Desc">
+            Antarmuka teknisi dengan panduan checklist inspeksi dan pencatatan riwayat tindakan perawatan berkala.
+          </p>
+          <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] font-mono text-slate-400">
+            SOP Terarah • Logbook Audit
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= S06 DASHBOARD PREVIEW ================= -->
+  <section class="py-20 bg-midnight-navy relative border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+        <div>
+          <span class="inline-block px-3 py-1 rounded-full bg-industrial-teal/15 text-signal-cyan border border-industrial-teal/30 text-xs font-mono font-bold uppercase tracking-wider mb-3" data-i18n="dashBadge">
+            DASHBOARD DEMONSTRASI
+          </span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-white" data-i18n="dashTitle">
+            Data Sintetis yang Nyata dan Dapat Ditindaklanjuti
+          </h2>
+          <p class="mt-2 text-slate-300 text-sm max-w-2xl" data-i18n="dashDesc">
+            Simulasi interaktif 3 unit mesin IKM tipikal. Seluruh angka adalah data uji sintetis untuk membuktikan logika alarm berjenjang.
+          </p>
+        </div>
+        <div class="mt-4 md:mt-0">
+          <a href="dashboard.html" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-industrial-teal hover:bg-teal-400 text-midnight-navy font-bold text-xs uppercase tracking-wider shadow-md shadow-industrial-teal/20 transition-all">
+            <span>Buka Dashboard Penuh</span>
+            <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- 3 Preview Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- P-01 -->
+        <div class="glass-card rounded-2xl p-6 border-slate-800">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-mono font-bold text-signal-cyan px-2.5 py-1 rounded bg-signal-cyan/10">P-01</span>
+            <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
+              ● NORMAL
+            </span>
+          </div>
+          <h4 class="text-lg font-bold text-white mb-1" data-i18n="m1Name">Pompa Sentrifugal P-01</h4>
+          <p class="text-xs text-slate-400 mb-4" data-i18n="m1Role">Sirkulasi Pendingin Pabrik</p>
+          <div class="grid grid-cols-2 gap-2 text-xs font-mono pt-3 border-t border-slate-800">
+            <div>
+              <span class="text-slate-400 block text-[11px]">Getaran RMS</span>
+              <span class="text-white font-bold">1.42 mm/s</span>
+            </div>
+            <div>
+              <span class="text-slate-400 block text-[11px]">Suhu Bantalan</span>
+              <span class="text-white font-bold">42.5 °C</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- M-02 -->
+        <div class="glass-card rounded-2xl p-6 border-amber-500/40 shadow-lg shadow-amber-500/5">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-mono font-bold text-safety-amber px-2.5 py-1 rounded bg-safety-amber/10">M-02</span>
+            <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/40 animate-pulse">
+              ● INSPEKSI
+            </span>
+          </div>
+          <h4 class="text-lg font-bold text-white mb-1" data-i18n="m2Name">Motor Induksi M-02</h4>
+          <p class="text-xs text-slate-400 mb-4" data-i18n="m2Role">Penggerak Lini Konveyor Utama</p>
+          <div class="grid grid-cols-2 gap-2 text-xs font-mono pt-3 border-t border-slate-800">
+            <div>
+              <span class="text-slate-400 block text-[11px]">Getaran RMS</span>
+              <span class="text-amber-400 font-bold">4.85 mm/s</span>
+            </div>
+            <div>
+              <span class="text-slate-400 block text-[11px]">Suhu Bantalan</span>
+              <span class="text-amber-400 font-bold">68.4 °C</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- F-03 -->
+        <div class="glass-card rounded-2xl p-6 border-sky-500/40">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-mono font-bold text-sky-400 px-2.5 py-1 rounded bg-sky-500/10">F-03</span>
+            <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-sky-500/20 text-sky-400 border border-sky-500/40">
+              ● PERIKSA SENSOR
+            </span>
+          </div>
+          <h4 class="text-lg font-bold text-white mb-1" data-i18n="m3Name">Kipas Ventilasi Sentral F-03</h4>
+          <p class="text-xs text-slate-400 mb-4" data-i18n="m3Role">Ekstraksi Udara Sentral</p>
+          <div class="grid grid-cols-2 gap-2 text-xs font-mono pt-3 border-t border-slate-800">
+            <div>
+              <span class="text-slate-400 block text-[11px]">Status Kualitas</span>
+              <span class="text-sky-400 font-bold">Kabel Lepas</span>
+            </div>
+            <div>
+              <span class="text-slate-400 block text-[11px]">Tindakan</span>
+              <span class="text-white font-bold">Cek Konektor</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= S07 FINANCIAL CALCULATOR ================= -->
+  <section id="economics" class="py-24 bg-deep-steel/30 relative border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="inline-block px-3 py-1 rounded-full bg-safety-amber/15 text-safety-amber border border-safety-amber/30 text-xs font-mono font-bold uppercase tracking-wider mb-3" data-i18n="econBadge">
+          ANALISIS SENSITIVITAS FINANSIAL
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white" data-i18n="econTitle">
+          Manfaat Harus Dihitung, Bukan Diasumsikan.
+        </h2>
+        <p class="mt-4 text-slate-300 text-sm sm:text-base leading-relaxed" data-i18n="econDesc">
+          Berdasarkan Tabel 5 & 6 pada esai IYEEA 2026: Investasi awal (CAPEX) Rp8.000.000 untuk 3 mesin, biaya operasional & alarm palsu (OPEX) Rp3.000.000/tahun.
+        </p>
+      </div>
+
+      <!-- Calculator Card -->
+      <div class="glass-card rounded-3xl p-6 lg:p-10 border border-signal-cyan/20">
+        
+        <!-- Scenario Presets -->
+        <div class="flex flex-wrap items-center justify-center gap-3 mb-8">
+          <button data-preset="konservatif" class="econ-preset-btn px-4 py-2 rounded-xl bg-deep-steel hover:bg-slate-700 text-xs font-semibold text-slate-200 transition-all" data-i18n="btnScenKons">
+            Skenario Konservatif (4 jam @ Rp500rb)
+          </button>
+          <button data-preset="moderat" class="econ-preset-btn px-4 py-2 rounded-xl bg-industrial-teal text-white text-xs font-semibold shadow-md transition-all" data-i18n="btnScenMod">
+            Skenario Moderat (12 jam @ Rp1jt)
+          </button>
+          <button data-preset="optimistis" class="econ-preset-btn px-4 py-2 rounded-xl bg-deep-steel hover:bg-slate-700 text-xs font-semibold text-slate-200 transition-all" data-i18n="btnScenOpt">
+            Skenario Optimistis (20 jam @ Rp1,5jt)
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          
+          <!-- Sliders Side (7 Cols) -->
+          <div class="lg:col-span-7 space-y-6">
+            
+            <!-- Slider 1: Hours -->
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <label for="sliderHours" class="text-sm font-semibold text-slate-200" data-i18n="sliderHours">Jam Downtime Terhindar / Tahun:</label>
+                <span id="sliderHoursVal" class="text-base font-mono font-bold text-signal-cyan">12 Jam</span>
+              </div>
+              <input type="range" id="sliderHours" min="2" max="30" step="1" value="12" class="w-full">
+              <div class="flex justify-between text-[11px] text-slate-500 font-mono mt-1">
+                <span>2 Jam</span>
+                <span>15 Jam</span>
+                <span>30 Jam</span>
+              </div>
+            </div>
+
+            <!-- Slider 2: Hourly Cost -->
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <label for="sliderCost" class="text-sm font-semibold text-slate-200" data-i18n="sliderCost">Biaya Downtime / Jam (Rp):</label>
+                <span id="sliderCostVal" class="text-base font-mono font-bold text-signal-cyan">Rp1.000.000</span>
+              </div>
+              <input type="range" id="sliderCost" min="250000" max="2500000" step="50000" value="1000000" class="w-full">
+              <div class="flex justify-between text-[11px] text-slate-500 font-mono mt-1">
+                <span>Rp250.000</span>
+                <span>Rp1.250.000</span>
+                <span>Rp2.500.000</span>
+              </div>
+            </div>
+
+            <!-- Transparency Caveat Box -->
+            <p class="text-xs text-slate-400 italic" data-i18n="econDisclaimer">
+              *Catatan: Seluruh angka merupakan model simulasi sensitivitas ekonomi hipotetis, bukan jaminan kepastian finansial di lapangan.
+            </p>
+
+          </div>
+
+          <!-- Dynamic Results Box (5 Cols) -->
+          <div class="lg:col-span-5 bg-midnight-navy/80 rounded-2xl p-6 border border-slate-700 space-y-4">
+            
+            <div class="flex items-center justify-between text-xs pb-3 border-b border-slate-800">
+              <span class="text-slate-400" data-i18n="resGross">Manfaat Kotor Tahunan:</span>
+              <span id="calcGrossVal" class="font-mono font-bold text-white">Rp12.000.000</span>
+            </div>
+
+            <div class="flex items-center justify-between text-xs pb-3 border-b border-slate-800">
+              <span class="text-slate-400" data-i18n="resOpex">Biaya OPEX & Alarm:</span>
+              <span id="calcOpexVal" class="font-mono font-bold text-slate-400">Rp3.000.000</span>
+            </div>
+
+            <div class="pt-1">
+              <div class="text-xs text-slate-400 mb-1" data-i18n="resNet">Manfaat Bersih Tahunan:</div>
+              <div id="calcNetVal" class="text-3xl font-mono font-bold text-emerald-400">+Rp9.000.000</div>
+              <!-- Visual Bar -->
+              <div class="w-full bg-slate-800 h-2 rounded-full mt-2 overflow-hidden">
+                <div id="calcNetBar" class="h-2 bg-gradient-to-r from-industrial-teal to-signal-cyan rounded-full transition-all duration-300" style="width: 30%"></div>
+              </div>
+            </div>
+
+            <div class="pt-3 border-t border-slate-800">
+              <div class="text-xs text-slate-400 mb-1" data-i18n="resPayback">Waktu Impas Sederhana (Payback):</div>
+              <div id="calcPaybackVal" class="text-2xl font-mono font-bold text-signal-cyan">≈ 10,7 Bulan</div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= S08 6-MONTH PILOT ROADMAP ================= -->
+  <section id="pilot" class="py-20 bg-midnight-navy relative border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="inline-block px-3 py-1 rounded-full bg-industrial-teal/15 text-signal-cyan border border-industrial-teal/30 text-xs font-mono font-bold uppercase tracking-wider mb-3" data-i18n="roadBadge">
+          PETA JALAN IMPLEMENTASI
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white" data-i18n="roadTitle">
+          Enam Bulan untuk Menguji, Bukan Menebak.
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- B1-2 -->
+        <div class="glass-card rounded-2xl p-6 relative border-t-4 border-t-industrial-teal">
+          <div class="text-xs font-mono font-bold text-signal-cyan mb-2">FASE 01</div>
+          <h4 class="text-lg font-bold text-white mb-2" data-i18n="m12Title">Bulan 1-2: Audit & Pemasangan</h4>
+          <p class="text-xs text-slate-300 leading-relaxed" data-i18n="m12Desc">
+            Audit kekritisan mesin IKM, pemasangan sensor retrofit non-invasif, kalibrasi instrumen, dan penentuan baseline awal.
+          </p>
+        </div>
+
+        <!-- B3-4 -->
+        <div class="glass-card rounded-2xl p-6 relative border-t-4 border-t-safety-amber">
+          <div class="text-xs font-mono font-bold text-safety-amber mb-2">FASE 02</div>
+          <h4 class="text-lg font-bold text-white mb-2" data-i18n="m34Title">Bulan 3-4: Uji Prospektif & Baseline</h4>
+          <p class="text-xs text-slate-300 leading-relaxed" data-i18n="m34Desc">
+            Perekaman data operasi stabil, penyesuaian ambang statistik robust, pelatihan teknisi dalam membaca indikasi anomali.
+          </p>
+        </div>
+
+        <!-- B5-6 -->
+        <div class="glass-card rounded-2xl p-6 relative border-t-4 border-t-success-jade">
+          <div class="text-xs font-mono font-bold text-success-jade mb-2">FASE 03</div>
+          <h4 class="text-lg font-bold text-white mb-2" data-i18n="m56Title">Bulan 5-6: Audit Manfaat & Gerbang Keputusan</h4>
+          <p class="text-xs text-slate-300 leading-relaxed" data-i18n="m56Desc">
+            Verifikasi rasio alarm palsu, pencatatan waktu henti aktual, perhitungan ROI riil, dan penentuan ekspansi unit.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= S09 TEAM & JOBDESK SECTION ================= -->
+  <section id="team" class="py-24 bg-deep-steel/20 relative border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="inline-block px-3 py-1 rounded-full bg-industrial-teal/15 text-signal-cyan border border-industrial-teal/30 text-xs font-mono font-bold uppercase tracking-wider mb-3" data-i18n="teamBadge">
+          TIM PENGEMBANG INOVASI
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white" data-i18n="teamTitle">
+          Tiga Disiplin, Satu Pendekatan Terintegrasi.
+        </h2>
+        <p class="mt-4 text-slate-300 text-sm sm:text-base leading-relaxed" data-i18n="teamDesc">
+          Kolaborasi multidisiplin mahasiswa Universitas Brawijaya memadukan rekayasa perangkat lunak, sistem tertanam, dan kecerdasan buatan.
+        </p>
+      </div>
+
+      <!-- 3 Team Profiles -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- Bimo Satrio -->
+        <div class="glass-card rounded-3xl p-8 relative border-t-4 border-t-industrial-teal flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-4 mb-5">
+              <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-industrial-teal to-signal-cyan text-midnight-navy font-extrabold text-xl flex items-center justify-center shadow-lg shadow-industrial-teal/20">
+                BS
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-white">Bimo Satrio</h3>
+                <span class="text-xs font-mono text-signal-cyan">NIM: 245150307111060</span>
+                <span class="block text-xs text-slate-400">Universitas Brawijaya</span>
+              </div>
+            </div>
+
+            <span class="inline-block px-3 py-1 rounded-full bg-industrial-teal/10 text-signal-cyan border border-industrial-teal/30 text-xs font-bold mb-3" data-i18n="bimoRole">
+              Ketua Tim • Arsitek Web & Dashboard
+            </span>
+
+            <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="bimoDesc">
+              Bertanggung jawab atas visi produk, arsitektur informasi UX/UI, perancangan dashboard interaktif, integrasi visualisasi 3D, deployment Vercel, serta koordinasi esai IYEEA 2026.
+            </p>
+          </div>
+
+          <div class="pt-4 border-t border-slate-800 text-[11px] font-mono text-slate-400 space-y-1">
+            <div>• Project Lead & Coordinator</div>
+            <div>• Web Frontend & 3D Integration</div>
+            <div>• Vercel Deployment & Git Maintainer</div>
+          </div>
+        </div>
+
+        <!-- Ihwan Ridwan -->
+        <div class="glass-card rounded-3xl p-8 relative border-t-4 border-t-safety-amber flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-4 mb-5">
+              <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-safety-amber to-amber-300 text-midnight-navy font-extrabold text-xl flex items-center justify-center shadow-lg shadow-safety-amber/20">
+                IR
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-white">Ihwan Ridwan S.</h3>
+                <span class="text-xs font-mono text-safety-amber">Universitas Brawijaya</span>
+                <span class="block text-xs text-slate-400">Malang, Indonesia</span>
+              </div>
+            </div>
+
+            <span class="inline-block px-3 py-1 rounded-full bg-safety-amber/10 text-safety-amber border border-safety-amber/30 text-xs font-bold mb-3" data-i18n="ihwanRole">
+              Lead Sistem Tertanam & Hardware
+            </span>
+
+            <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="ihwanDesc">
+              Bertanggung jawab atas riset komponen retrofit, pemilihan sensor akselerometer MEMS & probe termal, optimasi BOM perangkat, pengkondisian sinyal edge, dan panduan instalasi mekanik.
+            </p>
+          </div>
+
+          <div class="pt-4 border-t border-slate-800 text-[11px] font-mono text-slate-400 space-y-1">
+            <div>• BOM Optimization & Schematic</div>
+            <div>• MEMS Sensor Calibration</div>
+            <div>• Mechanical Clamp Retrofit SOP</div>
+          </div>
+        </div>
+
+        <!-- Muhammad Raiz -->
+        <div class="glass-card rounded-3xl p-8 relative border-t-4 border-t-signal-cyan flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-4 mb-5">
+              <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-signal-cyan to-teal-200 text-midnight-navy font-extrabold text-xl flex items-center justify-center shadow-lg shadow-signal-cyan/20">
+                MR
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-white">Muhammad Raiz B.</h3>
+                <span class="text-xs font-mono text-signal-cyan">Universitas Brawijaya</span>
+                <span class="block text-xs text-slate-400">Malang, Indonesia</span>
+              </div>
+            </div>
+
+            <span class="inline-block px-3 py-1 rounded-full bg-signal-cyan/10 text-signal-cyan border border-signal-cyan/30 text-xs font-bold mb-3" data-i18n="raizRole">
+              Lead Kecerdasan Buatan & Analitik Data
+            </span>
+
+            <p class="text-xs text-slate-300 leading-relaxed mb-4" data-i18n="raizDesc">
+              Bertanggung jawab atas pipeline deteksi anomali (Isolation Forest & Robust MAD), validasi mutu sinyal (deteksi kabel lepas), generator dataset sintetis, dan model simulasi ekonomi.
+            </p>
+          </div>
+
+          <div class="pt-4 border-t border-slate-800 text-[11px] font-mono text-slate-400 space-y-1">
+            <div>• Isolation Forest & Robust Stats</div>
+            <div>• Signal Quality Classification</div>
+            <div>• Synthetic Data Modeling</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= S10 RESEARCH & REFERENCES ================= -->
+  <section id="research" class="py-24 bg-midnight-navy relative border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="inline-block px-3 py-1 rounded-full bg-industrial-teal/15 text-signal-cyan border border-industrial-teal/30 text-xs font-mono font-bold uppercase tracking-wider mb-3" data-i18n="researchBadge">
+          LANDASAN RISET & PUSTAKA
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white" data-i18n="researchTitle">
+          Transparansi Akademis & Landasan Teori
+        </h2>
+        <p class="mt-4 text-slate-300 text-sm sm:text-base leading-relaxed" data-i18n="researchDesc">
+          Gagasan NADI-IKM dibangun di atas 16 publikasi ilmiah internasional, standar ISO 17359 / 20816, dan pedoman keamanan NIST OT.
+        </p>
+      </div>
+
+      <!-- Academic References Accordion/Grid -->
+      <div class="glass-card rounded-2xl p-6 lg:p-8 mb-8 space-y-4 max-h-[480px] overflow-y-auto">
+        <div class="text-xs font-mono text-slate-400 pb-2 border-b border-slate-800 flex justify-between items-center">
+          <span>16 DAFTAR PUSTAKA ACUAN (IYEEA 2026)</span>
+          <span>STANDAR INTERNASIONAL & JURNAL</span>
+        </div>
+
+        <ul class="space-y-3 text-xs text-slate-300 leading-relaxed divide-y divide-slate-800/60 font-sans">
+          <li class="pt-2"><strong>Badan Pusat Statistik (BPS)</strong> (2026) 'Ekonomi Indonesia Triwulan III-2026 tumbuh 5,47 persen (y-on-y)', <em>Berita Resmi Statistik</em>, 5 November.</li>
+          <li class="pt-2"><strong>Carvalho, T.P., Soares, F.A.A.M.N., Vita, R., Francisco, R. da P., Basto, J.P. dan Alcalá, S.G.S.</strong> (2019) 'A systematic literature review of machine learning methods applied to predictive maintenance', <em>Computers & Industrial Engineering</em>, 137, artikel 106024.</li>
+          <li class="pt-2"><strong>Cummins, L., Sommers, A., Ramezani, S.B., Mittal, S., Jabour, J., Seale, M. dan Rahimi, S.</strong> (2024) 'Explainable predictive maintenance: A survey of current methods, challenges and opportunities', <em>IEEE Access</em>, 12, hlm. 57574–57602.</li>
+          <li class="pt-2"><strong>Elía, I. dan Pagola, M.</strong> (2025) 'Anomaly detection in smart-manufacturing era: A review', <em>Engineering Applications of Artificial Intelligence</em>, 139, artikel 109578.</li>
+          <li class="pt-2"><strong>International Organization for Standardization (ISO)</strong> (2018) <em>ISO 17359:2018: Condition monitoring and diagnostics of machines—General guidelines</em>. Geneva: ISO.</li>
+          <li class="pt-2"><strong>International Organization for Standardization (ISO)</strong> (2026) <em>ISO 20816-3:2026: Mechanical vibration—Part 3: Industrial machines with operating speeds between 120 r/min and 30 000 r/min</em>. Geneva: ISO.</li>
+          <li class="pt-2"><strong>Jardine, A.K.S., Lin, D. dan Banjevic, D.</strong> (2006) 'A review on machinery diagnostics and prognostics implementing condition-based maintenance', <em>Mechanical Systems and Signal Processing</em>, 20(7), hlm. 1483–1510.</li>
+          <li class="pt-2"><strong>Kolok, P., Hodoň, M., Ševčík, P., Hotz, L. dan Remy, N.</strong> (2025) 'Low-cost IoT-based predictive maintenance using vibration', <em>Sensors</em>, 25(21), artikel 6610.</li>
+          <li class="pt-2"><strong>Liu, F.T., Ting, K.M. dan Zhou, Z.-H.</strong> (2008) 'Isolation forest', <em>Proceedings of the 2008 Eighth IEEE International Conference on Data Mining</em>, hlm. 413–422.</li>
+          <li class="pt-2"><strong>Nasirinejad, M., Afshari, H. dan Sampalli, S.</strong> (2024) 'Challenges and solutions to adopt smart maintenance in SMEs: A literature review and research agenda', <em>IFAC-PapersOnLine</em>, 58(19), hlm. 917–922.</li>
+          <li class="pt-2"><strong>National Institute of Standards and Technology (NIST)</strong> (2023) <em>Guide to Operational Technology (OT) Security</em>. NIST Special Publication 800-82 Revision 3.</li>
+          <li class="pt-2"><strong>Neupane, D., Bouadjenek, M.R., Dazeley, R. dan Aryal, S.</strong> (2025) 'Data-driven machinery fault diagnosis: A comprehensive review', <em>Neurocomputing</em>, 627, artikel 129588.</li>
+          <li class="pt-2"><strong>Sculley, D., Holt, G., Golovin, D. et al.</strong> (2015) 'Hidden technical debt in machine learning systems', <em>Advances in Neural Information Processing Systems</em>, 28, hlm. 2503–2511.</li>
+          <li class="pt-2"><strong>Kementerian Perindustrian</strong> (2026) 'Dukung industri dalam negeri, Kemenperin gelar Pameran Beli Produk IKM 2026', Ditjen IKMA, 9 November.</li>
+        </ul>
+      </div>
+
+      <!-- BibTeX Box -->
+      <div class="glass-card rounded-2xl p-6">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-mono font-bold text-signal-cyan" data-i18n="bibtexTitle">Format Sitasi Ilmiah (BibTeX)</span>
+          <button id="copyBibtexBtn" class="px-2.5 py-1 rounded bg-deep-steel hover:bg-slate-700 text-[11px] font-mono text-slate-200 border border-slate-700 transition-colors">
+            Salin Sitasi
+          </button>
+        </div>
+        <pre class="bg-midnight-navy/90 p-4 rounded-xl text-[11px] font-mono text-slate-300 overflow-x-auto">@article{satrio2026nadi,
+  title={NADI-IKM: Pemeliharaan Prediktif Hemat Data Berbasis Edge AI untuk Menjaga Keandalan Mesin Industri Kecil dan Menengah},
+  author={Satrio, Bimo and Maulidian, Ihwan Ridwan S and Belyaa, Muhammad Raiz},
+  journal={Indonesian Young Economy and Engineering Award (IYEEA)},
+  institution={Universitas Brawijaya},
+  year={2026}
+}</pre>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="bg-midnight-navy border-t border-slate-800 py-12 text-xs text-slate-400">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+      
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-slate-800">
+        <div class="flex items-center gap-3">
+          <img src="assets/img/logo-dark.svg" alt="NADI-IKM Logo" class="h-8 w-auto">
+        </div>
+        <div class="flex items-center gap-6 font-mono text-[11px]">
+          <a href="#lab3d" class="hover:text-signal-cyan">3D Product Lab</a>
+          <a href="dashboard.html" class="hover:text-signal-cyan text-industrial-teal">Live Demo Dashboard</a>
+          <a href="#economics" class="hover:text-signal-cyan">Kalkulator Sensitivitas</a>
+          <a href="#team" class="hover:text-signal-cyan">Struktur Tim</a>
+        </div>
+      </div>
+
+      <p class="leading-relaxed" data-i18n="footerDisclaimer">
+        Penafian: Website ini mendemonstrasikan rancangan konseptual, prototipe digital, dan simulasi interaktif proyek NADI-IKM (Universitas Brawijaya). Seluruh data mesin pada dashboard adalah data sintetis berlabel untuk tujuan edukasi dan kompetisi IYEEA 2026.
+      </p>
+
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 text-[11px] text-slate-500 font-mono">
+        <span data-i18n="footerRights">Hak Cipta © 2026 Tim NADI-IKM • Universitas Brawijaya, Malang. Seluruh hak cipta dilindungi.</span>
+        <span>Repository: <a href="https://github.com/bimskuy1205/Nadi-IKM.git" target="_blank" class="text-industrial-teal hover:underline">github.com/bimskuy1205/Nadi-IKM</a></span>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/js/translations.js"></script>
+  <script src="assets/js/three-viewer.js"></script>
+  <script src="assets/js/calculator.js"></script>
+
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Mobile Menu Toggle
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (mobileBtn && mobileMenu) {
+      mobileBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+      });
+    }
+
+    // Initialize Hero 3D Viewer (Turntable preview)
+    window.addEventListener('DOMContentLoaded', () => {
+      if (window.NadiDeviceViewer) {
+        window.heroViewer = new NadiDeviceViewer('hero3dCanvas', {
+          autoRotate: true
+        });
+
+        // Initialize Main 3D Lab Viewer
+        window.mainLabViewer = new NadiDeviceViewer('mainLab3dCanvas', {
+          autoRotate: false
+        });
+
+        // Bind 3D Lab UI Controls
+        const explodeRange = document.getElementById('labExplodeRange');
+        if (explodeRange) {
+          explodeRange.addEventListener('input', (e) => {
+            if (window.mainLabViewer) {
+              window.mainLabViewer.setExploded(parseFloat(e.target.value));
+            }
+          });
+        }
+
+        const xrayBtn = document.getElementById('toggleXrayBtn');
+        let isXrayActive = false;
+        if (xrayBtn) {
+          xrayBtn.addEventListener('click', () => {
+            isXrayActive = !isXrayActive;
+            window.mainLabViewer.setXray(isXrayActive);
+            xrayBtn.classList.toggle('bg-industrial-teal', isXrayActive);
+            xrayBtn.classList.toggle('text-white', isXrayActive);
+          });
+        }
+
+        const btnIso = document.getElementById('btnIsoView');
+        if (btnIso) {
+          btnIso.addEventListener('click', () => window.mainLabViewer.setView('iso'));
+        }
+
+        const btnTop = document.getElementById('btnTopView');
+        if (btnTop) {
+          btnTop.addEventListener('click', () => window.mainLabViewer.setView('top'));
+        }
+
+        const btnReset = document.getElementById('btnResetLab');
+        if (btnReset) {
+          btnReset.addEventListener('click', () => {
+            window.mainLabViewer.resetView();
+            if (explodeRange) explodeRange.value = 0;
+          });
+        }
+
+        // Listen for 3D part selection to update card
+        window.addEventListener('partSelected', (e) => {
+          const detail = e.detail;
+          const badgeEl = document.getElementById('activePartBadge');
+          const titleEl = document.getElementById('activePartTitle');
+          const descEl = document.getElementById('activePartDesc');
+          if (badgeEl) badgeEl.innerText = `KOMPONEN #${detail.num}`;
+          if (titleEl) titleEl.innerText = detail.title;
+          if (descEl) descEl.innerText = detail.desc;
+        });
+      }
+
+      // Initialize Calculator
+      if (window.NadiCalculator) {
+        window.NadiCalculator.init();
+      }
+
+      // BibTeX copy button
+      const copyBtn = document.getElementById('copyBibtexBtn');
+      if (copyBtn) {
+        copyBtn.addEventListener('click', () => {
+          const text = `@article{satrio2026nadi,\n  title={NADI-IKM: Pemeliharaan Prediktif Hemat Data Berbasis Edge AI untuk Menjaga Keandalan Mesin Industri Kecil dan Menengah},\n  author={Satrio, Bimo and Maulidian, Ihwan Ridwan S and Belyaa, Muhammad Raiz},\n  journal={Indonesian Young Economy and Engineering Award (IYEEA)},\n  institution={Universitas Brawijaya},\n  year={2026}\n}`;
+          navigator.clipboard.writeText(text);
+          copyBtn.innerText = 'Tersalin!';
+          setTimeout(() => { copyBtn.innerText = 'Salin Sitasi'; }, 2000);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

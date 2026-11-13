@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NADI-IKM | Struktur Tim & Rincian Jobdesk</title>
+  
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            'midnight-navy': '#0A1F2E',
+            'deep-steel': '#173447',
+            'industrial-teal': '#0DB3A6',
+            'signal-cyan': '#59D8D1',
+            'safety-amber': '#F0A444',
+            'alert-coral': '#E96F67',
+            'success-jade': '#3CB789',
+            'paper': '#F6F8F8',
+            'ink': '#173042',
+            'muted-slate': '#6B7F8A'
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"IBM Plex Mono"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-midnight-navy text-slate-100 antialiased min-h-screen flex flex-col font-sans">
+
+  <!-- Header -->
+  <header class="bg-deep-steel/90 border-b border-slate-800 sticky top-0 z-40 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <a href="index.html" class="flex items-center gap-2 group">
+          <img src="assets/img/logo-dark.svg" alt="NADI-IKM Logo" class="h-9 w-auto">
+        </a>
+        <div class="hidden sm:block h-6 w-px bg-slate-700"></div>
+        <span class="hidden sm:inline-block px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-industrial-teal/20 text-signal-cyan border border-industrial-teal/40">
+          STRUKTUR ORGANISASI & TATA KELOLA
+        </span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- Language Switcher -->
+        <div class="flex items-center bg-midnight-navy rounded-lg p-1 border border-slate-700 text-xs font-mono">
+          <button onclick="setLanguage('id')" data-lang="id" class="lang-btn px-2.5 py-1 rounded transition-all">ID</button>
+          <button onclick="setLanguage('en')" data-lang="en" class="lang-btn px-2.5 py-1 rounded transition-all">EN</button>
+        </div>
+
+        <a href="dashboard.html" class="px-3 py-1.5 rounded-lg bg-industrial-teal text-midnight-navy font-bold text-xs hover:bg-teal-400 transition-colors">
+          Demo Dashboard
+        </a>
+        <a href="index.html" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 transition-colors">
+          Beranda
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full space-y-12">
+    
+    <!-- Title -->
+    <div class="text-center max-w-3xl mx-auto space-y-3">
+      <span class="inline-block px-3 py-1 rounded-full bg-industrial-teal/15 text-signal-cyan border border-industrial-teal/30 text-xs font-mono font-bold uppercase tracking-wider">
+        TIM ENGINEERSPIKING • UNIVERSITAS BRAWIJAYA
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-white">
+        Struktur Tim, Peran & Rincian Jobdesk
+      </h1>
+      <p class="text-slate-300 text-sm leading-relaxed">
+        Pembagian tugas profesional dalam perancangan sistem NADI-IKM (Navigasi Anomali dan Diagnosis Industri untuk IKM) untuk kompetisi IYEEA 2026.
+      </p>
+    </div>
+
+    <!-- 3 Core Member Cards -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      
+      <!-- Bimo Satrio -->
+      <div class="glass-card rounded-3xl p-7 border-t-4 border-t-industrial-teal flex flex-col justify-between space-y-6">
+        <div>
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-industrial-teal to-signal-cyan text-midnight-navy font-black text-2xl flex items-center justify-center shadow-lg shadow-industrial-teal/20">
+              BS
+            </div>
+            <div>
+              <h2 class="text-xl font-bold text-white">Bimo Satrio</h2>
+              <div class="text-xs font-mono text-signal-cyan">NIM: 245150307111060</div>
+              <div class="text-xs text-slate-400">Universitas Brawijaya</div>
+            </div>
+          </div>
+
+          <div class="inline-block px-3 py-1 rounded-full bg-industrial-teal/15 text-signal-cyan border border-industrial-teal/30 text-xs font-bold mb-4">
+            Ketua Tim • Lead Arsitek Web & Dashboard
+          </div>
+
+          <p class="text-xs text-slate-300 leading-relaxed mb-4">
+            Memimpin keseluruhan inisiatif proyek, merumuskan visi produk, merancang arsitektur informasi UX/UI web publik, membangun dashboard telemetri interaktif, dan memimpin orkestrasi deployment cloud Vercel.
+          </p>
+
+          <h4 class="text-xs font-mono font-bold uppercase text-slate-400 mb-2">Rincian Jobdesk & Tanggung Jawab:</h4>
+          <ul class="space-y-2 text-xs text-slate-300 list-disc list-inside">
+            <li><strong>Project Leadership:</strong> Koordinasi jadwal riset, pembagian modul, sinkronisasi antaranggota tim, dan review naskah esai IYEEA 2026.</li>
+            <li><strong>UX/UI & Web Engineering:</strong> Merancang desain sistem, token warna (Midnight Navy, Deep Steel, Industrial Teal), tipografi, dan antarmuka responsif mobile-friendly.</li>
+            <li><strong>Interactive Dashboard:</strong> Membangun logika dashboard demo 3 mesin sintetis (P-01, M-02, F-03), chart telemetri waktu nyata, dan sistem logbook inspeksi teknisi.</li>
+            <li><strong>3D Lab Integration:</strong> Mengintegrasikan canvas 3D digital twin, exploded view animation, slider displacement, dan hotspot anotasi komponen.</li>
+            <li><strong>Deployment & Version Control:</strong> Pengelolaan GitHub repository, konfigurasi continuous deployment Vercel, optimasi performa web, dan keamanan OT baseline.</li>
+          </ul>
+        </div>
+
+        <div class="pt-4 border-t border-slate-800 text-[11px] font-mono text-signal-cyan">
+          Deliverable: Web Portal, Demo Dashboard, 3D WebGL Scene, Vercel Production URL.
+        </div>
+      </div>
+
+      <!-- Ihwan Ridwan -->
+      <div class="glass-card rounded-3xl p-7 border-t-4 border-t-safety-amber flex flex-col justify-between space-y-6">
+        <div>
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-safety-amber to-amber-300 text-midnight-navy font-black text-2xl flex items-center justify-center shadow-lg shadow-safety-amber/20">
+              IR
+            </div>
+            <div>
+              <h2 class="text-xl font-bold text-white">Ihwan Ridwan S. M.</h2>
+              <div class="text-xs font-mono text-safety-amber">Universitas Brawijaya</div>
+              <div class="text-xs text-slate-400">Malang, Indonesia</div>
+            </div>
+          </div>
+
+          <div class="inline-block px-3 py-1 rounded-full bg-safety-amber/15 text-safety-amber border border-safety-amber/30 text-xs font-bold mb-4">
+            Lead Sistem Tertanam & Hardware Engineering
+          </div>
+
+          <p class="text-xs text-slate-300 leading-relaxed mb-4">
+            Bertanggung jawab penuh atas rekayasa perangkat keras sensor node retrofit, pemilihan sensor MEMS & probe termal, skema rangkaian catu daya, dan SOP pemasangan mekanis non-invasif pada mesin industri.
+          </p>
+
+          <h4 class="text-xs font-mono font-bold uppercase text-slate-400 mb-2">Rincian Jobdesk & Tanggung Jawab:</h4>
+          <ul class="space-y-2 text-xs text-slate-300 list-disc list-inside">
+            <li><strong>Sensor Node Hardware Selection:</strong> Riset dan pemilihan sensor akselerometer MEMS triaksial bandwidth 1-2 kHz dan probe suhu RTD PT100 industri.</li>
+            <li><strong>Bill of Materials (BOM) & Budgeting:</strong> Optimalisasi target biaya perangkat Rp850.000/node agar ekonomis bagi kapasitas belanja IKM.</li>
+            <li><strong>Power & Protection Circuitry:</strong> Perancangan proteksi transient TVS diode, buck step-down 24V ke 3.3V, dan sekering pemulihan mandiri (PTC fuse).</li>
+            <li><strong>Mechanical Retrofit Mounting:</strong> Merancang mekanisme penempelan non-invasif menggunakan stud M8 dan magnet neodymium N52 tanpa pengeboran mesin.</li>
+            <li><strong>Enclosure & Thermal Packaging:</strong> Desain konsep casing tahan benturan dengan ventilasi labirin pasif untuk lingkungan bengkel IKM berdebu.</li>
+          </ul>
+        </div>
+
+        <div class="pt-4 border-t border-slate-800 text-[11px] font-mono text-safety-amber">
+          Deliverable: Spesifikasi Node, Daftar BOM, Skema Pengkabelan, Prosedur SOP Pemasangan.
+        </div>
+      </div>
+
+      <!-- Muhammad Raiz -->
+      <div class="glass-card rounded-3xl p-7 border-t-4 border-t-signal-cyan flex flex-col justify-between space-y-6">
+        <div>
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-signal-cyan to-teal-200 text-midnight-navy font-black text-2xl flex items-center justify-center shadow-lg shadow-signal-cyan/20">
+              MR
+            </div>
+            <div>
+              <h2 class="text-xl font-bold text-white">Muhammad Raiz B.</h2>
+              <div class="text-xs font-mono text-signal-cyan">Universitas Brawijaya</div>
+              <div class="text-xs text-slate-400">Malang, Indonesia</div>
+            </div>
+          </div>
+
+          <div class="inline-block px-3 py-1 rounded-full bg-signal-cyan/15 text-signal-cyan border border-signal-cyan/30 text-xs font-bold mb-4">
+            Lead Kecerdasan Buatan & Analitik Data
+          </div>
+
+          <p class="text-xs text-slate-300 leading-relaxed mb-4">
+            Bertanggung jawab atas arsitektur deteksi anomali hemat data, pemodelan statistik robust baseline per mesin, algoritma pemfilteran mutu sinyal (kabel lepas), dan model kalkulasi sensitivitas ekonomi.
+          </p>
+
+          <h4 class="text-xs font-mono font-bold uppercase text-slate-400 mb-2">Rincian Jobdesk & Tanggung Jawab:</h4>
+          <ul class="space-y-2 text-xs text-slate-300 list-disc list-inside">
+            <li><strong>Edge Feature Extraction:</strong> Algoritma ekstraksi fitur time-domain (RMS, kurtosis, crest factor) dan frekuensi getaran pada mikrokontroler.</li>
+            <li><strong>Anomaly Detection Pipeline:</strong> Penerapan model statistik robust Median Absolute Deviation (MAD) dan evaluasi model Isolation Forest di gateway lokal.</li>
+            <li><strong>Signal Health & Fail-Safe Logic:</strong> Merancang pemisah antara anomali fisik mekanis dengan anomali sensor (kabel putus/longgar) agar tidak memicu alarm palsu.</li>
+            <li><strong>Synthetic Data Generator:</strong> Menghasilkan dataset deterministik 3 unit mesin dan skenario operasional (normal, fluktuasi beban, anomali, kerusakan sensor).</li>
+            <li><strong>Financial ROI Modeling:</strong> Menyusun rumus sensitivitas ekonomi jam downtime, biaya tahunan, dan payback period untuk Tabel 5 & 6 esai.</li>
+          </ul>
+        </div>
+
+        <div class="pt-4 border-t border-slate-800 text-[11px] font-mono text-signal-cyan">
+          Deliverable: Formula Algoritma, Evaluasi Statistik, Dataset Sintetis, Model Sensitivitas Finansial.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RACI Matrix Table -->
+    <div class="glass-card rounded-3xl p-6 lg:p-8 space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div>
+          <h3 class="text-lg font-bold text-white flex items-center gap-2">
+            <i data-lucide="grid" class="w-5 h-5 text-industrial-teal"></i>
+            <span>Matriks Akuntabilitas RACI Tim NADI-IKM</span>
+          </h3>
+          <p class="text-xs text-slate-400 mt-1">
+            <strong>R</strong>: Responsible (Pelaksana) • <strong>A</strong>: Accountable (Penanggung Jawab Utama) • <strong>C</strong>: Consulted (Konsultan) • <strong>I</strong>: Informed (Penerima Laporan)
+          </p>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead>
+            <tr class="font-mono text-slate-400 border-b border-slate-800">
+              <th class="py-3 px-4">Area Proyek / Deliverables</th>
+              <th class="py-3 px-4 text-center">Bimo Satrio (Lead / Web)</th>
+              <th class="py-3 px-4 text-center">Ihwan Ridwan (Hardware)</th>
+              <th class="py-3 px-4 text-center">Muhammad Raiz (AI & Data)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800/60 font-sans text-slate-300">
+            <tr class="hover:bg-slate-800/30">
+              <td class="py-3 px-4 font-semibold text-white">Konseptualisasi Produk & Penulisan Naskah IYEEA</td>
+              <td class="py-3 px-4 text-center font-bold text-signal-cyan">A / R</td>
+              <td class="py-3 px-4 text-center font-bold text-slate-300">R</td>
+              <td class="py-3 px-4 text-center font-bold text-slate-300">R</td>
+            </tr>
+            <tr class="hover:bg-slate-800/30">
+              <td class="py-3 px-4 font-semibold text-white">Arsitektur UI/UX Web, Desain Sistem & Branding</td>
+              <td class="py-3 px-4 text-center font-bold text-signal-cyan">A / R</td>
+              <td class="py-3 px-4 text-center font-bold text-slate-400">C</td>
+              <td class="py-3 px-4 text-center font-bold text-slate-400">C</td>
+            </tr>
+            <tr class="hover:bg-slate-800/30">
+              <td class="py-3 px-4 font-semibold text-white">Pemodelan 3D WebGL Digital Twin & Exploded View</td>
+              <td class="py-3 px-4 text-center font-bold text-signal-cyan">A / R</td>
+              <td class="py-3 px-4 text-center font-bold text-slate-300">C (Referensi Fisik)</td>
+              <td class="py-3 px-4 text-center font-bold text-slate-400">I</td>
+            </tr>
+            <tr class="hover:bg-slate-800/30">
+              <td class="py-3 px-4 font-semibold text-white">Rancangan Sensor Node, Rangkaian Catu Daya & BOM</td>
+              <td class="py-3 px-4 text-center font-bold text-slate-400">C</td>
+              <td class="py-3 px-4 text-center font-bold text-safety-amber">A / R</td>
+              <td class="py-3 px-4 text-center font-bold text-slate-300">C (Sampling Rate)</td>
+            </tr>
+            <tr class="hover:bg-slate-800/30">
+              <td class="py-3 px-4 font-semibold text-white">Pipeline AI Deteksi Anomali & Ambang Robust MAD</td>
+              <td class="py-3 px-4 text-center font-bold text-slate-400">C (Kontrak Data UI)</td>
+              <td class="py-3 px-4 text-center font-bold text-slate-400">C</td>
+              <td class="py-3 px-4 text-center font-bold text-signal-cyan">A / R</td>
+            </tr>
+            <tr class="hover:bg-slate-800/30">
+              <td class="py-3 px-4 font-semibold text-white">Pembuatan Data Sintetis & Skenario What-If</td>
+              <td class="py-3 px-4 text-center font-bold text-slate-300">R (Integrasi Web)</td>
+              <td class="py-3 px-4 text-center font-bold text-slate-400">I</td>
+              <td class="py-3 px-4 text-center font-bold text-signal-cyan">A / R (Model Matematis)</td>
+            </tr>
+            <tr class="hover:bg-slate-800/30">
+              <td class="py-3 px-4 font-semibold text-white">Pengelolaan Git Repo & Deployment Vercel</td>
+              <td class="py-3 px-4 text-center font-bold text-signal-cyan">A / R</td>
+              <td class="py-3 px-4 text-center font-bold text-slate-400">I</td>
+              <td class="py-3 px-4 text-center font-bold text-slate-400">I</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-midnight-navy border-t border-slate-800 py-8 text-xs text-slate-400 text-center font-mono">
+    Hak Cipta © 2026 Tim NADI-IKM • Universitas Brawijaya, Malang.
+  </footer>
+
+  <script src="assets/js/translations.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NADI-IKM | 3D Interactive Product Lab & Exploded Anatomy</title>
+  
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            'midnight-navy': '#0A1F2E',
+            'deep-steel': '#173447',
+            'industrial-teal': '#0DB3A6',
+            'signal-cyan': '#59D8D1',
+            'safety-amber': '#F0A444',
+            'alert-coral': '#E96F67',
+            'success-jade': '#3CB789',
+            'paper': '#F6F8F8',
+            'ink': '#173042',
+            'muted-slate': '#6B7F8A'
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"IBM Plex Mono"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Three.js + OrbitControls + GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-midnight-navy text-slate-100 antialiased min-h-screen flex flex-col font-sans overflow-x-hidden">
+
+  <!-- ================= TOP BAR ================= -->
+  <header class="bg-deep-steel/90 border-b border-slate-800 sticky top-0 z-40 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3 flex items-center justify-between">
+      
+      <div class="flex items-center gap-4">
+        <a href="index.html" class="flex items-center gap-2 group">
+          <img src="assets/img/logo-dark.svg" alt="NADI-IKM Logo" class="h-9 w-auto">
+        </a>
+        <div class="hidden sm:block h-6 w-px bg-slate-700"></div>
+        <span class="hidden sm:inline-block px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-industrial-teal/20 text-signal-cyan border border-industrial-teal/40">
+          3D PRODUCT LAB • DIGITAL TWIN
+        </span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- Language Switcher -->
+        <div class="flex items-center bg-midnight-navy rounded-lg p-1 border border-slate-700 text-xs font-mono">
+          <button onclick="setLanguage('id')" data-lang="id" class="lang-btn px-2.5 py-1 rounded transition-all">ID</button>
+          <button onclick="setLanguage('en')" data-lang="en" class="lang-btn px-2.5 py-1 rounded transition-all">EN</button>
+        </div>
+
+        <a href="dashboard.html" class="px-3.5 py-1.5 rounded-lg bg-industrial-teal text-midnight-navy font-bold text-xs hover:bg-teal-400 transition-colors">
+          Demo Dashboard
+        </a>
+        <a href="index.html" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 transition-colors">
+          Beranda
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ================= MAIN STAGE ================= -->
+  <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full space-y-6">
+    
+    <!-- Title & Mode Banner -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-white">
+          Anatomi Perangkat Retrofit 3D
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-400 mt-1">
+          Eksplorasi 360°, pemisahan komponen bertingkat (exploded view), dan spesifikasi Bill of Materials (BOM).
+        </p>
+      </div>
+
+      <div class="flex items-center gap-2 text-xs font-mono">
+        <span class="text-slate-400">Kontrol Mouse: Drag untuk Putar • Scroll untuk Zoom</span>
+      </div>
+    </div>
+
+    <!-- 3D Studio Canvas Frame -->
+    <div class="relative bg-deep-steel/60 rounded-3xl border border-signal-cyan/20 p-4 shadow-2xl backdrop-blur-xl">
+      
+      <!-- 3D Canvas -->
+      <div id="full3dCanvas" class="w-full h-[600px] rounded-2xl relative overflow-hidden bg-midnight-navy cursor-grab active:cursor-grabbing">
+        <!-- Floating Info Overlay Top-Left -->
+        <div class="absolute top-4 left-4 z-10 flex flex-col gap-2">
+          <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-midnight-navy/85 border border-slate-700 text-xs font-mono text-signal-cyan backdrop-blur">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            <span>MODEL RETROFIT NODE V1.0</span>
+          </div>
+          <div class="text-[11px] text-slate-400 bg-midnight-navy/70 px-3 py-1 rounded-lg border border-slate-800 font-mono">
+            Ukuran Konseptual: Ø 85 mm × T 65 mm
+          </div>
+        </div>
+
+        <!-- Camera Preset Floating Bar Top-Right -->
+        <div class="absolute top-4 right-4 z-10 flex items-center gap-1.5 bg-midnight-navy/85 p-1 rounded-xl border border-slate-700 backdrop-blur text-xs">
+          <button id="camIso" class="px-2.5 py-1 rounded-lg hover:bg-slate-800 text-slate-300">Isometrik</button>
+          <button id="camTop" class="px-2.5 py-1 rounded-lg hover:bg-slate-800 text-slate-300">Atas</button>
+          <button id="camSide" class="px-2.5 py-1 rounded-lg hover:bg-slate-800 text-slate-300">Samping</button>
+          <button id="camReset" class="px-2.5 py-1 rounded-lg bg-industrial-teal/20 text-signal-cyan hover:bg-industrial-teal/30">Reset</button>
+        </div>
+      </div>
+
+      <!-- Studio Control Bar Bottom -->
+      <div class="mt-4 p-4 bg-midnight-navy/80 rounded-2xl border border-slate-800 flex flex-wrap items-center justify-between gap-6">
+        
+        <!-- Explode Slider -->
+        <div class="flex items-center gap-4 flex-1 min-w-[280px]">
+          <div class="text-xs font-mono text-slate-300 flex items-center gap-2">
+            <i data-lucide="layers" class="w-4 h-4 text-industrial-teal"></i>
+            <span>Exploded View:</span>
+          </div>
+          <input type="range" id="explodeSliderFull" min="0" max="1" step="0.01" value="0" class="flex-1">
+          <span id="explodePctVal" class="text-xs font-mono font-bold text-signal-cyan w-10">0%</span>
+        </div>
+
+        <!-- Mode Buttons -->
+        <div class="flex items-center gap-3">
+          <button id="toggleXrayFull" class="px-4 py-2 rounded-xl bg-deep-steel hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200 flex items-center gap-2 transition-all">
+            <i data-lucide="eye" class="w-4 h-4 text-signal-cyan"></i>
+            <span>Mode X-Ray</span>
+          </button>
+
+          <button id="autoRotateToggle" class="px-4 py-2 rounded-xl bg-deep-steel hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200 flex items-center gap-2 transition-all">
+            <i data-lucide="rotate-cw" class="w-4 h-4 text-industrial-teal"></i>
+            <span>Putar Otomatis</span>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Bill of Materials (BOM) Table & Component Breakdown -->
+    <div class="glass-card rounded-3xl p-6 lg:p-8 space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h3 class="text-xl font-bold text-white flex items-center gap-2">
+            <i data-lucide="cpu" class="w-5 h-5 text-industrial-teal"></i>
+            <span>Rincian Bill of Materials (BOM) & Peran Komponen</span>
+          </h3>
+          <p class="text-xs text-slate-400 mt-1">
+            Berdasarkan Bab 2.3 & Tabel 3 & 5 pada esai IYEEA 2026. Alokasi komponen retrofit non-invasif.
+          </p>
+        </div>
+        <span class="text-xs font-mono px-3 py-1 rounded-full bg-industrial-teal/10 text-signal-cyan border border-industrial-teal/30">
+          Target Anggaran: Rp850.000 / node
+        </span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead>
+            <tr class="font-mono text-slate-400 border-b border-slate-800 text-[11px]">
+              <th class="py-3 px-4">#</th>
+              <th class="py-3 px-4">Modul / Komponen</th>
+              <th class="py-3 px-4">Spesifikasi Desain</th>
+              <th class="py-3 px-4">Fungsi Utama</th>
+              <th class="py-3 px-4">Batasan Rekayasa</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800/60 font-sans text-slate-300">
+            <tr class="hover:bg-slate-800/30">
+              <td class="py-3 px-4 font-mono font-bold text-signal-cyan">01</td>
+              <td class="py-3 px-4 font-semibold text-white">Enclosure Polikarbonat & Indikator</td>
+              <td class="py-3 px-4 font-mono text-[11px] text-slate-400">ABS/PC tahan benturan, ring akrilik 360°</td>
+              <td class="py-3 px-4">Melindungi rangkaian internal dari debu pabrik dan percikan air</td>
+              <td class="py-3 px-4 text-slate-400">Konsep IP65; ventilasi labirin termal pasif</td>
+            </tr>
+            <tr class="hover:bg-slate-800/30">
+              <td class="py-3 px-4 font-mono font-bold text-signal-cyan">02</td>
+              <td class="py-3 px-4 font-semibold text-white">Mikrokontroler Edge ESP32-S3</td>
+              <td class="py-3 px-4 font-mono text-[11px] text-slate-400">Xtensa Dual-Core 240 MHz, 512KB SRAM, WiFi/BLE</td>
+              <td class="py-3 px-4">Akuisisi sinyal berkecepatan tinggi, FFT onboard, kalkulasi RMS & MAD</td>
+              <td class="py-3 px-4 text-slate-400">Bukan pengganti PLC; beban kalkulasi harus dioptimalkan</td>
+            </tr>
+            <tr class="hover:bg-slate-800/30">
+              <td class="py-3 px-4 font-mono font-bold text-signal-cyan">03</td>
+              <td class="py-3 px-4 font-semibold text-white">Akselerometer MEMS Triaksial</td>
+              <td class="py-3 px-4 font-mono text-[11px] text-slate-400">Bandwidth 1-2 kHz, rentang ±16g, SPI/I2C digital</td>
+              <td class="py-3 px-4">Mendeteksi getaran mekanis radial dan aksial pada bantalan motor/pompa</td>
+              <td class="py-3 px-4 text-slate-400">Harus menempel kaku pada casing kaku mesin</td>
+            </tr>
+            <tr class="hover:bg-slate-800/30">
+              <td class="py-3 px-4 font-mono font-bold text-signal-cyan">04</td>
+              <td class="py-3 px-4 font-semibold text-white">Probe Suhu RTD Industri</td>
+              <td class="py-3 px-4 font-mono text-[11px] text-slate-400">PT100 / Termistor NTC akurasi ±0.5°C (-40°C sd 125°C)</td>
+              <td class="py-3 px-4">Memonitor tren pemanasan bantalan untuk mendeteksi kurangnya pelumasan</td>
+              <td class="py-3 px-4 text-slate-400">Waktu respons dipengaruhi suhu sekitar pabrik</td>
+            </tr>
+            <tr class="hover:bg-slate-800/30">
+              <td class="py-3 px-4 font-mono font-bold text-signal-cyan">05</td>
+              <td class="py-3 px-4 font-semibold text-white">Modul Catu Daya & Proteksi TVS</td>
+              <td class="py-3 px-4 font-mono text-[11px] text-slate-400">Input 12-24V DC / 5V USB-C, Dioda TVS, Sekering PTC</td>
+              <td class="py-3 px-4">Melindungi chip dari lonjakan tegangan transien saat mesin industri start-up</td>
+              <td class="py-3 px-4 text-slate-400">Grounding harus diisolasi dari sasis motor bising</td>
+            </tr>
+            <tr class="hover:bg-slate-800/30">
+              <td class="py-3 px-4 font-mono font-bold text-signal-cyan">06</td>
+              <td class="py-3 px-4 font-semibold text-white">Dudukan Magnetik & Stud M8</td>
+              <td class="py-3 px-4 font-mono text-[11px] text-slate-400">Baja nirkarat 304 + Magnet Neodymium N52 daya tarik 15 kg</td>
+              <td class="py-3 px-4">Pemasangan retrofit cepat tanpa perlu pengeboran atau modifikasi permanen</td>
+              <td class="py-3 px-4 text-slate-400">Hanya dapat digunakan pada housing besi/baja magnetis</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Scripts -->
+  <script src="assets/js/translations.js"></script>
+  <script src="assets/js/three-viewer.js"></script>
+
+  <script>
+    lucide.createIcons();
+
+    window.addEventListener('DOMContentLoaded', () => {
+      if (window.NadiDeviceViewer) {
+        window.fullLabViewer = new NadiDeviceViewer('full3dCanvas', {
+          autoRotate: false
+        });
+
+        // Explode Slider
+        const slider = document.getElementById('explodeSliderFull');
+        const pctVal = document.getElementById('explodePctVal');
+        if (slider) {
+          slider.addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value);
+            window.fullLabViewer.setExploded(val);
+            if (pctVal) pctVal.innerText = `${Math.round(val * 100)}%`;
+          });
+        }
+
+        // X-Ray Toggle
+        const xrayBtn = document.getElementById('toggleXrayFull');
+        let isXray = false;
+        if (xrayBtn) {
+          xrayBtn.addEventListener('click', () => {
+            isXray = !isXray;
+            window.fullLabViewer.setXray(isXray);
+            xrayBtn.classList.toggle('bg-industrial-teal', isXray);
+            xrayBtn.classList.toggle('text-white', isXray);
+          });
+        }
+
+        // Auto Rotate Toggle
+        const autoRotateBtn = document.getElementById('autoRotateToggle');
+        let isAutoRotate = false;
+        if (autoRotateBtn) {
+          autoRotateBtn.addEventListener('click', () => {
+            isAutoRotate = !isAutoRotate;
+            window.fullLabViewer.controls.autoRotate = isAutoRotate;
+            autoRotateBtn.classList.toggle('bg-industrial-teal', isAutoRotate);
+            autoRotateBtn.classList.toggle('text-white', isAutoRotate);
+          });
+        }
+
+        // Camera presets
+        document.getElementById('camIso').addEventListener('click', () => window.fullLabViewer.setView('iso'));
+        document.getElementById('camTop').addEventListener('click', () => window.fullLabViewer.setView('top'));
+        document.getElementById('camSide').addEventListener('click', () => window.fullLabViewer.setView('side'));
+        document.getElementById('camReset').addEventListener('click', () => {
+          window.fullLabViewer.resetView();
+          if (slider) slider.value = 0;
+          if (pctVal) pctVal.innerText = '0%';
+        });
+      }
+    });
+  </script>
+</body>
+</html>
