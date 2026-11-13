@@ -53,8 +53,8 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3 flex items-center justify-between">
       
       <div class="flex items-center gap-4">
-        <a href="index.html" class="flex items-center gap-2 group">
-          <img src="assets/img/logo-dark.svg" alt="NADI-IKM Logo" class="h-9 w-auto">
+        <a href="index.html" class="brand-logo-showcase group">
+          <img src="assets/img/logo-dark.svg" alt="NADI-IKM Logo" class="brand-logo-img">
         </a>
         <div class="hidden sm:block h-6 w-px bg-slate-700"></div>
         <span class="hidden sm:inline-block px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-industrial-teal/20 text-signal-cyan border border-industrial-teal/40">
@@ -102,8 +102,9 @@
     <!-- 3D Studio Canvas Frame -->
     <div class="relative bg-deep-steel/60 rounded-3xl border border-signal-cyan/20 p-4 shadow-2xl backdrop-blur-xl">
       
-      <!-- 3D Canvas -->
-      <div id="full3dCanvas" class="w-full h-[600px] rounded-2xl relative overflow-hidden bg-midnight-navy cursor-grab active:cursor-grabbing">
+      <!-- 3D Hologram Canvas -->
+      <div id="full3dCanvas" class="w-full h-[600px] rounded-2xl relative overflow-hidden holo-viewport cursor-grab active:cursor-grabbing">
+        <div class="laser-scanner-line"></div>
         <!-- Floating Info Overlay Top-Left -->
         <div class="absolute top-4 left-4 z-10 flex flex-col gap-2">
           <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-midnight-navy/85 border border-slate-700 text-xs font-mono text-signal-cyan backdrop-blur">

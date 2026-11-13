@@ -1,147 +1,283 @@
 /* ==========================================================================
-   NADI-IKM: RETRO-INDUSTRIAL ENGINEERING MASTERPIECE STYLESHEET
-   Aesthetics: Vintage Oscilloscope / Aerospace CAD Workstation / Braun-Linear Hybrid
+   NADI-IKM: WORLD-CLASS RETRO-INDUSTRIAL & 3D HOLOGRAM MASTERPIECE STYLESHEET
+   Aesthetics: Vintage CRT Oscilloscope × Cyberpunk CAD Hologram × Industrial Telemetry
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
 
 :root {
-  /* Core Industrial Palette */
-  --obsidian-dark: #050B11;
-  --midnight-navy: #09131D;
-  --deep-steel: #122230;
-  --surface-plate: #182C3D;
-  --border-caliper: rgba(0, 242, 254, 0.2);
-  
-  /* Exotic Engineering Neon & Retro Tones */
+  /* Core Industrial Chassis Palette */
+  --obsidian-dark: #040810;
+  --midnight-navy: #07111E;
+  --deep-steel: #0E1F32;
+  --surface-plate: #152C44;
+  --border-caliper: rgba(0, 242, 254, 0.28);
+
+  /* Exotic Retro-Industrial & Holographic Colour Grading */
   --neon-cyan: #00F2FE;
   --electric-teal: #05D5C5;
   --plasma-amber: #FFA834;
   --retro-orange: #FF5E36;
   --oscilloscope-green: #00FF87;
-  --cadmium-red: #FF3366;
-  --ultra-violet: #8A2BE2;
-  
-  /* Textures & Fonts */
+  --cadmium-red: #FF2E93;
+  --cyber-magenta: #FF2E93;
+  --synth-violet: #7928CA;
+  --holo-gold: #FFD166;
+
+  /* Fonts */
   --font-display: 'Space Grotesk', sans-serif;
   --font-body: 'Plus Jakarta Sans', sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
 }
 
-/* Base Viewport & Blueprint Grid */
 html {
   scroll-behavior: smooth;
   cursor: default;
 }
 
+/* ==========================================================================
+   NON-PLAIN, RICH RETRO-INDUSTRIAL HOLOGRAPHIC BACKGROUND ARCHITECTURE
+   ========================================================================== */
 body {
   font-family: var(--font-body);
   background-color: var(--obsidian-dark);
-  color: #EDF3F8;
+  color: #F2F7FC;
   overflow-x: hidden;
   position: relative;
-  background-image: 
-    radial-gradient(circle at 50% 0%, rgba(0, 242, 254, 0.08) 0%, transparent 60%),
-    linear-gradient(rgba(0, 242, 254, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 242, 254, 0.03) 1px, transparent 1px);
-  background-size: 100% 100%, 32px 32px, 32px 32px;
-  background-position: 0 0, -1px -1px, -1px -1px;
+  /* Multi-layered exotic colour grading + major/minor CAD blueprint grid */
+  background-image:
+    radial-gradient(circle at 12% 15%, rgba(0, 242, 254, 0.16) 0%, transparent 42%),
+    radial-gradient(circle at 88% 22%, rgba(255, 168, 52, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 50% 55%, rgba(255, 46, 147, 0.10) 0%, transparent 48%),
+    radial-gradient(circle at 20% 82%, rgba(121, 40, 202, 0.14) 0%, transparent 45%),
+    radial-gradient(circle at 82% 85%, rgba(0, 255, 135, 0.12) 0%, transparent 42%),
+    linear-gradient(rgba(0, 242, 254, 0.085) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 242, 254, 0.085) 1px, transparent 1px),
+    linear-gradient(rgba(255, 168, 52, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 168, 52, 0.035) 1px, transparent 1px);
+  background-size:
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    160px 160px,
+    160px 160px,
+    32px 32px,
+    32px 32px;
+  background-position: 0 0, 0 0, 0 0, 0 0, 0 0, -1px -1px, -1px -1px, -1px -1px, -1px -1px;
+  background-attachment: fixed;
 }
 
 .font-display { font-family: var(--font-display); }
 .font-mono { font-family: var(--font-mono); }
 
-/* Retro CRT Subtle Scanline Overlay */
+/* Retro CRT Phosphor Scanline + Subtle Chromatic Vignette Overlay */
 body::before {
   content: " ";
   display: block;
   position: fixed;
   top: 0; left: 0; bottom: 0; right: 0;
-  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
-  background-size: 100% 4px;
+  background:
+    radial-gradient(circle at 50% 50%, transparent 58%, rgba(2, 6, 12, 0.65) 100%),
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.22) 50%);
+  background-size: 100% 100%, 100% 4px;
   z-index: 9990;
   pointer-events: none;
+  opacity: 0.55;
+}
+
+/* Perspective Retro Synth-Industrial Horizon Grid Glow at Bottom of Viewport */
+body::after {
+  content: "";
+  position: fixed;
+  left: -20%;
+  right: -20%;
+  bottom: -140px;
+  height: 320px;
+  background:
+    linear-gradient(transparent 0%, rgba(0, 242, 254, 0.12) 100%),
+    repeating-linear-gradient(90deg, rgba(0, 242, 254, 0.14) 0px, rgba(0, 242, 254, 0.14) 1px, transparent 1px, transparent 60px),
+    repeating-linear-gradient(0deg, rgba(255, 168, 52, 0.12) 0px, rgba(255, 168, 52, 0.12) 1px, transparent 1px, transparent 35px);
+  transform: perspective(450px) rotateX(68deg);
+  pointer-events: none;
+  z-index: 0;
   opacity: 0.45;
 }
 
+/* Ensure page sections sit above background perspective grid */
+header, section, main, footer {
+  position: relative;
+  z-index: 1;
+}
+
 /* ==========================================================================
-   INTERACTIVE ENGINEERING CUSTOM CURSOR & HUD RETICLE
+   HIGHLIGHTED BRAND LOGO AURA & WORLD-CHAMPION NAVBAR PRESENCE
+   ========================================================================== */
+.brand-logo-showcase {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(0, 242, 254, 0.14) 0%, rgba(14, 31, 50, 0.9) 50%, rgba(255, 168, 52, 0.14) 100%);
+  border: 1.5px solid rgba(0, 242, 254, 0.45);
+  box-shadow:
+    0 0 25px rgba(0, 242, 254, 0.25),
+    0 0 45px rgba(255, 168, 52, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.brand-logo-showcase:hover {
+  transform: translateY(-2px) scale(1.03);
+  border-color: var(--plasma-amber);
+  box-shadow:
+    0 0 32px rgba(0, 242, 254, 0.45),
+    0 0 55px rgba(255, 168, 52, 0.35);
+}
+
+.brand-logo-img {
+  height: 54px;
+  width: auto;
+  filter: drop-shadow(0 0 10px rgba(0, 242, 254, 0.35));
+}
+
+@media (max-width: 640px) {
+  .brand-logo-img {
+    height: 42px;
+  }
+}
+
+/* ==========================================================================
+   INTERACTIVE SIGMA ENGINEERING CURSOR, OUTER COMPASS & SCROLL DEPTH HUD
    ========================================================================== */
 #cursor-dot {
-  width: 8px;
-  height: 8px;
-  background-color: var(--neon-cyan);
+  width: 9px;
+  height: 9px;
+  background: radial-gradient(circle, #FFFFFF 0%, var(--neon-cyan) 70%);
   border-radius: 50%;
   position: fixed;
   top: 0; left: 0;
   pointer-events: none;
   z-index: 99999;
   transform: translate(-50%, -50%);
-  box-shadow: 0 0 12px var(--neon-cyan), 0 0 24px var(--neon-cyan);
-  transition: transform 0.05s ease-out, background-color 0.2s ease;
+  box-shadow: 0 0 14px var(--neon-cyan), 0 0 28px var(--neon-cyan);
+  transition: background 0.2s ease, box-shadow 0.2s ease;
 }
 
 #cursor-reticle {
-  width: 36px;
-  height: 36px;
-  border: 1.5px dashed rgba(0, 242, 254, 0.65);
+  width: 42px;
+  height: 42px;
+  border: 1.5px dashed rgba(0, 242, 254, 0.8);
   border-radius: 50%;
   position: fixed;
   top: 0; left: 0;
   pointer-events: none;
   z-index: 99998;
   transform: translate(-50%, -50%);
-  transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+  box-shadow: 0 0 18px rgba(0, 242, 254, 0.22), inset 0 0 12px rgba(255, 168, 52, 0.15);
+  transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1),
               height 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.2s ease;
-  animation: reticle-spin 14s linear infinite;
+              border-color 0.2s ease,
+              background-color 0.2s ease;
 }
 
 #cursor-reticle::before, #cursor-reticle::after {
   content: '';
   position: absolute;
   background: var(--plasma-amber);
+  box-shadow: 0 0 8px var(--plasma-amber);
 }
 #cursor-reticle::before {
-  top: -4px; left: 50%; width: 2px; height: 6px; transform: translateX(-50%);
+  top: -5px; left: 50%; width: 2px; height: 8px; transform: translateX(-50%);
 }
 #cursor-reticle::after {
-  bottom: -4px; left: 50%; width: 2px; height: 6px; transform: translateX(-50%);
+  bottom: -5px; left: 50%; width: 2px; height: 8px; transform: translateX(-50%);
 }
 
-@keyframes reticle-spin {
-  from { transform: translate(-50%, -50%) rotate(0deg); }
-  to { transform: translate(-50%, -50%) rotate(360deg); }
+#cursor-outer-ring {
+  width: 68px;
+  height: 68px;
+  border: 1px solid rgba(255, 168, 52, 0.32);
+  border-radius: 12px;
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 99997;
+  transform: translate(-50%, -50%) rotate(45deg);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Cursor hover on active buttons & links */
+#cursor-hud-tag {
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 99999;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: var(--neon-cyan);
+  background: rgba(5, 12, 22, 0.82);
+  border: 1px solid rgba(0, 242, 254, 0.4);
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  text-shadow: 0 0 6px rgba(0, 242, 254, 0.6);
+  transition: opacity 0.2s ease, transform 0.1s ease-out;
+}
+
+/* Hover Lock-On State */
 .cursor-hover #cursor-reticle {
-  width: 58px;
-  height: 58px;
+  width: 62px;
+  height: 62px;
   border-color: var(--plasma-amber);
   border-style: solid;
-  background: rgba(255, 168, 52, 0.08);
+  border-width: 2px;
+  background: radial-gradient(circle, rgba(255, 168, 52, 0.16) 0%, rgba(255, 46, 147, 0.08) 100%);
+  box-shadow: 0 0 28px rgba(255, 168, 52, 0.45);
+}
+.cursor-hover #cursor-outer-ring {
+  width: 84px;
+  height: 84px;
+  border-color: var(--neon-cyan);
+  transform: translate(-50%, -50%) rotate(0deg);
+  box-shadow: 0 0 24px rgba(0, 242, 254, 0.35);
 }
 .cursor-hover #cursor-dot {
-  background-color: var(--retro-orange);
-  box-shadow: 0 0 15px var(--retro-orange);
+  background: var(--plasma-amber);
+  box-shadow: 0 0 18px var(--plasma-amber), 0 0 32px var(--retro-orange);
+}
+
+/* Top Laser Scroll Progress Bar */
+#scroll-laser-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 4px;
+  width: 0%;
+  z-index: 99999;
+  background: linear-gradient(90deg, #00F2FE 0%, #00FF87 35%, #FFA834 70%, #FF2E93 100%);
+  box-shadow: 0 0 16px #00F2FE, 0 0 28px #FFA834;
+  transition: width 0.08s linear;
 }
 
 /* Top Right Fixed Engineering Telemetry HUD */
 #eng-hud-badge {
   position: fixed;
-  top: 14px;
+  bottom: 16px;
   right: 18px;
   z-index: 9995;
-  background: rgba(9, 19, 29, 0.85);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(0, 242, 254, 0.3);
-  padding: 4px 10px;
-  border-radius: 6px;
+  background: linear-gradient(135deg, rgba(7, 17, 30, 0.92) 0%, rgba(18, 36, 56, 0.92) 100%);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(0, 242, 254, 0.45);
+  padding: 6px 12px;
+  border-radius: 10px;
   font-family: var(--font-mono);
   font-size: 10px;
   color: var(--neon-cyan);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.75), 0 0 20px rgba(0, 242, 254, 0.2);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -149,138 +285,239 @@ body::before {
 }
 
 /* ==========================================================================
-   EXOTIC RETRO-INDUSTRIAL GRADIENTS & ILLUMINATION TOKENS
+   EXOTIC RETRO-INDUSTRIAL GRADIENTS & COLOUR GRADING TOKENS
    ========================================================================== */
+@keyframes holo-gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 .bg-retro-mesh {
-  background: linear-gradient(135deg, #050B11 0%, #091927 50%, #0F2A38 100%);
+  background:
+    radial-gradient(circle at 20% 25%, rgba(0, 242, 254, 0.20) 0%, transparent 45%),
+    radial-gradient(circle at 80% 30%, rgba(255, 168, 52, 0.18) 0%, transparent 45%),
+    radial-gradient(circle at 55% 75%, rgba(255, 46, 147, 0.14) 0%, transparent 50%),
+    linear-gradient(135deg, #040911 0%, #091A2C 45%, #12283F 100%);
 }
 
 .gradient-plasma-flame {
-  background: linear-gradient(135deg, #FF5E36 0%, #FFA834 50%, #00F2FE 100%);
+  background: linear-gradient(135deg, #FF5E36 0%, #FFA834 45%, #00FF87 80%, #00F2FE 100%);
+  background-size: 200% 200%;
+  animation: holo-gradient-shift 6s ease infinite;
+}
+
+.gradient-cyber-holo {
+  background: linear-gradient(135deg, #00F2FE 0%, #00FF87 35%, #FFA834 70%, #FF2E93 100%);
+  background-size: 200% 200%;
+  animation: holo-gradient-shift 7s ease infinite;
+}
+
+.text-gradient-exotic {
+  background: linear-gradient(110deg, #00F2FE 0%, #00FF87 28%, #FFA834 62%, #FF2E93 95%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: holo-gradient-shift 5s linear infinite;
+  filter: drop-shadow(0 0 18px rgba(0, 242, 254, 0.25));
 }
 
 .text-gradient-plasma {
-  background: linear-gradient(120deg, #FFFFFF 0%, #00F2FE 40%, #FFA834 85%);
+  background: linear-gradient(120deg, #FFFFFF 0%, #00F2FE 35%, #FFA834 72%, #FF5E36 100%);
+  background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  animation: holo-gradient-shift 6s linear infinite;
 }
 
 .text-gradient-oscilloscope {
-  background: linear-gradient(120deg, #00FF87 0%, #00F2FE 60%, #FFFFFF 100%);
+  background: linear-gradient(120deg, #00FF87 0%, #00F2FE 50%, #FFA834 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Tactile Industrial Bezel Card */
-.retro-card {
-  background: linear-gradient(145deg, rgba(18, 34, 48, 0.75) 0%, rgba(9, 19, 29, 0.85) 100%);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(0, 242, 254, 0.18);
-  border-radius: 18px;
+/* ==========================================================================
+   3D HOLOGRAM PROJECTION STAGE & CARDS (.retro-card & .glass-card)
+   ========================================================================== */
+.retro-card, .glass-card {
+  background:
+    radial-gradient(500px circle at var(--mouse-x, 50%) var(--mouse-y, 0%), rgba(0, 242, 254, 0.13), transparent 45%),
+    linear-gradient(145deg, rgba(16, 35, 54, 0.86) 0%, rgba(7, 17, 29, 0.92) 65%, rgba(22, 24, 48, 0.88) 100%);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(0, 242, 254, 0.28);
+  border-radius: 20px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow:
+    0 14px 36px -10px rgba(0, 0, 0, 0.8),
+    0 0 24px -8px rgba(0, 242, 254, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.3s ease,
+              box-shadow 0.35s ease;
 }
 
-.retro-card::before {
+.retro-card::before, .glass-card::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0, 242, 254, 0.5), transparent);
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent 0%, #00F2FE 25%, #FFA834 55%, #FF2E93 80%, transparent 100%);
+  opacity: 0.85;
 }
 
-.retro-card:hover {
-  transform: translateY(-5px);
-  border-color: rgba(0, 242, 254, 0.45);
-  box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.8), 0 0 25px -5px rgba(0, 242, 254, 0.25);
+.retro-card:hover, .glass-card:hover {
+  transform: translateY(-6px) scale(1.008);
+  border-color: rgba(255, 168, 52, 0.65);
+  box-shadow:
+    0 24px 48px -12px rgba(0, 0, 0, 0.9),
+    0 0 32px -4px rgba(0, 242, 254, 0.35),
+    0 0 40px -10px rgba(255, 168, 52, 0.28);
+}
+
+/* 3D Hologram Viewport Frame Effect */
+.holo-viewport {
+  position: relative;
+  background:
+    radial-gradient(ellipse at 50% 85%, rgba(0, 242, 254, 0.25) 0%, rgba(255, 168, 52, 0.08) 40%, rgba(4, 9, 17, 0.96) 78%),
+    repeating-linear-gradient(0deg, rgba(0, 242, 254, 0.05) 0px, rgba(0, 242, 254, 0.05) 1px, transparent 1px, transparent 4px);
+  border: 1.5px solid rgba(0, 242, 254, 0.45);
+  box-shadow:
+    inset 0 0 45px rgba(0, 242, 254, 0.22),
+    inset 0 -30px 60px rgba(255, 168, 52, 0.14),
+    0 0 35px rgba(0, 242, 254, 0.22);
+}
+
+/* Upward Hologram Projector Light Cone inside 3D Viewer */
+.holo-viewport::before {
+  content: '';
+  position: absolute;
+  left: 15%;
+  right: 15%;
+  bottom: 0;
+  height: 75%;
+  background: linear-gradient(to top, rgba(0, 242, 254, 0.18) 0%, rgba(0, 255, 135, 0.06) 45%, transparent 100%);
+  clip-path: polygon(25% 100%, 75% 100%, 100% 0%, 0% 0%);
+  pointer-events: none;
+  z-index: 1;
+  animation: holo-flicker 4s ease-in-out infinite alternate;
+}
+
+@keyframes holo-flicker {
+  0% { opacity: 0.65; }
+  50% { opacity: 0.95; }
+  75% { opacity: 0.72; }
+  100% { opacity: 1.0; }
+}
+
+/* Layman Friendly Callout Pill ("Paham Dalam 10 Detik") */
+.layman-pill {
+  background: linear-gradient(135deg, rgba(0, 242, 254, 0.12) 0%, rgba(255, 168, 52, 0.12) 55%, rgba(255, 46, 147, 0.10) 100%);
+  border: 1.5px solid rgba(255, 168, 52, 0.5);
+  border-left: 5px solid var(--plasma-amber);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), 0 0 22px rgba(255, 168, 52, 0.15);
 }
 
 /* Tactical Corner Chamfer Markers */
 .corner-tick-tl {
-  position: absolute; top: 0; left: 0; width: 8px; height: 8px;
-  border-top: 2px solid var(--neon-cyan); border-left: 2px solid var(--neon-cyan);
+  position: absolute; top: 0; left: 0; width: 12px; height: 12px;
+  border-top: 2.5px solid var(--neon-cyan); border-left: 2.5px solid var(--neon-cyan);
+  pointer-events: none;
 }
 .corner-tick-tr {
-  position: absolute; top: 0; right: 0; width: 8px; height: 8px;
-  border-top: 2px solid var(--neon-cyan); border-right: 2px solid var(--neon-cyan);
+  position: absolute; top: 0; right: 0; width: 12px; height: 12px;
+  border-top: 2.5px solid var(--neon-cyan); border-right: 2.5px solid var(--neon-cyan);
+  pointer-events: none;
 }
 .corner-tick-bl {
-  position: absolute; bottom: 0; left: 0; width: 8px; height: 8px;
-  border-bottom: 2px solid var(--plasma-amber); border-left: 2px solid var(--plasma-amber);
+  position: absolute; bottom: 0; left: 0; width: 12px; height: 12px;
+  border-bottom: 2.5px solid var(--plasma-amber); border-left: 2.5px solid var(--plasma-amber);
+  pointer-events: none;
 }
 .corner-tick-br {
-  position: absolute; bottom: 0; right: 0; width: 8px; height: 8px;
-  border-bottom: 2px solid var(--plasma-amber); border-right: 2px solid var(--plasma-amber);
+  position: absolute; bottom: 0; right: 0; width: 12px; height: 12px;
+  border-bottom: 2.5px solid var(--plasma-amber); border-right: 2.5px solid var(--plasma-amber);
+  pointer-events: none;
 }
 
 /* Laser Scan Line Sweep */
 @keyframes laser-sweep {
   0% { transform: translateY(-100%); opacity: 0; }
-  50% { opacity: 0.8; }
-  100% { transform: translateY(400%); opacity: 0; }
+  45% { opacity: 0.9; }
+  100% { transform: translateY(450%); opacity: 0; }
 }
 
 .laser-scanner-line {
   position: absolute;
-  left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, transparent, var(--neon-cyan), var(--plasma-amber), transparent);
-  box-shadow: 0 0 15px var(--neon-cyan);
+  left: 0; right: 0; height: 2.5px;
+  background: linear-gradient(90deg, transparent, var(--neon-cyan), var(--plasma-amber), var(--cyber-magenta), transparent);
+  box-shadow: 0 0 18px var(--neon-cyan), 0 0 30px var(--plasma-amber);
   pointer-events: none;
-  animation: laser-sweep 5s infinite cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 5;
+  animation: laser-sweep 4.5s infinite cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================================================
+   SCROLL-TRIGGERED HOLOGRAPHIC REVEAL ANIMATIONS
+   ========================================================================== */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(34px) scale(0.98);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
 /* Mechanical Slider Styling */
-input[type=range].retro-slider {
+input[type=range].retro-slider, input[type=range] {
   -webkit-appearance: none;
-  background: #0B1924;
+  background: linear-gradient(90deg, rgba(0, 242, 254, 0.25), rgba(255, 168, 52, 0.35), rgba(255, 46, 147, 0.25));
   height: 10px;
   border-radius: 6px;
-  border: 1px solid rgba(0, 242, 254, 0.25);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(0, 242, 254, 0.4);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.7);
 }
-input[type=range].retro-slider::-webkit-slider-thumb {
+input[type=range].retro-slider::-webkit-slider-thumb, input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 24px;
   height: 24px;
-  border-radius: 4px;
-  background: linear-gradient(180deg, #2D4D65 0%, #122230 100%);
-  border: 2px solid var(--neon-cyan);
+  border-radius: 6px;
+  background: linear-gradient(135deg, #00F2FE 0%, #FFA834 100%);
+  border: 2px solid #FFFFFF;
   cursor: ew-resize;
-  box-shadow: 0 0 14px rgba(0, 242, 254, 0.8), 0 2px 4px rgba(0, 0, 0, 0.8);
-  transition: transform 0.15s ease, border-color 0.2s ease;
+  box-shadow: 0 0 16px rgba(0, 242, 254, 0.9), 0 0 24px rgba(255, 168, 52, 0.6);
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
 }
-input[type=range].retro-slider::-webkit-slider-thumb:hover {
-  transform: scale(1.15);
-  border-color: var(--plasma-amber);
-  box-shadow: 0 0 18px var(--plasma-amber);
+input[type=range].retro-slider::-webkit-slider-thumb:hover, input[type=range]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 22px var(--plasma-amber), 0 0 35px var(--cyber-magenta);
 }
 
 /* Flowchart Circuit Routing Paths */
 .flowchart-pulse-line {
-  stroke-dasharray: 6 6;
-  animation: circuit-flow 1.5s linear infinite;
+  stroke-dasharray: 8 6;
+  animation: circuit-flow 1.2s linear infinite;
 }
 
 @keyframes circuit-flow {
-  from { stroke-dashoffset: 24; }
+  from { stroke-dashoffset: 28; }
   to { stroke-dashoffset: 0; }
 }
 
-/* Responsive Custom Scrollbar */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
   background: var(--obsidian-dark);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--surface-plate);
-  border-radius: 3px;
-  border: 1px solid rgba(0, 242, 254, 0.2);
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--neon-cyan);
+  background: linear-gradient(180deg, var(--neon-cyan), var(--plasma-amber), var(--cyber-magenta));
+  border-radius: 4px;
 }

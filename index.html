@@ -90,9 +90,9 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-20">
         
-        <!-- Logo -->
-        <a href="index.html" class="flex items-center gap-3 group">
-          <img src="assets/img/logo-dark.svg" alt="NADI-IKM Logo" class="h-11 w-auto group-hover:scale-105 transition-transform duration-200">
+        <!-- Highlighted World-Class Brand Logo Lockup -->
+        <a href="index.html" class="brand-logo-showcase group">
+          <img src="assets/img/logo-dark.svg" alt="NADI-IKM Logo" class="brand-logo-img">
         </a>
 
         <!-- Desktop Navigation Links -->
@@ -156,22 +156,40 @@
         
         <!-- Left Hero Content (7 Cols) -->
         <div class="lg:col-span-7 space-y-6">
-          
-          <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-deep-steel/80 border border-neon-cyan/40 text-neon-cyan text-xs font-mono shadow-md">
-            <span class="w-2 h-2 rounded-full bg-oscilloscope-green animate-ping"></span>
-            <span>RETROFIT EDGE AI • KONDISI PREDIKTIF IKM</span>
-            <span class="text-slate-500">|</span>
-            <span class="text-plasma-amber">NO CLOUD SINK</span>
+
+          <!-- Featured Hero Holographic Brand Identity Crest -->
+          <div class="inline-flex flex-wrap items-center gap-4 p-2.5 pr-5 rounded-2xl bg-midnight-navy/90 border border-neon-cyan/45 shadow-2xl">
+            <img src="assets/img/logo-dark.svg" alt="NADI-IKM Hologram Crest" class="h-14 sm:h-16 w-auto">
+            <div class="border-l border-neon-cyan/30 pl-4 space-y-1">
+              <div class="flex items-center gap-2 text-[11px] font-mono font-bold text-oscilloscope-green">
+                <span class="w-2 h-2 rounded-full bg-oscilloscope-green animate-ping"></span>
+                <span>STETOSKOP PINTAR HOLOGRAM & EDGE AI UNTUK MESIN IKM</span>
+              </div>
+              <div class="text-xs font-mono text-plasma-amber">
+                UNIVERSITAS BRAWIJAYA • KOMPETISI ESAI NASIONAL IYEEA 2026
+              </div>
+            </div>
           </div>
 
-          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-display font-extrabold tracking-tight leading-[1.12] text-white" data-i18n="heroHeadline">
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-display font-extrabold tracking-tight leading-[1.1] text-white" data-i18n="heroHeadline">
             Sebelum mesin berhenti, <br>
-            <span class="text-gradient-plasma">pahami sinyalnya.</span>
+            <span class="text-gradient-exotic">pahami sinyalnya.</span>
           </h1>
 
-          <p class="text-base sm:text-lg text-slate-300 leading-relaxed max-w-2xl font-sans" data-i18n="heroSubhead">
-            NADI-IKM menghadirkan sistem pemantauan kondisi mesin berbasis edge AI retrofit bagi industri kecil & menengah (IKM). Mengubah getaran mikro dan tren termal menjadi anjuran inspeksi yang logis, hemat data, dan tanpa ketergantungan internet penuh.
+          <p class="text-base sm:text-lg text-slate-200 leading-relaxed max-w-2xl font-sans" data-i18n="heroSubhead">
+            NADI-IKM menghadirkan sistem pemantauan kondisi mesin berbasis <strong>Edge AI Retrofit</strong> bagi Industri Kecil & Menengah (IKM). Mengubah getaran mikro dan suhu mesin menjadi panduan inspeksi yang jernih, hemat kuota data, dan tetap bekerja 100% meski tanpa internet.
           </p>
+
+          <!-- Layman-Friendly Instant Explanation Box ("Paham Dalam 10 Detik untuk Orang Awam") -->
+          <div class="layman-pill p-4 sm:p-5 space-y-1.5">
+            <div class="flex items-center gap-2 text-xs font-mono font-bold text-plasma-amber uppercase tracking-wider">
+              <i data-lucide="sparkles" class="w-4 h-4 text-neon-cyan"></i>
+              <span>PAHAM DALAM 10 DETIK (PENJELASAN MUDAH UNTUK ORANG AWAM):</span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
+              Bayangkan <strong>NADI-IKM</strong> seperti <strong>"Stetoskop Dokter Pintar"</strong> yang cukup ditempelkan dengan magnet di luar bodi mesin pabrik—tanpa perlu membongkar mesin. Sebelum mesin tiba-tiba macet atau terbakar dan membuat pemilik pabrik rugi puluhan juta rupiah, alat ini merasakan <em>getaran halus</em> dan <em>panas tidak wajar</em> sejak dini, lalu memberi tahu teknisi lewat layar: <strong>"Mesin nomor 2 mulai aus bantalannya, segera beri pelumas!"</strong>
+            </p>
+          </div>
 
           <!-- Action Buttons -->
           <div class="flex flex-wrap items-center gap-3 pt-2">
@@ -230,12 +248,16 @@
               <span class="text-neon-cyan">FPS: 60 | 360° DRAG</span>
             </div>
 
-            <!-- 3D Canvas Box -->
-            <div id="hero3dCanvas" class="w-full h-[440px] rounded-xl relative overflow-hidden bg-obsidian-dark cursor-grab active:cursor-grabbing">
+            <!-- 3D Hologram Canvas Box -->
+            <div id="hero3dCanvas" class="w-full h-[460px] rounded-xl relative overflow-hidden holo-viewport cursor-grab active:cursor-grabbing">
+              <div class="laser-scanner-line"></div>
               <!-- Overlay Pill -->
-              <div class="absolute top-4 left-4 z-10 flex items-center gap-2 px-3 py-1 rounded-md bg-midnight-navy/90 border border-neon-cyan/40 text-[10px] font-mono text-neon-cyan backdrop-blur shadow">
+              <div class="absolute top-4 left-4 z-10 flex items-center gap-2 px-3 py-1.5 rounded-md bg-midnight-navy/90 border border-neon-cyan/50 text-[10px] font-mono text-neon-cyan backdrop-blur shadow-lg">
                 <i data-lucide="rotate-3d" class="w-3.5 h-3.5 text-plasma-amber animate-spin"></i>
-                <span>CALIBRATION ORBIT ACTIVE</span>
+                <span>3D HOLOGRAM ORBIT ACTIVE</span>
+              </div>
+              <div class="absolute bottom-3 right-3 z-10 px-2.5 py-1 rounded bg-plasma-amber/20 border border-plasma-amber/50 text-[10px] font-mono text-plasma-amber">
+                HOLO-FIELD: 360° GYRO
               </div>
             </div>
             
@@ -258,13 +280,13 @@
       
       <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
         <span class="inline-block px-3.5 py-1 rounded-full bg-retro-orange/15 text-retro-orange border border-retro-orange/40 text-xs font-mono font-bold uppercase tracking-wider" data-i18n="problemBadge">
-          Akar Masalah IKM
+          ALUR CERITA 01 // KENAPA MESIN PABRIK SERING RUSAK MENDADAK?
         </span>
-        <h2 class="text-3xl sm:text-4xl font-display font-extrabold text-white" data-i18n="problemTitle">
-          Gangguan kecil. Dampak produksi yang besar.
+        <h2 class="text-3xl sm:text-5xl font-display font-extrabold text-white" data-i18n="problemTitle">
+          Gangguan kecil. <span class="text-gradient-exotic">Dampak produksi yang besar.</span>
         </h2>
         <p class="text-slate-300 text-sm sm:text-base leading-relaxed" data-i18n="problemDesc">
-          IKM mengoperasikan 4,2 juta unit usaha dengan 12,3 juta tenaga kerja di Indonesia. Kerusakan pada satu motor penggerak atau pompa utama dapat menghentikan seluruh lini perakitan.
+          Di Indonesia terdapat <strong>4,2 juta usaha IKM</strong> yang menghidupi <strong>12,3 juta pekerja</strong>. Sayangnya, sebagian besar pabrik kecil masih menunggu mesin benar-benar berasap atau macet total baru diperbaiki—karena sistem sensor pabrik besar terlalu mahal dan rumit.
         </p>
       </div>
 
@@ -331,13 +353,13 @@
       <!-- Section Header -->
       <div class="text-center max-w-3xl mx-auto mb-14 space-y-3">
         <span class="inline-block px-3.5 py-1 rounded-full bg-neon-cyan/15 text-neon-cyan border border-neon-cyan/40 text-xs font-mono font-bold uppercase tracking-wider" data-i18n="labBadge">
-          ANATOMI PERANGKAT RETROFIT
+          ALUR CERITA 02 // BEDAH HOLOGRAM 3D 360° ALAT NADI-IKM
         </span>
         <h2 class="text-3xl sm:text-5xl font-display font-extrabold text-white" data-i18n="labTitle">
-          Kenali Setiap Komponen, Lapis demi Lapis.
+          Kenali Setiap Komponen, <span class="text-gradient-exotic">Lapis demi Lapis.</span>
         </h2>
         <p class="text-slate-300 text-sm sm:text-base leading-relaxed" data-i18n="labDesc">
-          Kit sensor retrofit non-invasif NADI-IKM dirancang untuk dipasang tanpa memodifikasi sirkuit kendali utama (PLC) mesin industri.
+          <strong>Bahasa Awam:</strong> Alat sebesar cangkir kopi ini ditempelkan memakai <strong>magnet super kuat (N52)</strong> di permukaan luar mesin—tanpa perlu mengebor bodi mesin atau memotong kabel pabrik. Geser slider <em>Explode</em> atau klik tombol <strong>Auto-Explode 30s (Samping)</strong> di bawah untuk membedah 6 lapisan jeroan hologramnya!
         </p>
       </div>
 
@@ -360,8 +382,9 @@
             </div>
           </div>
           
-          <div id="mainLab3dCanvas" class="w-full h-[520px] rounded-xl relative overflow-hidden bg-obsidian-dark cursor-grab active:cursor-grabbing">
-            <!-- 3D Canvas Renders Here -->
+          <div id="mainLab3dCanvas" class="w-full h-[520px] rounded-xl relative overflow-hidden holo-viewport cursor-grab active:cursor-grabbing">
+            <div class="laser-scanner-line"></div>
+            <!-- 3D Hologram Canvas Renders Here -->
           </div>
 
           <!-- Bottom Control Bar inside Canvas Box -->
@@ -599,11 +622,14 @@
       
       <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
         <span class="inline-block px-3.5 py-1 rounded-full bg-neon-cyan/15 text-neon-cyan border border-neon-cyan/40 text-xs font-mono font-bold uppercase tracking-wider" data-i18n="archBadge">
-          ARSITEKTUR 4 LAPIS
+          ALUR CERITA 03 // BAGAIMANA CARA KERJANYA STEP-BY-STEP?
         </span>
         <h2 class="text-3xl sm:text-5xl font-display font-extrabold text-white" data-i18n="archTitle">
-          Dari Getaran Menjadi Keputusan Terarah
+          Dari Getaran Halus Menjadi <span class="text-gradient-exotic">Keputusan yang Mudah Dipahami</span>
         </h2>
+        <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+          <strong>Analogi Sederhana:</strong> Sama seperti jam tangan pintar (<em>smartwatch</em>) yang memantau detak jantung Anda lalu memberi peringatan saat tubuh kelelahan, 4 lapisan NADI-IKM mengubah getaran mesin menjadi instruksi perawatan yang siap dijalankan teknisi bengkel.
+        </p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-4 gap-6 relative">
@@ -667,13 +693,13 @@
       
       <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
         <span class="inline-block px-3.5 py-1 rounded-full bg-plasma-amber/15 text-plasma-amber border border-plasma-amber/40 text-xs font-mono font-bold uppercase tracking-wider" data-i18n="econBadge">
-          ANALISIS SENSITIVITAS FINANSIAL
+          ALUR CERITA 04 // APAKAH ALAT INI MENGUNTUNGKAN BAGI PEMILIK PABRIK?
         </span>
         <h2 class="text-3xl sm:text-5xl font-display font-extrabold text-white" data-i18n="econTitle">
-          Manfaat Harus Dihitung, Bukan Diasumsikan.
+          Manfaat Harus Dihitung, <span class="text-gradient-exotic">Bukan Sekadar Janji.</span>
         </h2>
         <p class="text-slate-300 text-sm sm:text-base leading-relaxed" data-i18n="econDesc">
-          Berdasarkan Tabel 5 & 6 pada esai IYEEA 2026: Investasi awal (CAPEX) Rp8.000.000 untuk 3 mesin, biaya operasional & alarm palsu (OPEX) Rp3.000.000/tahun.
+          <strong>Bahasa Awam:</strong> Dengan modal awal sekitar <strong>Rp8 Juta untuk melindungi 3 mesin utama</strong>, pabrik cukup mencegah <strong>12 jam mogok produksi dalam setahun</strong> untuk balik modal dalam waktu sekitar <strong>10,7 bulan</strong>. Geser kalkulator di bawah untuk mencoba berbagai skenario!
         </p>
       </div>
 
@@ -767,13 +793,13 @@
       
       <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
         <span class="inline-block px-3.5 py-1 rounded-full bg-neon-cyan/15 text-neon-cyan border border-neon-cyan/40 text-xs font-mono font-bold uppercase tracking-wider" data-i18n="teamBadge">
-          TIM PENGEMBANG INOVASI
+          ALUR CERITA 05 // MINDMAP REKAYASA & PEMBAGIAN TUGAS TIM INTI
         </span>
         <h2 class="text-3xl sm:text-5xl font-display font-extrabold text-white" data-i18n="teamTitle">
-          Tiga Disiplin, Satu Pendekatan Terintegrasi.
+          Tiga Disiplin Keahlian, <span class="text-gradient-exotic">Satu Mahakarya Terintegrasi.</span>
         </h2>
         <p class="text-slate-300 text-sm sm:text-base leading-relaxed" data-i18n="teamDesc">
-          Diagram alur sirkuit tanggung jawab rekayasa sistem NADI-IKM (Universitas Brawijaya).
+          Dikomandoi oleh <strong>Bimo Satrio</strong> (Ketua Tim & Perancang Utama Web/Dashboard/3D), berkolaborasi erat dengan <strong>Ihwan Ridwan</strong> (Perancang Perangkat Keras & Sensor) serta <strong>Muhammad Raiz</strong> (Perancang Algoritma AI & Model Ekonomi).
         </p>
       </div>
 
@@ -989,8 +1015,10 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
       
       <div class="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-slate-800">
-        <div class="flex items-center gap-3">
-          <img src="assets/img/logo-dark.svg" alt="NADI-IKM Logo" class="h-9 w-auto">
+        <div class="flex items-center gap-4">
+          <div class="brand-logo-showcase">
+            <img src="assets/img/logo-dark.svg" alt="NADI-IKM Logo" class="brand-logo-img">
+          </div>
         </div>
         <div class="flex items-center gap-6 font-mono text-[11px]">
           <a href="#lab3d" class="hover:text-neon-cyan">3D CAD Lab</a>

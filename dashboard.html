@@ -50,10 +50,10 @@
   <header class="bg-deep-steel/90 border-b border-slate-800 sticky top-0 z-40 backdrop-blur-md">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3 flex items-center justify-between">
       
-      <!-- Brand & Back -->
+      <!-- Highlighted Brand Logo & Back -->
       <div class="flex items-center gap-4">
-        <a href="index.html" class="flex items-center gap-2 group">
-          <img src="assets/img/logo-dark.svg" alt="NADI-IKM Logo" class="h-9 w-auto">
+        <a href="index.html" class="brand-logo-showcase group">
+          <img src="assets/img/logo-dark.svg" alt="NADI-IKM Logo" class="brand-logo-img">
         </a>
         <div class="hidden sm:block h-6 w-px bg-slate-700"></div>
         <div class="hidden sm:flex items-center gap-2">
@@ -93,7 +93,24 @@
 
   <!-- ================= MAIN CONTENT ================= -->
   <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-6">
-    
+
+    <!-- Layman-Friendly Instant Dashboard Guide Banner -->
+    <div class="layman-pill p-5 space-y-2 relative overflow-hidden">
+      <div class="laser-scanner-line"></div>
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-2 text-xs font-mono font-bold text-amber-300 uppercase tracking-wider">
+          <i data-lucide="sparkles" class="w-4 h-4 text-signal-cyan"></i>
+          <span>PANDUAN MUDAH UNTUK ORANG AWAM — CARA MEMBACA LAYAR DASHBOARD INI:</span>
+        </div>
+        <span class="px-2.5 py-0.5 rounded bg-signal-cyan/15 text-signal-cyan border border-signal-cyan/40 text-[10px] font-mono font-bold">
+          HOLO-TELEMETRY V2.0
+        </span>
+      </div>
+      <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
+        Layar ini memantau <strong>3 mesin pabrik sekaligus</strong> secara otomatis. Anda tidak perlu pusing membaca rumus: cukup lihat <strong>3 Warna Status Pintar</strong>—<span class="text-emerald-400 font-bold">HIJAU (Normal/Aman)</span>, <span class="text-amber-400 font-bold">KUNING AMBER (Jadwalkan Cek Mekanik karena getaran/panas naik)</span>, dan <span class="text-signal-cyan font-bold">BIRU SIAN (Periksa Kabel Sensor yang lepas—sehingga teknisi tidak tertipu alarm palsu!)</span>. Klik tombol <strong>4 Skenario Uji</strong> di bawah untuk melihat perubahannya secara langsung!
+      </p>
+    </div>
+
     <!-- Top KPI Cards Bar -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
       

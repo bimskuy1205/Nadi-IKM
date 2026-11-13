@@ -1,67 +1,31 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 360" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 150" width="100%" height="100%">
   <defs>
-    <linearGradient id="nGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0A1F2E"/>
-      <stop offset="100%" stop-color="#173447"/>
+    <linearGradient id="holoCyanAmberL" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00F2FE"/>
+      <stop offset="45%" stop-color="#00FF87"/>
+      <stop offset="100%" stop-color="#FFA834"/>
     </linearGradient>
-    <linearGradient id="tealGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0DB3A6"/>
-      <stop offset="100%" stop-color="#59D8D1"/>
+    <linearGradient id="plasmaFlameL" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FF5E36"/>
+      <stop offset="50%" stop-color="#FFA834"/>
+      <stop offset="100%" stop-color="#FF2E93"/>
     </linearGradient>
-    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="3" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-    </filter>
   </defs>
-
-  <!-- Gauge Arc Segment (Top Right) -->
-  <g transform="translate(300, 115)">
-    <!-- Outer Arc segments -->
-    <path d="M 0,-85 A 85,85 0 0,1 60,-60" fill="none" stroke="#F0A444" stroke-width="12" stroke-linecap="round" stroke-dasharray="14 6"/>
-    <path d="M 65,-55 A 85,85 0 0,1 85,0" fill="none" stroke="#F0A444" stroke-width="12" stroke-linecap="round"/>
-    <!-- Navy arc left & bottom -->
-    <path d="M -60,-60 A 85,85 0 0,0 -85,0 A 85,85 0 0,0 0,85" fill="none" stroke="#0A1F2E" stroke-width="12" stroke-linecap="round"/>
-    <path d="M 0,85 A 85,85 0 0,0 60,60" fill="none" stroke="#0DB3A6" stroke-width="12" stroke-linecap="round"/>
-    <!-- Inner concentric ring -->
-    <circle cx="0" cy="0" r="68" fill="none" stroke="#0A1F2E" stroke-width="3" opacity="0.4"/>
+  <rect x="6" y="8" width="134" height="134" rx="28" fill="#071320" stroke="url(#holoCyanAmberL)" stroke-width="3.5"/>
+  <g transform="translate(73, 75)">
+    <path d="M -46,-20 A 50,50 0 1,1 46,20" fill="none" stroke="url(#holoCyanAmberL)" stroke-width="5" stroke-linecap="round"/>
+    <path d="M -26,-30 L -11,-30 L -11,30 L -26,30 Z" fill="#FFFFFF"/>
+    <path d="M 11,-30 L 26,-30 L 26,30 L 11,30 Z" fill="#00F2FE"/>
+    <path d="M -11,-30 L 14,18 L 14,30 L -11,-18 Z" fill="url(#plasmaFlameL)"/>
+    <ellipse cx="0" cy="4" rx="54" ry="18" fill="none" stroke="#00FF87" stroke-width="2.5" transform="rotate(-16)"/>
+    <path d="M -48,4 L -20,4 L -12,-22 L -2,26 L 8,-14 L 16,10 L 24,4 L 48,4" fill="none" stroke="#FFA834" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
-
-  <!-- Monogram N (Left stem, Diagonal, Right stem) -->
-  <g transform="translate(300, 115)">
-    <!-- Left vertical bar with facet -->
-    <path d="M -56,-70 L -24,-70 L -24,70 L -56,70 Z" fill="#0A1F2E"/>
-    <path d="M -56,-70 L -24,-70 L -24,-10 L -56,20 Z" fill="#0DB3A6"/>
-
-    <!-- Right vertical bar -->
-    <path d="M 24,-70 L 56,-70 L 56,70 L 24,70 Z" fill="#0A1F2E"/>
-    <path d="M 24,-70 L 56,-70 L 56,-20 L 24,-20 Z" fill="#173447"/>
-
-    <!-- Diagonal facet -->
-    <path d="M -24,-70 L 24,30 L 24,70 L -24,-30 Z" fill="#082A3A"/>
-    <path d="M -24,-20 L 24,70 L 10,70 L -24,10 Z" fill="#0DB3A6" opacity="0.85"/>
-
-    <!-- Orbit Ellipse -->
-    <ellipse cx="0" cy="18" rx="100" ry="34" fill="none" stroke="#0DB3A6" stroke-width="6" transform="rotate(-18)" stroke-linecap="round"/>
-    <!-- Foreground Orbit Section overlay for 3D depth -->
-    <path d="M -90,45 C -50,75 50,55 94,-5" fill="none" stroke="#59D8D1" stroke-width="6" stroke-linecap="round"/>
-
-    <!-- Amber Sensor Node on Orbit -->
-    <circle cx="-78" cy="38" r="9" fill="#F0A444" stroke="#0A1F2E" stroke-width="3.5" filter="url(#glow)"/>
-
-    <!-- Heartbeat Pulse / ECG Line in Safety Amber -->
-    <path d="M -35,5 L -14,5 L -5,-30 L 8,30 L 16,-12 L 24,8 L 38,5" fill="none" stroke="#F0A444" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+  <g transform="translate(162, 0)">
+    <rect x="0" y="16" width="255" height="22" rx="6" fill="#0D2235" stroke="#00F2FE" stroke-width="1.2"/>
+    <circle cx="13" cy="27" r="4" fill="#00FF87"/>
+    <text x="25" y="31" font-family="'IBM Plex Mono', monospace" font-weight="700" font-size="11" letter-spacing="2" fill="#00F2FE">EDGE AI RETROFIT SYSTEM</text>
+    <text x="0" y="96" font-family="'Space Grotesk', 'Plus Jakarta Sans', sans-serif" font-weight="900" font-size="68" letter-spacing="3" fill="#FFFFFF">NADI<tspan fill="url(#plasmaFlameL)">-</tspan><tspan fill="url(#holoCyanAmberL)">IKM</tspan></text>
+    <line x1="2" y1="114" x2="530" y2="114" stroke="url(#holoCyanAmberL)" stroke-width="2"/>
+    <text x="2" y="134" font-family="'IBM Plex Mono', monospace" font-weight="700" font-size="14" letter-spacing="4.5" fill="#FFA834">INTELLIGENT MACHINE CARE • HOLOGRAM CAD</text>
   </g>
-
-  <!-- Brand Typography -->
-  <!-- NADI - IKM -->
-  <text x="300" y="275" font-family="'Plus Jakarta Sans', 'Inter', sans-serif" font-weight="900" font-size="46" text-anchor="middle" letter-spacing="3" fill="#0A1F2E">
-    NADI<tspan fill="#F0A444">-</tspan>IKM
-  </text>
-
-  <!-- Tagline: INTELLIGENT MACHINE CARE with side lines -->
-  <line x1="105" y1="305" x2="165" y2="305" stroke="#0DB3A6" stroke-width="2.5" stroke-linecap="round"/>
-  <text x="300" y="310" font-family="'Plus Jakarta Sans', 'Inter', sans-serif" font-weight="700" font-size="14.5" text-anchor="middle" letter-spacing="5.5" fill="#0DB3A6">
-    INTELLIGENT MACHINE CARE
-  </text>
-  <line x1="435" y1="305" x2="495" y2="305" stroke="#0DB3A6" stroke-width="2.5" stroke-linecap="round"/>
 </svg>
