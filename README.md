@@ -1,14 +1,14 @@
 # 🩺 NADI-IKM: Intelligent Machine Care
 > **Navigasi Anomali dan Diagnosis Industri untuk IKM**  
 > *Sistem Pemeliharaan Prediktif Hemat Data Berbasis Retrofit Edge AI untuk Menjaga Keandalan Mesin Industri Kecil dan Menengah*  
-> **Kompetisi:** Indonesian Young Economy and Engineering Award (IYEEA 2026) • Universitas Brawijaya
+> **Kompetisi:** Indonesia Youth Excellence Essay Award (IYEEA) 2026 • Universitas Brawijaya
 
 ---
 
 ## 🌟 Highlight Fitur Website & Sistem
 - **🎨 Brand & Visual Identity:** Menggunakan sistem warna industri modern (*Midnight Navy*, *Deep Steel*, *Industrial Teal*, *Signal Cyan*, *Safety Amber*, *Alert Coral*).
 - **🌐 Fitur 2 Bahasa (Bilingual ID/EN):** Switch instan antara Bahasa Indonesia dan English dengan persistensi lokal.
-- **🧊 3D Product Lab & Digital Twin:**
+- **🧊 3D Product Lab & Model Konseptual 3D Interaktif:**
   - Visualisasi 3D WebGL interaktif (rotasi 360°, zoom, pan).
   - Slider animasi **Exploded View** (0% sampai 100%) memperlihatkan seluruh lapisan anatomi perangkat.
   - Mode **X-Ray / Transparansi** casing luar untuk menginspeksi mikrokontroler dan sensor.
@@ -135,4 +135,4 @@ Nadi-IKM/
 - **Muhammad Raiz Belyaa:** Lead Kecerdasan Buatan & Analitik Data
 
 ---
-*Dibuat untuk submisi kompetisi Indonesian Young Economy and Engineering Award (IYEEA) 2026.*
+*Dibuat untuk submisi kompetisi Indonesia Youth Excellence Essay Award (IYEEA) 2026.*

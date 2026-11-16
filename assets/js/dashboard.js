@@ -9,6 +9,15 @@ const NadiDashboard = {
   selectedAssetId: 'M-02',
   isPaused: false,
   timer: null,
+  _seed: 20261115,
+
+  // Deterministic seeded PRNG (Mulberry32) for reproducible synthetic scenario telemetry
+  nextRand() {
+    let t = (this._seed += 0x6D2B79F5);
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  },
 
   assets: {
     'P-01': {
@@ -106,11 +115,11 @@ const NadiDashboard = {
       for (let i = 20; i >= 0; i--) {
         const time = new Date(now - i * 15000);
         const timeLabel = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        const jitter = (Math.random() - 0.5) * 0.15;
+        const jitter = (this.nextRand() - 0.5) * 0.15;
         asset.history.push({
           time: timeLabel,
           rms: Math.max(0.1, +(asset.rms + jitter).toFixed(2)),
-          temp: +(asset.temp + (Math.random() - 0.5) * 0.4).toFixed(1),
+          temp: +(asset.temp + (this.nextRand() - 0.5) * 0.4).toFixed(1),
           baseline: asset.rmsBaseline
         });
       }
@@ -234,8 +243,8 @@ const NadiDashboard = {
         asset.status = 'NORMAL';
         asset.deviation = 0.22;
         asset.quality = 'VALID';
-        targetRms = asset.rmsBaseline + (Math.random() - 0.5) * 0.2;
-        targetTemp = asset.tempBaseline + (Math.random() - 0.5) * 0.5;
+        targetRms = asset.rmsBaseline + (this.nextRand() - 0.5) * 0.2;
+        targetTemp = asset.tempBaseline + (this.nextRand() - 0.5) * 0.5;
       } else if (this.currentScenario === 'load_shift') {
         // Operational load bumped from 60% to 92%
         asset.load = 92;
@@ -248,11 +257,11 @@ const NadiDashboard = {
         if (id === 'M-02') {
           asset.status = 'INSPEKSI';
           asset.deviation = 0.78;
-          targetRms = 4.9 + Math.random() * 0.3;
-          targetTemp = 69.2 + Math.random() * 0.8;
+          targetRms = 4.9 + this.nextRand() * 0.3;
+          targetTemp = 69.2 + this.nextRand() * 0.8;
           asset.quality = 'VALID';
         } else {
-          targetRms = asset.rmsBaseline + (Math.random() - 0.5) * 0.15;
+          targetRms = asset.rmsBaseline + (this.nextRand() - 0.5) * 0.15;
           targetTemp = asset.tempBaseline;
         }
       } else if (this.currentScenario === 'sensor_fault') {
