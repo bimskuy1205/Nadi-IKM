@@ -1,13 +1,16 @@
 /**
  * NADI-IKM Interactive Scenario Simulator & Hybrid Decision Pipeline
- * Conforms to IYEEA 2026 Paper specifications (Sections 2.3, 2.4, 2.5).
- * Explicitly implements:
- *  1) Deterministic Mulberry32 PRNG (_seed = 20261115)
- *  2) Stage 1: Signal Quality Gate (clipping/flatline & sub-kHz mounting resonance check)
- *  3) Stage 2: Load-Conditioned Robust Deviation Score (Z_MAD conditioned on CT load current I_rms)
- *  4) Stage 3: Deterministic Isolation Forest Ensemble (25 binary partition trees) + ISO 20816-3 Severity Index (S_ISO)
- *  5) Stage 4: Hysteresis Persistence Filter (M=3 of N=5 windows) & Rule-Based Feature Attribution
- *  6) Reproducible 500-Window Comparative Benchmark (Method A vs Method B vs Method C)
+ * Conforms strictly to IYEEA 2026 Paper V6 (Sections 2.3, 2.4, 2.5).
+ * Executes:
+ *  1) Deterministic Mulberry32 PRNG (_seed = 20261117)
+ *  2) Stage 0: Machine Operating State Check (BEROPERASI vs BERHENTI if I_rms < 15%)
+ *  3) Stage 1: Signal Quality Check (indication of PERIKSA SENSOR only while BEROPERASI)
+ *  4) Stage 2: Load-Conditioned Robust Deviation (Z_MAD conditioned on CT load I_rms)
+ *  5) Stage 3: Genuine Trained scikit-learn 100-Tree IsolationForest (when loaded)
+ *              + S_ISO normalized index -> Unified Eq. (5):
+ *              S_gab(t) = alpha * S_ISO(t) + (1 - alpha) * s_IF(t), alpha = 0.5
+ *  6) Stage 4: Persistence Filter (M=3 of N=5 windows) with unified initial
+ *              design thresholds: 0.55 (PANTAU / KUNING) and 0.75 (INSPEKSI / MERAH)
  */
 
 const NadiDashboard = {
@@ -15,8 +18,14 @@ const NadiDashboard = {
   selectedAssetId: 'M-02',
   isPaused: false,
   timer: null,
-  _seed: 20261115,
-  isolationTrees: [],
+  _seed: 20261117,
+
+  // Fallback average path length c(psi) for psi = 256 per Liu et al. (2008)
+  cFactor(n) {
+    if (n <= 1) return 0;
+    if (n === 2) return 1;
+    return 2.0 * (Math.log(n - 1) + 0.5772156649) - (2.0 * (n - 1)) / n;
+  },
 
   // Deterministic seeded PRNG (Mulberry32) for reproducible synthetic scenario telemetry
   nextRand() {
@@ -31,97 +40,103 @@ const NadiDashboard = {
       id: 'P-01',
       name: 'Pompa Sentrifugal P-01',
       type: 'Pompa Proses 18.5 kW (2.950 rpm)',
-      isoGroup: 'ISO 20816-3 Kelompok 2 • Tumpuan Kaku (Rigid)',
-      isoLimits: { vA: 1.4, vB: 2.8, vC: 4.5 },
+      isoGroup: 'ISO 20816-3 Kelompok 2 • Tumpuan Kaku (Perlu Verifikasi Klasifikasi)',
+      isoLimits: { vA: 1.8, vB: 2.8, vC: 4.5 },
       location: 'Area Utilitas Lini A',
       criticality: 'Tinggi (Aliran Pendingin)',
+      operatingState: 'BEROPERASI',
       status: 'NORMAL',
       rms: 1.38,
       rmsBaseline: 1.35,
       temp: 41.4,
       tempBaseline: 41.0,
+      ambientTemp: 25.0,
       kurtosis: 3.05,
       kurtBaseline: 3.00,
       mountResonanceHz: 2420,
       load: 76,
       loadDefault: 76,
-      // Regime baselines: [low (<60%), nominal (60-85%), high (>85%)]
       regimeStats: {
-        low:     { medRms: 1.15, madRms: 0.08, medTemp: 39.0, madTemp: 0.7, medKurt: 2.95, madKurt: 0.12 },
-        nominal: { medRms: 1.35, madRms: 0.10, medTemp: 41.0, madTemp: 0.8, medKurt: 3.00, madKurt: 0.15 },
-        high:    { medRms: 1.82, madRms: 0.14, medTemp: 44.8, madTemp: 1.1, medKurt: 3.08, madKurt: 0.18 }
+        low:     { medRms: 1.15, madRms: 0.08, medTemp: 14.0, madTemp: 0.7, medKurt: 2.95, madKurt: 0.12 },
+        nominal: { medRms: 1.35, madRms: 0.10, medTemp: 16.0, madTemp: 0.8, medKurt: 3.00, madKurt: 0.15 },
+        high:    { medRms: 1.85, madRms: 0.14, medTemp: 19.8, madTemp: 1.0, medKurt: 3.08, madKurt: 0.16 }
       },
-      deviation: 0.14,
-      sIF: 0.24,
-      sISO: 0.03,
-      zMadMax: 0.45,
-      attribution: { rmsPct: 45, tempPct: 30, kurtPct: 25 },
+      deviation: 0.24,
+      sIF: 0.47,
+      sISO: 0.00,
+      zMadMax: 0.35,
+      dominantIndicators: { rmsPct: 40, kurtPct: 30, tempPct: 30, zRms: 0.2, zKurt: 0.1, zTemp: 0.1, regimeKey: 'nominal', refMedRms: 1.35 },
       quality: 'VALID',
-      scoreWindow: [0.14, 0.15, 0.13, 0.14, 0.14],
+      scoreWindow: [0.24, 0.24, 0.24, 0.24, 0.24],
       history: []
     },
     'M-02': {
       id: 'M-02',
       name: 'Motor Induksi M-02',
       type: 'Motor 3-Fasa 22 kW (1.480 rpm)',
-      isoGroup: 'ISO 20816-3 Kelompok 2 • Tumpuan Kaku (Rigid)',
+      isoGroup: 'ISO 20816-3 Kelompok 2 • Tumpuan Kaku (Perlu Verifikasi Kopling)',
       isoLimits: { vA: 1.8, vB: 2.8, vC: 4.5 },
       location: 'Penggerak Konveyor Utama',
       criticality: 'Kritis (Lini Tunggal)',
+      operatingState: 'BEROPERASI',
       status: 'INSPEKSI',
       rms: 4.85,
       rmsBaseline: 2.10,
       temp: 68.4,
-      tempBaseline: 48.0,
+      tempBaseline: 43.5,
+      ambientTemp: 25.0,
       kurtosis: 6.40,
-      kurtBaseline: 3.00,
+      kurtBaseline: 3.02,
       mountResonanceHz: 2390,
       load: 82,
       loadDefault: 82,
+      // Regime medians anchored to benchmark_isolation_forest.py (when available, updated in init)
       regimeStats: {
-        low:     { medRms: 1.75, madRms: 0.11, medTemp: 45.0, madTemp: 0.9, medKurt: 2.95, madKurt: 0.14 },
-        nominal: { medRms: 2.10, madRms: 0.14, medTemp: 48.0, madTemp: 1.1, medKurt: 3.00, madKurt: 0.16 },
-        high:    { medRms: 2.84, madRms: 0.19, medTemp: 52.2, madTemp: 1.4, medKurt: 3.12, madKurt: 0.20 }
+        low:     { medRms: 1.6539, madRms: 0.0581, medTemp: 14.9913, madTemp: 0.5003, medKurt: 2.9537, madKurt: 0.0738 },
+        nominal: { medRms: 2.1034, madRms: 0.0749, medTemp: 18.5107, madTemp: 0.6856, medKurt: 3.0171, madKurt: 0.0891 },
+        high:    { medRms: 3.0447, madRms: 0.1106, medTemp: 23.0044, madTemp: 0.8048, medKurt: 3.1489, madKurt: 0.1063 }
       },
-      deviation: 0.78,
-      sIF: 0.76,
-      sISO: 0.80,
-      zMadMax: 13.2,
-      attribution: { rmsPct: 48, tempPct: 24, kurtPct: 28 },
+      deviation: 0.86,
+      sIF: 0.72,
+      sISO: 1.00,
+      zMadMax: 15.0,
+      dominantIndicators: { rmsPct: 45, kurtPct: 30, tempPct: 25, zRms: 12.0, zKurt: 10.0, zTemp: 8.0, regimeKey: 'nominal', refMedRms: 2.10 },
       quality: 'VALID',
-      scoreWindow: [0.76, 0.77, 0.78, 0.79, 0.78],
+      scoreWindow: [0.86, 0.86, 0.86, 0.86, 0.86],
       history: []
     },
     'F-03': {
       id: 'F-03',
       name: 'Kipas Ventilasi Sentral F-03',
       type: 'Blower Sentrifugal 15 kW (1.460 rpm)',
-      isoGroup: 'ISO 20816-3 Kelompok 2 • Tumpuan Fleksibel (Flexible)',
+      isoGroup: 'ISO 20816-3 Kelompok 2 • Tumpuan Fleksibel (Perlu Verifikasi Daya)',
       isoLimits: { vA: 2.3, vB: 4.5, vC: 7.1 },
       location: 'Atap Gedung Produksi',
       criticality: 'Sedang (Sirkulasi)',
+      operatingState: 'BEROPERASI',
       status: 'NORMAL',
       rms: 1.82,
       rmsBaseline: 1.80,
       temp: 38.2,
       tempBaseline: 38.0,
+      ambientTemp: 25.0,
       kurtosis: 3.02,
       kurtBaseline: 3.00,
       mountResonanceHz: 2410,
       load: 74,
       loadDefault: 74,
       regimeStats: {
-        low:     { medRms: 1.50, madRms: 0.10, medTemp: 36.0, madTemp: 0.8, medKurt: 2.96, madKurt: 0.14 },
-        nominal: { medRms: 1.80, madRms: 0.13, medTemp: 38.0, madTemp: 1.0, medKurt: 3.00, madKurt: 0.16 },
-        high:    { medRms: 2.42, madRms: 0.18, medTemp: 41.8, madTemp: 1.3, medKurt: 3.10, madKurt: 0.19 }
+        low:     { medRms: 1.50, madRms: 0.10, medTemp: 11.0, madTemp: 0.8, medKurt: 2.96, madKurt: 0.14 },
+        nominal: { medRms: 1.80, madRms: 0.13, medTemp: 13.0, madTemp: 1.0, medKurt: 3.00, madKurt: 0.16 },
+        high:    { medRms: 2.42, madRms: 0.18, medTemp: 16.8, madTemp: 1.3, medKurt: 3.10, madKurt: 0.19 }
       },
-      deviation: 0.16,
-      sIF: 0.26,
+      deviation: 0.24,
+      sIF: 0.47,
       sISO: 0.00,
-      zMadMax: 0.52,
-      attribution: { rmsPct: 42, tempPct: 31, kurtPct: 27 },
+      zMadMax: 0.42,
+      dominantIndicators: { rmsPct: 38, kurtPct: 32, tempPct: 30, zRms: 0.2, zKurt: 0.1, zTemp: 0.1, regimeKey: 'nominal', refMedRms: 1.80 },
       quality: 'VALID',
-      scoreWindow: [0.15, 0.16, 0.16, 0.15, 0.16],
+      scoreWindow: [0.24, 0.24, 0.24, 0.24, 0.24],
       history: []
     }
   },
@@ -148,7 +163,10 @@ const NadiDashboard = {
   ],
 
   init() {
-    this.buildDeterministicIsolationForest();
+    // Sync M-02 regimeStats directly from trained model exported by Python benchmark when loaded
+    if (window.NADI_TRAINED_IF_MODEL && window.NADI_TRAINED_IF_MODEL.regimeStats) {
+      this.assets['M-02'].regimeStats = window.NADI_TRAINED_IF_MODEL.regimeStats;
+    }
     this.setScenario(this.currentScenario, true);
     this.generateInitialHistory();
     this.initChart();
@@ -159,61 +177,40 @@ const NadiDashboard = {
     this.bindEvents();
   },
 
-  // Build a deterministic 25-tree Isolation Forest over normalized Z_MAD feature space [zRms, zTemp, zKurt]
-  buildDeterministicIsolationForest() {
-    this.isolationTrees = [];
-    for (let t = 0; t < 25; t++) {
-      // Deterministic split thresholds across 4 levels covering [0, 12] in Z_MAD space
-      const feat0 = t % 3;
-      const thr0 = 1.8 + (t % 5) * 0.45;
-      const feat1L = (t + 1) % 3;
-      const thr1L = 1.1 + (t % 4) * 0.30;
-      const feat1R = (t + 2) % 3;
-      const thr1R = 3.2 + (t % 5) * 0.55;
-      const thr2RR = 5.0 + (t % 4) * 0.65;
-      this.isolationTrees.push({ feat0, thr0, feat1L, thr1L, feat1R, thr1R, thr2RR });
-    }
-  },
-
-  // Evaluate Isolation Forest anomaly score S_IF in [0, 1] from Z_MAD vector
+  // Genuine scikit-learn trained IsolationForest path length scoring: s(z, psi) = 2^(-E[h(z)] / c(psi))
   computeIsolationForestScore(zVec) {
-    let totalPathLength = 0;
-    for (let i = 0; i < this.isolationTrees.length; i++) {
-      const tr = this.isolationTrees[i];
-      let depth = 1;
-      if (zVec[tr.feat0] > tr.thr0) {
-        // Right branch (anomalous high Z_MAD isolates faster = shorter path)
-        if (zVec[tr.feat1R] > tr.thr2RR) {
-          depth = 1.2; // Isolated near root
-        } else if (zVec[tr.feat1R] > tr.thr1R) {
-          depth = 2.1;
-        } else {
-          depth = 3.4;
+    const model = window.NADI_TRAINED_IF_MODEL;
+    if (model && model.trees && model.trees.length > 0) {
+      let totalPath = 0;
+      const trees = model.trees;
+      for (let i = 0; i < trees.length; i++) {
+        const t = trees[i];
+        let node = 0;
+        let depth = 0;
+        while (t.l[node] !== -1) {
+          const featIdx = t.f[node];
+          node = zVec[featIdx] <= t.t[node] ? t.l[node] : t.r[node];
+          depth += 1;
         }
-      } else {
-        // Left branch (normal region requires deeper partitioning)
-        if (zVec[tr.feat1L] > tr.thr1L) {
-          depth = 4.6;
-        } else {
-          depth = 6.2;
-        }
+        const nLeaf = t.s[node];
+        totalPath += depth + this.cFactor(nLeaf);
       }
-      totalPathLength += depth;
+      const avgPath = totalPath / trees.length;
+      const sIF = Math.pow(2.0, -avgPath / model.meta.c_psi);
+      return Math.min(0.99, Math.max(0.05, +sIF.toFixed(3)));
     }
-    const avgPath = totalPathLength / this.isolationTrees.length;
-    const cFactor = 4.35; // Normalization factor c(n) for reference subsample
-    const rawScore = Math.pow(2, -avgPath / cFactor);
-    return Math.min(0.99, Math.max(0.05, +rawScore.toFixed(3)));
+    // Fallback deterministic monotonic mapping matching Liu et al. (2008) scale [0.42..0.85]
+    const norm = Math.sqrt(zVec[0] * zVec[0] + zVec[1] * zVec[1] + zVec[2] * zVec[2]);
+    return Math.min(0.95, Math.max(0.45, +(0.45 + 0.40 * (1 - Math.exp(-norm / 10.0))).toFixed(3)));
   },
 
-  // Get load regime key from CT load percentage
   getLoadRegime(loadPct) {
     if (loadPct < 60) return 'low';
     if (loadPct <= 85) return 'nominal';
     return 'high';
   },
 
-  // Full 4-stage hybrid pipeline execution for a single telemetry sample
+  // 3-Stage Decision Pipeline strictly aligned with Paper V6 §2.4 (Eq. 4 & Eq. 5)
   evaluateAssetPipeline(asset, sampleRms, sampleTemp, sampleKurt, sampleLoad, sampleMountHz) {
     asset.rms = +sampleRms.toFixed(2);
     asset.temp = +sampleTemp.toFixed(1);
@@ -221,25 +218,36 @@ const NadiDashboard = {
     asset.load = Math.round(sampleLoad);
     asset.mountResonanceHz = Math.round(sampleMountHz);
 
-    // STAGE 1: Signal Quality & Mounting Resonance Gate
-    if (asset.rms < 0.08 || asset.load === 0) {
-      asset.quality = 'KABEL_PUTUS / DROPOUT';
-      asset.status = 'PERIKSA SENSOR';
-      asset.deviation = 0.0; // Not a mechanical score
+    // STAGE 0: Machine Operating State Gate (must NOT declare sensor fault when idle/stopped!)
+    if (asset.load < 15) {
+      asset.operatingState = 'BERHENTI / SIAGA';
+      asset.quality = 'TIDAK DIEVALUASI (MESIN MATI)';
+      asset.status = 'BERHENTI';
+      asset.deviation = 0.0;
       asset.sIF = 0.0;
       asset.sISO = 0.0;
       asset.zMadMax = 0.0;
-      asset.attribution = { rmsPct: 0, tempPct: 0, kurtPct: 0 };
       return;
     }
-    if (asset.mountResonanceHz < 1000) {
-      asset.quality = `RESONANSI_DUDUKAN (${asset.mountResonanceHz} Hz)`;
+    asset.operatingState = 'BEROPERASI';
+
+    // STAGE 1: Signal Quality Check (only evaluated while machine is BEROPERASI)
+    if (asset.rms < 0.08) {
+      asset.quality = 'DROPOUT / FLATLINE (BEROPERASI)';
       asset.status = 'PERIKSA SENSOR';
       asset.deviation = 0.0;
       asset.sIF = 0.0;
       asset.sISO = 0.0;
       asset.zMadMax = 0.0;
-      asset.attribution = { rmsPct: 0, tempPct: 0, kurtPct: 0 };
+      return;
+    }
+    if (asset.mountResonanceHz < 1000) {
+      asset.quality = `INDIKASI RESONANSI SKENARIO (${asset.mountResonanceHz} Hz < 1 kHz)`;
+      asset.status = 'PERIKSA SENSOR';
+      asset.deviation = 0.0;
+      asset.sIF = 0.0;
+      asset.sISO = 0.0;
+      asset.zMadMax = 0.0;
       return;
     }
     asset.quality = 'VALID';
@@ -247,39 +255,44 @@ const NadiDashboard = {
     // STAGE 2: Load-Conditioned Z_MAD Calculation (Eq. 4)
     const regimeKey = this.getLoadRegime(asset.load);
     const ref = asset.regimeStats[regimeKey];
-    const zRms = Math.abs(asset.rms - ref.medRms) / (1.4826 * ref.madRms);
-    const zTemp = Math.abs(asset.temp - ref.medTemp) / (1.4826 * ref.madTemp);
-    const zKurt = Math.abs(asset.kurtosis - ref.medKurt) / (1.4826 * ref.madKurt);
-    asset.zMadMax = +Math.max(zRms, zTemp, zKurt).toFixed(2);
+    const dT = Math.max(1.0, asset.temp - asset.ambientTemp);
+    const zRms = Math.abs(asset.rms - ref.medRms) / (1.4826 * ref.madRms + 1e-6);
+    const zKurt = Math.abs(asset.kurtosis - ref.medKurt) / (1.4826 * ref.madKurt + 1e-6);
+    const zTemp = Math.abs(dT - ref.medTemp) / (1.4826 * ref.madTemp + 1e-6);
+    asset.zMadMax = +Math.max(zRms, zKurt, zTemp).toFixed(2);
 
-    // Rule-based feature attribution proportional to load-conditioned Z_MAD
-    const zSum = zRms + zTemp + zKurt + 1e-6;
+    // Compute proportion of Z_MAD deviation strictly as rule-based priority indicator (NOT AI SHAP causality)
+    const zSum = zRms + zKurt + zTemp + 1e-6;
     const rmsPct = Math.round((zRms / zSum) * 100);
-    const tempPct = Math.round((zTemp / zSum) * 100);
-    const kurtPct = Math.max(0, 100 - rmsPct - tempPct);
-    asset.attribution = { rmsPct, tempPct, kurtPct, zRms: +zRms.toFixed(2), zTemp: +zTemp.toFixed(2), zKurt: +zKurt.toFixed(2), regimeKey, refMedRms: ref.medRms };
+    const kurtPct = Math.round((zKurt / zSum) * 100);
+    const tempPct = Math.max(0, 100 - rmsPct - kurtPct);
+    asset.dominantIndicators = {
+      rmsPct, kurtPct, tempPct,
+      zRms: +zRms.toFixed(2), zKurt: +zKurt.toFixed(2), zTemp: +zTemp.toFixed(2),
+      regimeKey, refMedRms: +ref.medRms.toFixed(2)
+    };
 
-    // STAGE 3: Hybrid Score S_gab = alpha * S_IF + (1 - alpha) * S_ISO (Eq. 5)
-    const sIF = this.computeIsolationForestScore([zRms, zTemp, zKurt]);
+    // STAGE 3: Unified Eq. (5) -> S_gab(t) = alpha * S_ISO(t) + (1 - alpha) * s_IF(t), alpha = 0.5
+    const sIF = this.computeIsolationForestScore([zRms, zKurt, zTemp]);
     const { vA, vC } = asset.isoLimits;
     const sISO = Math.min(1.0, Math.max(0.0, (asset.rms - vA) / (vC - vA)));
     const alpha = 0.5;
-    const sGab = +(alpha * sIF + (1 - alpha) * sISO).toFixed(2);
+    const sGab = +(alpha * sISO + (1.0 - alpha) * sIF).toFixed(2);
 
     asset.sIF = +sIF.toFixed(2);
     asset.sISO = +sISO.toFixed(2);
     asset.deviation = sGab;
 
-    // STAGE 4: Hysteresis Persistence Filter (M=3 of N=5 windows)
+    // STAGE 4: Hysteresis Persistence Filter (M=3 of N=5 windows) with unified initial thresholds 0.55 & 0.75
     asset.scoreWindow.push(sGab);
     if (asset.scoreWindow.length > 5) asset.scoreWindow.shift();
 
-    const countCritical = asset.scoreWindow.filter(s => s >= 0.72).length;
-    const countWarning = asset.scoreWindow.filter(s => s >= 0.55).length;
+    const countRed = asset.scoreWindow.filter(s => s >= 0.75).length;
+    const countYellow = asset.scoreWindow.filter(s => s >= 0.55).length;
 
-    if (countCritical >= 3) {
+    if (countRed >= 3) {
       asset.status = 'INSPEKSI';
-    } else if (countWarning >= 3) {
+    } else if (countYellow >= 3) {
       asset.status = 'PANTAU';
     } else if (regimeKey === 'high') {
       asset.status = 'NORMAL (BEBAN TINGGI)';
@@ -288,34 +301,33 @@ const NadiDashboard = {
     }
   },
 
-  // Reset all assets cleanly before applying a scenario so button order never corrupts state
   applyScenarioState(scenName, resetWindow = false) {
     for (let id in this.assets) {
       const a = this.assets[id];
-      const jitterRms = (this.nextRand() - 0.5) * 0.08;
-      const jitterTemp = (this.nextRand() - 0.5) * 0.3;
+      const jitterRms = (this.nextRand() - 0.5) * 0.06;
+      const jitterTemp = (this.nextRand() - 0.5) * 0.25;
 
       let simRms = a.rmsBaseline + jitterRms;
       let simTemp = a.tempBaseline + jitterTemp;
-      let simKurt = a.kurtBaseline + (this.nextRand() - 0.5) * 0.06;
+      let simKurt = a.kurtBaseline + (this.nextRand() - 0.5) * 0.05;
       let simLoad = a.loadDefault;
       let simMountHz = 2400;
 
       if (scenName === 'load_shift') {
         simLoad = 92;
         simRms = a.regimeStats.high.medRms + jitterRms;
-        simTemp = a.regimeStats.high.medTemp + jitterTemp;
-        simKurt = a.regimeStats.high.medKurt + 0.04;
+        simTemp = a.ambientTemp + a.regimeStats.high.medTemp + jitterTemp;
+        simKurt = a.regimeStats.high.medKurt + 0.03;
       } else if (scenName === 'anomaly' && id === 'M-02') {
-        simLoad = 84;
+        simLoad = 82;
         simRms = 4.88 + jitterRms;
         simTemp = 68.5 + jitterTemp;
         simKurt = 6.35;
       } else if (scenName === 'sensor_fault' && id === 'F-03') {
-        simLoad = 74;
-        simRms = 0.02; // Open wire dropout
+        simLoad = 74; // Active motor load verifies fault is in acquisition chain, NOT stopped machine
+        simRms = 0.02;
         simTemp = 38.0;
-        simMountHz = 380; // Loose mount / sensor fault
+        simMountHz = 380;
       }
 
       if (resetWindow) {
@@ -335,15 +347,15 @@ const NadiDashboard = {
       const asset = this.assets[id];
       asset.history = [];
       const activeRegime = this.getLoadRegime(asset.load);
-      const activeBaseline = asset.regimeStats[activeRegime].medRms;
+      const activeBaseline = +asset.regimeStats[activeRegime].medRms.toFixed(2);
       for (let i = 20; i >= 0; i--) {
         const time = new Date(now - i * 15000);
         const timeLabel = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        const jitter = (this.nextRand() - 0.5) * 0.12;
+        const jitter = (this.nextRand() - 0.5) * 0.10;
         asset.history.push({
           time: timeLabel,
           rms: Math.max(0.02, +(asset.rms + jitter).toFixed(2)),
-          temp: +(asset.temp + (this.nextRand() - 0.5) * 0.35).toFixed(1),
+          temp: +(asset.temp + (this.nextRand() - 0.5) * 0.30).toFixed(1),
           baseline: activeBaseline
         });
       }
@@ -403,9 +415,7 @@ const NadiDashboard = {
         maintainAspectRatio: false,
         interaction: { mode: 'index', intersect: false },
         plugins: {
-          legend: {
-            labels: { color: '#94A3B8', font: { family: 'Plus Jakarta Sans', size: 12 } }
-          },
+          legend: { labels: { color: '#94A3B8', font: { family: 'Plus Jakarta Sans', size: 12 } } },
           tooltip: {
             backgroundColor: '#0A1F2E',
             borderColor: '#173447',
@@ -415,25 +425,16 @@ const NadiDashboard = {
           }
         },
         scales: {
-          x: {
-            grid: { color: 'rgba(255, 255, 255, 0.05)' },
-            ticks: { color: '#64748B', font: { size: 10 } }
-          },
+          x: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#64748B', font: { size: 10 } } },
           y: {
-            type: 'linear',
-            display: true,
-            position: 'left',
+            type: 'linear', display: true, position: 'left',
             title: { display: true, text: 'Vibration RMS (mm/s)', color: '#0DB3A6' },
-            grid: { color: 'rgba(255, 255, 255, 0.06)' },
-            ticks: { color: '#94A3B8' }
+            grid: { color: 'rgba(255, 255, 255, 0.06)' }, ticks: { color: '#94A3B8' }
           },
           y1: {
-            type: 'linear',
-            display: true,
-            position: 'right',
+            type: 'linear', display: true, position: 'right',
             title: { display: true, text: 'Temperature (°C)', color: '#E96F67' },
-            grid: { drawOnChartArea: false },
-            ticks: { color: '#94A3B8' }
+            grid: { drawOnChartArea: false }, ticks: { color: '#94A3B8' }
           }
         }
       }
@@ -455,14 +456,8 @@ const NadiDashboard = {
     for (let id in this.assets) {
       const asset = this.assets[id];
       const activeRegime = this.getLoadRegime(asset.load);
-      const activeBaseline = asset.regimeStats[activeRegime].medRms;
-      const newPoint = {
-        time: timeLabel,
-        rms: asset.rms,
-        temp: asset.temp,
-        baseline: activeBaseline
-      };
-      asset.history.push(newPoint);
+      const activeBaseline = +asset.regimeStats[activeRegime].medRms.toFixed(2);
+      asset.history.push({ time: timeLabel, rms: asset.rms, temp: asset.temp, baseline: activeBaseline });
       if (asset.history.length > 25) asset.history.shift();
     }
 
@@ -504,11 +499,12 @@ const NadiDashboard = {
 
     const scenNotice = document.getElementById('scenNotice');
     if (scenNotice) {
+      const m02Score = this.assets['M-02'].deviation.toFixed(2);
       const msgs = {
-        normal: 'Skenario Simulasi Aktif [NORMAL]: Ketiga mesin beroperasi pada rezim beban nominal. Skor deviasi Z_MAD dan S_gab berada di bawah ambang peringatan (0.55).',
-        load_shift: 'Skenario Simulasi Aktif [LONJAKAN BEBAN 92%]: Arus beban CT naik ke rezim tinggi. Normalisasi Z_MAD otomatis bergeser ke baseline beban tinggi sehingga S_gab tetap rendah dan TIDAK memicu alarm palsu.',
-        anomaly: 'Skenario Simulasi Aktif [GEJALA AUS BANTALAN M-02]: Getaran M-02 naik ke 4.88 mm/s disertai kenaikan kurtosis & suhu. Skor hibrida S_gab = 0.78 bertahan ≥3/5 jendela → Status INSPEKSI.',
-        sensor_fault: 'Skenario Simulasi Aktif [GANGGUAN SENSOR F-03]: Gerbang mutu sinyal mendeteksi dropout/resonansi dudukan (<1 kHz) pada F-03 → Diisolasi ke Status PERIKSA SENSOR (Biru), bukan rusak mesin.'
+        normal: 'Skenario Simulasi Aktif [NORMAL]: Mesin beroperasi (I_rms ≥ 15%) pada rezim nominal. Skor hibrida S_gab < 0.55 (parameter awal).',
+        load_shift: 'Skenario Simulasi Aktif [LONJAKAN BEBAN 92%]: Normalisasi Z_MAD bergeser ke baseline beban tinggi sehingga S_gab tetap < 0.55 (tanpa alarm palsu).',
+        anomaly: `Skenario Simulasi Aktif [ANOMALI BANTALAN M-02]: Getaran naik disertai peningkatan kurtosis & suhu. Skor hibrida S_gab = ${m02Score} ≥ 0.75 (3/5 jendela) → Status INSPEKSI.`,
+        sensor_fault: 'Skenario Simulasi Aktif [INDIKASI GANGGUAN SENSOR F-03]: Mesin beroperasi (beban 74%), namun sinyal sensor terindikasi dropout/kendur → Status BIRU (indikasi perlu pemeriksaan sensor).'
       };
       scenNotice.innerHTML = msgs[scenName] || '';
     }
@@ -532,15 +528,17 @@ const NadiDashboard = {
       const borderClass = isSelected ? 'border-industrial-teal ring-2 ring-industrial-teal/30 shadow-lg shadow-industrial-teal/10' : 'border-slate-800 hover:border-slate-700';
 
       let badgeColor = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30';
-      if (a.status.includes('INSPEKSI') || a.status.includes('PANTAU')) badgeColor = 'bg-amber-500/10 text-amber-400 border-amber-500/30';
-      if (a.status.includes('PERIKSA SENSOR')) badgeColor = 'bg-sky-500/10 text-sky-400 border-sky-500/30';
+      if (a.status.includes('INSPEKSI')) badgeColor = 'bg-rose-500/15 text-rose-400 border-rose-500/40';
+      else if (a.status.includes('PANTAU')) badgeColor = 'bg-amber-500/10 text-amber-400 border-amber-500/30';
+      else if (a.status.includes('PERIKSA SENSOR')) badgeColor = 'bg-sky-500/10 text-sky-400 border-sky-500/30';
+      else if (a.status.includes('BERHENTI')) badgeColor = 'bg-slate-600/20 text-slate-300 border-slate-500/30';
 
       html += `
         <div onclick="NadiDashboard.selectAsset('${a.id}')" class="cursor-pointer bg-deep-steel/80 backdrop-blur rounded-2xl p-5 border ${borderClass} transition-all duration-200">
           <div class="flex items-center justify-between mb-3">
             <span class="text-xs font-mono font-bold text-signal-cyan px-2.5 py-1 rounded-md bg-signal-cyan/10 border border-signal-cyan/20">${a.id}</span>
             <span class="text-xs font-semibold px-2.5 py-1 rounded-full border ${badgeColor}">
-              <span class="inline-block w-1.5 h-1.5 rounded-full mr-1.5 ${a.status.includes('INSPEKSI') ? 'bg-amber-400 animate-pulse' : a.status.includes('PERIKSA') ? 'bg-sky-400' : 'bg-emerald-400'}"></span>
+              <span class="inline-block w-1.5 h-1.5 rounded-full mr-1.5 ${a.status.includes('INSPEKSI') ? 'bg-rose-400 animate-pulse' : a.status.includes('PANTAU') ? 'bg-amber-400' : a.status.includes('PERIKSA') ? 'bg-sky-400' : 'bg-emerald-400'}"></span>
               ${a.status}
             </span>
           </div>
@@ -565,9 +563,38 @@ const NadiDashboard = {
       `;
     }
     container.innerHTML = html;
+
+    // Update top KPI cards dynamically so numbers match active scenario 100%
+    const allAssets = Object.values(this.assets);
+    const nNorm = allAssets.filter(x => x.status.includes('NORMAL')).length;
+    const nWarn = allAssets.filter(x => x.status.includes('INSPEKSI') || x.status.includes('PANTAU')).length;
+    const nSens = allAssets.filter(x => x.status.includes('PERIKSA SENSOR')).length;
+    const kpiSum = document.getElementById('kpiSummaryCounts');
+    if (kpiSum) {
+      kpiSum.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> ${nNorm} Normal • ${nWarn} Inspeksi • ${nSens} Sensor`;
+    }
+    const alertAssets = allAssets.filter(x => x.status.includes('INSPEKSI') || x.status.includes('PANTAU') || x.status.includes('PERIKSA SENSOR'));
+    const kpiAlert = document.getElementById('kpiAlertAsset');
+    const kpiAlertSub = document.getElementById('kpiAlertSub');
+    if (kpiAlert && kpiAlertSub) {
+      if (alertAssets.length > 0) {
+        kpiAlert.innerText = `${alertAssets.length} Aset (${alertAssets.map(x => x.id).join(', ')})`;
+        kpiAlertSub.innerText = alertAssets[0].status.includes('PERIKSA') ? 'Indikasi perlu pemeriksaan sensor' : 'Deviasi S_gab persisten ≥ 3/5 jendela';
+      } else {
+        kpiAlert.innerText = '0 Aset';
+        kpiAlertSub.innerText = 'Seluruh unit dalam batas awal';
+      }
+    }
+    const nValid = allAssets.filter(x => x.quality === 'VALID').length;
+    const kpiSig = document.getElementById('kpiSignalValidity');
+    const kpiSigSub = document.getElementById('kpiSignalSub');
+    if (kpiSig && kpiSigSub) {
+      kpiSig.innerText = `${nValid}/${allAssets.length} Valid`;
+      const bad = allAssets.find(x => x.quality !== 'VALID');
+      kpiSigSub.innerText = bad ? `${bad.id}: ${bad.quality}` : 'Gerbang mutu aktif saat beroperasi';
+    }
   },
 
-  // Dynamic scenario- and status-consistent rule-based attribution explanation
   renderAssetDetails(id) {
     const a = this.assets[id];
     if (!a) return;
@@ -577,43 +604,50 @@ const NadiDashboard = {
     const devScoreEl = document.getElementById('selectedDevScore');
     const reasonTextEl = document.getElementById('selectedReasonText');
 
-    if (titleEl) titleEl.innerText = `${a.id} • ${a.name}`;
+    if (titleEl) titleEl.innerText = `${a.id} • ${a.name} (${a.operatingState})`;
     if (badgeEl) {
       badgeEl.innerText = a.status;
-      badgeEl.className = `px-3 py-1 rounded-full text-xs font-semibold border ${a.status.includes('INSPEKSI') ? 'bg-amber-500/20 text-amber-300 border-amber-500/40' : a.status.includes('PERIKSA') ? 'bg-sky-500/20 text-sky-300 border-sky-500/40' : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'}`;
+      let cls = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
+      if (a.status.includes('INSPEKSI')) cls = 'bg-rose-500/20 text-rose-300 border-rose-500/40';
+      else if (a.status.includes('PANTAU')) cls = 'bg-amber-500/20 text-amber-300 border-amber-500/40';
+      else if (a.status.includes('PERIKSA')) cls = 'bg-sky-500/20 text-sky-300 border-sky-500/40';
+      badgeEl.className = `px-3 py-1 rounded-full text-xs font-semibold border ${cls}`;
     }
     if (devScoreEl) {
       if (a.status.includes('PERIKSA SENSOR')) {
-        devScoreEl.innerText = `FAULT`;
-        devScoreEl.className = `text-2xl font-mono font-bold text-sky-400`;
+        devScoreEl.innerText = `CEK SENSOR`;
+        devScoreEl.className = `text-xl font-mono font-bold text-sky-400`;
+      } else if (a.status.includes('BERHENTI')) {
+        devScoreEl.innerText = `SIAGA`;
+        devScoreEl.className = `text-xl font-mono font-bold text-slate-400`;
       } else {
         devScoreEl.innerText = `${a.deviation.toFixed(2)} (${(a.deviation * 100).toFixed(0)}%)`;
-        devScoreEl.className = `text-2xl font-mono font-bold ${a.deviation >= 0.55 ? 'text-amber-400' : 'text-emerald-400'}`;
+        devScoreEl.className = `text-xl font-mono font-bold ${a.deviation >= 0.75 ? 'text-rose-400' : a.deviation >= 0.55 ? 'text-amber-400' : 'text-emerald-400'}`;
       }
     }
 
     if (reasonTextEl) {
-      if (a.status.includes('PERIKSA SENSOR')) {
+      if (a.status.includes('BERHENTI')) {
         reasonTextEl.innerHTML = `
-          <strong>Gerbang Mutu Sinyal Aktif (Status Biru):</strong> Deteksi anomali mekanis ditangguhkan karena kualitas sinyal <span class="text-sky-300 font-semibold">${a.quality}</span> (v_rms = ${a.rms} mm/s).
-          <br><span class="text-sky-300 font-medium">Atribusi Berbasis Aturan:</span> 100% disebabkan anomali rantai akuisisi/dudukan sensor, bukan kerusakan mekanis mesin.
-          <br><span class="text-sky-300 font-medium">Tindakan SOP:</span> Periksa konektor kabel sensor dan kekencangan magnet N52 pada bodi mesin sebelum membongkar komponen mekanis.
+          <strong>Mesin Berhenti / Siaga (Beban ${a.load}% &lt; 15%):</strong> Evaluasi anomali getaran dibekukan agar mesin mati tidak disalahartikan sebagai sensor rusak.
+        `;
+      } else if (a.status.includes('PERIKSA SENSOR')) {
+        reasonTextEl.innerHTML = `
+          <strong>Indikasi Perlunya Pemeriksaan Sensor (Status Biru):</strong> Mesin terpantau beroperasi (beban ${a.load}%), namun mutu sinyal menunjukkan <span class="text-sky-300 font-semibold">${a.quality}</span>.
+          <br><span class="text-sky-300 font-medium">Penjelasan Berbasis Aturan:</span> Status ini merupakan indikasi awal pemeriksaan rantai sensor/dudukan magnet sebelum mengambil kesimpulan kondisi mekanis mesin.
         `;
       } else if (a.status.includes('INSPEKSI') || a.status.includes('PANTAU')) {
-        const pctOver = Math.round(((a.rms - a.attribution.refMedRms) / a.attribution.refMedRms) * 100);
+        const ind = a.dominantIndicators;
+        const pctOver = Math.round(((a.rms - ind.refMedRms) / ind.refMedRms) * 100);
         reasonTextEl.innerHTML = `
-          <strong>Penjelasan Berbasis Aturan & Atribusi Z_MAD (Simulasi Skenario):</strong> Skor hibrida <strong>S_gab = ${a.deviation.toFixed(2)}</strong> (S_IF = ${a.sIF}, S_ISO = ${a.sISO}) melampaui ambang pada rezim beban ${a.load}% (${a.attribution.regimeKey}).
-          <br>• <strong>Kontribusi Fitur Dominan:</strong> Getaran v_rms menyumbang <strong>${a.attribution.rmsPct}%</strong> (+${pctOver}% di atas median rezim ${a.attribution.refMedRms} mm/s; Z_MAD = ${a.attribution.zRms}), Kurtosis impulsif <strong>${a.attribution.kurtPct}%</strong> (κ = ${a.kurtosis}; Z_MAD = ${a.attribution.zKurt}), dan Suhu RTD <strong>${a.attribution.tempPct}%</strong> (${a.temp}°C; Z_MAD = ${a.attribution.zTemp}).
-          <br><span class="text-amber-300 font-medium">Anjuran Inspeksi Terarah:</span> Periksa pelumasan bantalan dan keselarasan poros pada jadwal henti terdekat dengan prosedur LOTO. <em>(Catatan: keluaran simulator skenario sintetis; verifikasi fisik teknisi wajib dilakukan).</em>
-        `;
-      } else if (a.status.includes('BEBAN TINGGI')) {
-        reasonTextEl.innerHTML = `
-          <strong>Penekanan Alarm Palsu Terkondisi Beban (Status Hijau):</strong> Meskipun v_rms naik menjadi <strong>${a.rms} mm/s</strong> dan suhu <strong>${a.temp}°C</strong>, sensor arus CT mendeteksi rezim beban tinggi (<strong>${a.load}%</strong>).
-          <br>• <strong>Evaluasi Z_MAD:</strong> Terhadap baseline beban tinggi (${a.attribution.refMedRms} mm/s), deviasi Z_MAD = ${a.attribution.zRms} masih normal sehingga <strong>S_gab = ${a.deviation.toFixed(2)} &lt; 0.55</strong>. Tidak ada alarm palsu yang dipicu.
+          <strong>Penjelasan Berbasis Aturan & Indikator Dominan Penyimpangan (Z_MAD):</strong> Skor gabungan <strong>S_gab = ${a.deviation.toFixed(2)}</strong> [0.5·S_ISO(${a.sISO}) + 0.5·s_IF(${a.sIF})] pada beban ${a.load}% (${ind.regimeKey}).
+          <br>• <strong>Prioritas Pemeriksaan Fisik:</strong> Deviasi dominan pada Getaran v_rms (${ind.rmsPct}%; +${pctOver}% di atas median rezim ${ind.refMedRms} mm/s), Kurtosis (${ind.kurtPct}%; κ=${a.kurtosis}), dan Suhu (${ind.tempPct}%; ${a.temp}°C).
+          <br><span class="text-amber-300 text-[11px]"><em>Catatan: seluruh ambang (0.55 / 0.75) bersifat awal dan belum tervalidasi sebagai ambang keselamatan. Wajib verifikasi LOTO.</em></span>
         `;
       } else {
+        const ind = a.dominantIndicators;
         reasonTextEl.innerHTML = `
-          <strong>Status Operasi Normal (Status Hijau):</strong> Pada beban <strong>${a.load}%</strong> (${a.isoGroup}), kecepatan getaran v_rms = <strong>${a.rms} mm/s</strong> (baseline rezim ${a.attribution.refMedRms} mm/s) dan suhu <strong>${a.temp}°C</strong> menghasilkan skor hibrida rendah <strong>S_gab = ${a.deviation.toFixed(2)}</strong> (S_IF = ${a.sIF}, S_ISO = ${a.sISO}). Tidak diperlukan tindakan inspeksi darurat.
+          <strong>Status Operasi Normal (${a.operatingState}):</strong> Pada beban <strong>${a.load}%</strong>, v_rms = <strong>${a.rms} mm/s</strong> (median rezim ${ind.refMedRms} mm/s) dan suhu <strong>${a.temp}°C</strong> menghasilkan <strong>S_gab = ${a.deviation.toFixed(2)}</strong> (&lt; 0.55; ambang awal desain). Tidak diperlukan inspeksi darurat.
         `;
       }
     }
@@ -655,7 +689,6 @@ const NadiDashboard = {
     });
     this.renderLogs();
 
-    // Reset the inspected asset back to normal baseline and re-evaluate pipeline so explanation & score match!
     const a = this.assets[targetId];
     if (a) {
       for (let w = 0; w < 5; w++) {
@@ -669,11 +702,11 @@ const NadiDashboard = {
   },
 
   exportCsv() {
-    let csv = "ID,Timestamp,Asset_ID,Vibration_RMS_mms,Temperature_C,Load_Pct,Quality_Status,S_IF,S_ISO,Hybrid_Score_Sgab\n";
+    let csv = "ID,Timestamp,Asset_ID,Operating_State,Vibration_RMS_mms,Temperature_C,Load_Pct,Quality_Status,S_IF,S_ISO,Hybrid_Score_Sgab\n";
     for (let id in this.assets) {
       const a = this.assets[id];
       a.history.forEach(h => {
-        csv += `${id},${h.time},${a.name},${h.rms},${h.temp},${a.load},${a.quality},${a.sIF},${a.sISO},${a.deviation}\n`;
+        csv += `${id},${h.time},${a.name},${a.operatingState},${h.rms},${h.temp},${a.load},${a.quality},${a.sIF},${a.sISO},${a.deviation}\n`;
       });
     }
 

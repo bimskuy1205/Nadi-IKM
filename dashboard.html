@@ -120,8 +120,8 @@
           <i data-lucide="cpu" class="w-4 h-4 text-industrial-teal"></i>
         </div>
         <div class="text-2xl font-bold font-mono text-white">3 Unit</div>
-        <div class="text-[11px] text-emerald-400 mt-1 flex items-center gap-1">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> 1 Normal • 1 Cek • 1 Sensor
+        <div id="kpiSummaryCounts" class="text-[11px] text-emerald-400 mt-1 flex items-center gap-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> 2 Normal • 1 Inspeksi
         </div>
       </div>
 
@@ -130,17 +130,17 @@
           <span>Alarm Menunggu Verifikasi</span>
           <i data-lucide="alert-circle" class="w-4 h-4 text-safety-amber"></i>
         </div>
-        <div class="text-2xl font-bold font-mono text-safety-amber">1 Aset (M-02)</div>
-        <div class="text-[11px] text-slate-400 mt-1">Deviasi persisten &gt; 3 siklus</div>
+        <div id="kpiAlertAsset" class="text-2xl font-bold font-mono text-safety-amber">1 Aset (M-02)</div>
+        <div id="kpiAlertSub" class="text-[11px] text-slate-400 mt-1">Deviasi persisten &ge; 3/5 jendela</div>
       </div>
 
       <div class="glass-card rounded-2xl p-4">
         <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
-          <span>Validitas Sinyal Edge</span>
+          <span>Mutu Sinyal Simulasi</span>
           <i data-lucide="activity" class="w-4 h-4 text-signal-cyan"></i>
         </div>
-        <div class="text-2xl font-bold font-mono text-signal-cyan">98.4%</div>
-        <div class="text-[11px] text-slate-400 mt-1">Sensor F-03 sinyal dropout</div>
+        <div id="kpiSignalValidity" class="text-2xl font-bold font-mono text-signal-cyan">3/3 Valid</div>
+        <div id="kpiSignalSub" class="text-[11px] text-slate-400 mt-1">Gerbang mutu aktif saat beroperasi</div>
       </div>
 
       <div class="glass-card rounded-2xl p-4">
@@ -246,11 +246,11 @@
         <!-- Explainable Card -->
         <div class="glass-card rounded-2xl p-5 border-l-4 border-l-safety-amber">
           <div class="flex items-center justify-between mb-2">
-            <span class="text-xs font-mono uppercase text-slate-400">Skor Deviasi Baseline</span>
-            <span id="selectedDevScore" class="text-2xl font-mono font-bold text-amber-400">74%</span>
+            <span class="text-xs font-mono uppercase text-slate-400">Skor Hibrida S_gab (Awal)</span>
+            <span id="selectedDevScore" class="text-xl font-mono font-bold text-rose-400">0.86 (86%)</span>
           </div>
           <div id="selectedReasonText" class="text-xs text-slate-300 leading-relaxed space-y-2">
-            <!-- Dynamic explanation injected here -->
+            <!-- Dynamic rule-based indicator injected here -->
           </div>
         </div>
 
@@ -369,6 +369,7 @@
   <!-- Scripts -->
   <script src="assets/js/translations.js"></script>
   <script src="assets/js/cursor.js"></script>
+  <script src="assets/js/trained_if_model.js"></script>
   <script src="assets/js/dashboard.js"></script>
 
   <script>

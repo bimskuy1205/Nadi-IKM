@@ -1,0 +1,122 @@
+{
+  "seed": 20261117,
+  "splits": {
+    "train": 2000,
+    "val": 1000,
+    "test": 2000
+  },
+  "regime_stats": {
+    "low": {
+      "medRms": 1.6539,
+      "madRms": 0.0581,
+      "medKurt": 2.9537,
+      "madKurt": 0.0738,
+      "medTemp": 14.9913,
+      "madTemp": 0.5003
+    },
+    "nominal": {
+      "medRms": 2.1034,
+      "madRms": 0.0749,
+      "medKurt": 3.0171,
+      "madKurt": 0.0891,
+      "medTemp": 18.5107,
+      "madTemp": 0.6856
+    },
+    "high": {
+      "medRms": 3.0447,
+      "madRms": 0.1106,
+      "medKurt": 3.1489,
+      "madKurt": 0.1063,
+      "medTemp": 23.0044,
+      "madTemp": 0.8048
+    }
+  },
+  "val_metrics": {
+    "A": {
+      "N_non_fault": 1000,
+      "N_fault_windows": 0,
+      "N_sensor_fault": 0,
+      "FPR_non_fault_pct": 14.7,
+      "FPR_high_load_pct": 95.33,
+      "FPR_transient_pct": 100.0,
+      "FP_sensor_as_mech": 0,
+      "Precision_pct": 0.0,
+      "Window_Recall_pct": null,
+      "Events_detected": "N/A",
+      "Mean_lead_windows": 0.0,
+      "Sensor_isolated_pct": null
+    },
+    "B": {
+      "N_non_fault": 1000,
+      "N_fault_windows": 0,
+      "N_sensor_fault": 0,
+      "FPR_non_fault_pct": 1.2,
+      "FPR_high_load_pct": 0.67,
+      "FPR_transient_pct": 100.0,
+      "FP_sensor_as_mech": 0,
+      "Precision_pct": 0.0,
+      "Window_Recall_pct": null,
+      "Events_detected": "N/A",
+      "Mean_lead_windows": 0.0,
+      "Sensor_isolated_pct": null
+    },
+    "C": {
+      "N_non_fault": 1000,
+      "N_fault_windows": 0,
+      "N_sensor_fault": 0,
+      "FPR_non_fault_pct": 0.0,
+      "FPR_high_load_pct": 0.0,
+      "FPR_transient_pct": 0.0,
+      "FP_sensor_as_mech": 0,
+      "Precision_pct": 0.0,
+      "Window_Recall_pct": null,
+      "Events_detected": "N/A",
+      "Mean_lead_windows": 0.0,
+      "Sensor_isolated_pct": null
+    }
+  },
+  "test_metrics": {
+    "A": {
+      "N_non_fault": 1200,
+      "N_fault_windows": 600,
+      "N_sensor_fault": 200,
+      "FPR_non_fault_pct": 24.08,
+      "FPR_high_load_pct": 93.0,
+      "FPR_transient_pct": 100.0,
+      "FP_sensor_as_mech": 100,
+      "Precision_pct": 55.85,
+      "Window_Recall_pct": 82.0,
+      "Events_detected": "3/3",
+      "Mean_lead_windows": 126.0,
+      "Sensor_isolated_pct": 0.0
+    },
+    "B": {
+      "N_non_fault": 1200,
+      "N_fault_windows": 600,
+      "N_sensor_fault": 200,
+      "FPR_non_fault_pct": 1.42,
+      "FPR_high_load_pct": 0.67,
+      "FPR_transient_pct": 100.0,
+      "FP_sensor_as_mech": 0,
+      "Precision_pct": 97.24,
+      "Window_Recall_pct": 99.67,
+      "Events_detected": "3/3",
+      "Mean_lead_windows": 145.0,
+      "Sensor_isolated_pct": 100.0
+    },
+    "C": {
+      "N_non_fault": 1200,
+      "N_fault_windows": 600,
+      "N_sensor_fault": 200,
+      "FPR_non_fault_pct": 0.75,
+      "FPR_high_load_pct": 1.0,
+      "FPR_transient_pct": 0.0,
+      "FP_sensor_as_mech": 0,
+      "Precision_pct": 98.29,
+      "Window_Recall_pct": 86.0,
+      "Events_detected": "3/3",
+      "Mean_lead_windows": 120.3,
+      "Sensor_isolated_pct": 100.0
+    }
+  }
+}

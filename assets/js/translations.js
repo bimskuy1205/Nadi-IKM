@@ -93,7 +93,7 @@ const translations = {
     // Dashboard Preview
     dashBadge: "DASHBOARD DEMONSTRASI",
     dashTitle: "Data Sintetis yang Nyata dan Dapat Ditindaklanjuti",
-    dashDesc: "Simulasi interaktif 3 unit mesin IKM tipikal. Seluruh angka adalah data uji sintetis untuk membuktikan logika alarm berjenjang.",
+    dashDesc: "Simulasi interaktif 3 unit mesin IKM tipikal. Seluruh angka adalah data uji sintetis untuk mendemonstrasikan alur keputusan berjenjang.",
     m1Name: "Pompa Sentrifugal P-01",
     m1Role: "Sirkulasi Pendingin Pabrik",
     m2Name: "Motor Induksi M-02",
@@ -200,8 +200,8 @@ const translations = {
     p1Desc: "Focusing capital on the top 3 high-impact production machines based on downtime cost, spare parts lead time, and physical safety.",
     p2Title: "2. Asset-Specific Baseline",
     p2Desc: "Adaptive statistical learning per machine rather than rigid generic vibration thresholds (conforming to ISO 17359 / 20816-3 guidelines).",
-    p3Title: "3. Explainable Actionable Alarms",
-    p3Desc: "Transparent root indicators rather than black-box failure percentages: RMS deviation, thermal delta, signal health check, and SOP checklist.",
+    p3Title: "3. Rule-Based Actionable Alarms",
+    p3Desc: "Transparent baseline deviation indicators rather than black-box claims: RMS deviation, thermal delta, signal health check, and SOP checklist.",
     p4Title: "4. Human-In-The-Loop Control",
     p4Desc: "No hazardous automated machine shutdowns. The system acts as a navigation co-pilot; final safety authority rests with qualified technicians.",
 
@@ -237,11 +237,11 @@ const translations = {
     archL3Title: "Layer 3: Local Gateway & UI",
     archL3Desc: "Local SQLite historical logging, secondary Isolation Forest scoring, and lightweight offline web dashboard serving.",
     archL4Title: "Layer 4: Human Decision & Log",
-    archL4Desc: "Technician terminal providing explainable inspection SOP checklists and perpetual maintenance audit trails.",
+    archL4Desc: "Technician terminal providing rule-based inspection SOP checklists and maintenance audit logs.",
 
     // Dashboard Preview
     dashBadge: "DEMO DASHBOARD",
-    dashTitle: "Actionable, Explainable Synthetic Telemetry",
+    dashTitle: "Actionable Rule-Based Synthetic Telemetry",
     dashDesc: "Interactive simulation across 3 representative industrial SME machines. All values are synthetic data to demonstrate multi-tier alarm logic.",
     m1Name: "Centrifugal Pump P-01",
     m1Role: "Plant Cooling Circulation",
@@ -297,7 +297,7 @@ const translations = {
     bibtexTitle: "Academic Citation Format (BibTeX)",
 
     // Footer
-    footerDisclaimer: "Disclaimer: This website demonstrates the conceptual design, digital twin prototype, and interactive simulation of NADI-IKM (Universitas Brawijaya). All telemetry on the dashboard is synthetic data labeled for educational and IYEEA 2026 competition purposes.",
+    footerDisclaimer: "Disclaimer: This website demonstrates the conceptual design, interactive 3D prototype, and scenario simulation of NADI-IKM (Universitas Brawijaya). All telemetry on the dashboard is synthetic data labeled for educational and IYEEA 2026 competition purposes.",
     footerRights: "Copyright © 2026 NADI-IKM Team • Universitas Brawijaya, Malang. All rights reserved."
   }
 };
